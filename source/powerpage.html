@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body { margin:12px; font-family:arial; font-size:14px; }
+  li { padding-top: 6px; }
+  td.remark {border:1px solid grey; width:350px; padding:4px; }
+  td.sample {border:1px solid grey; width:250px; padding:4px; }
+  td.syntax {border:1px solid grey; width:30%; padding:4px; }
+  th {border:1px solid grey; background:lightgrey; padding:4px; }
+  a { text-decoration: none; }
+  a:hover { background-color: lightgreen; }
+  h3 {color:darkblue}
+</style>
+<body>
+
+<button onclick="location.href='markdown.html'" disabled>Markdown Editor</button> 
+<button onclick="location.href='dbbrowser.html'" disabled>DB Browser</button> 
+<button onclick="location.href='document.html'" disabled>Documentation</button> 
+<button onclick="pb.run('notepad.exe powerpage.html')" accesskey=e style="float:right"><u>E</u>dit This Page</button> 
+<button onclick="pb.window('w_about')" accesskey=a style="float:right"><u>A</u>bout</button> 
+
+<p><b>Powerpage is a lightweight web browser with DB capability and windows accessibility, for rapid application development by html/css/js. </b>
+<p>Powerpage will connect to database, and load startup page by the setting of powerpage.ini, and open OLE web-browser with new protocol <mark>pb:// or ps://</mark> supported below features</b>
+<ul>
+<li>(Run)  Call External Program 
+<li>(File) Access file system
+<li>(DB)   Access Database
+<li>(PB)   Call Powerbuilder Windows/Functions
+<li>(Misc)  Variables, session information
+</ul>
+</p>
+
+<hr>
+
+<div>
+<h3>Global Features (Callback, Prompt, @JsVar, Secured protocol)</h3> 
+"Callback, Prompt/Confirm, @JsVar, Secured protocol" are supported in all commands.
+
+<table style="margin:10px;border-collapse: collapse;">
+  <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
+  <tr>
+     <td class=remark>Prompt for confirmation, then run command
+     <td class=sample><mark>pb://?Prompt Msg?</mark>/AnyCommand
+     <td class=syntax>[pb://?Open notepad?/run/notepad.exe]() 
+     <td class=syntax>[javascript:pb.confirm('Open notepad').run('notepad.exe')]()
+  </tr>
+  <tr>
+     <td class=remark>Callback js function after run command
+     <td class=sample><mark>pb://callback/jsFunction</mark>/AnyCommand
+     <td class=syntax>[pb://callback/mycallback/run/calc.exe]() 
+     <td class=syntax>[javascript:pb.run('calc.exe','mycallback')]()
+  </tr>
+  <tr>
+     <td class=remark>use @jsVar as command parameter for long string
+     <td class=sample>pb://AnyCommand/<mark>@jsVarName</mark>
+     <td class=syntax>[pb://sql/query/@sql1]()
+     <td class=syntax>[javascript:pb.db.query(sql1)]() 
+  </tr>
+  <tr>
+     <td class=remark>Use Secured Protocol to run command
+     <td class=sample><mark>ps://</mark>AnyCommand
+     <td class=syntax>[ps://run/resmon.exe]() 
+     <td class=syntax>[javascript:pb.secure().run('resmon.exe')]()
+  </tr>
+</table>
+</div>
+
+<div>
+<h3>Run / RunAt / Shell</h3>
+Run will call powerbuilder.run(), and RunAt will run program at its existing folder.
+<br>Shell command will be diverted to shell32.dll -> ShellExecuteW()
+<table style="margin:10px;border-collapse: collapse;">
+  <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
+  <tr>
+     <td class=remark>Run a program, e.g. mspaint.exe, resmon.exe
+     <td class=sample><mark>pb://run</mark>/command
+     <td class=syntax>[pb://run/mspaint.exe]()
+     <td class=syntax>[javascript:pb.run('resmon.exe')]()
+  </tr>
+  <tr>
+     <td class=remark>Run command with parameter e.g. edit powerpage.html
+     <td class=sample><mark>pb://run</mark>/Command+Parameters
+     <td class=syntax>[pb://run/notepad.exe powerpage.html]() 
+     <td class=syntax>[javascript:pb.run('notepad.exe powerpage.html')]()
+  </tr>
+  <tr>
+     <td class=remark>Run program in its directory
+     <td class=sample><mark>pb://runat</mark>/Command, <br> <mark>pb://run@</mark>/Command
+     <td class=syntax>[pb://runat/c:\app\cis\cis.exe](), [pb://run@/c:\app\cis\cis.exe]()
+     <td class=syntax>[javascript:pb.runat('c:\\app\\cis\\cis.exe')]()
+  </tr>
+  <tr>
+     <td class=remark>Shell: Open File (same as start.exe [prg])
+     <td class=sample><mark>pb://shell/open</mark>/file
+     <td class=syntax>[pb://shell/open/calc.exe]() 
+     <td class=syntax>[javascript:pb.shell.open('calc.exe')]()
+  </tr>
+  <tr>
+     <td class=remark>Shell: Open folder (e.g. c:\temp)
+     <td class=sample><mark>pb://shell/open</mark>/folder
+     <td class=syntax>[pb://shell/open/c:\temp]() 
+     <td class=syntax>[javascript:pb.shell.open('c:\\temp')]()
+  </tr>
+  <tr>
+     <td class=remark>Shell: Run program (similar to runat())
+     <td class=sample><mark>pb://shell/run</mark>/filename
+     <td class=syntax>[pb://shell/run/c:\app\cis\cis.exe]() 
+     <td class=syntax>[javascript:pb.shell.run('c:\\app\\cis\\cis.exe')]()
+  </tr>
+  <tr>
+     <td class=remark>Shell: Print File
+     <td class=sample><mark>pb://shell/print</mark>/filename
+     <td class=syntax>[pb://?Print PDF?/shell/print/powerpage.pdf]()
+     <td class=syntax>[javascript:pb.shell.print('powerpage.pdf')]()
+  </tr>
+</table>
+</div>
+
+<div>
+<h3>File Accessibility</h3>
+calling powerbuilder.filecopy(), filemove(), fileread(), filewrite to provide file support.
+<table style="margin:10px;border-collapse: collapse;">
+  <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
+  <tr>
+     <td class=remark>Copy powerpage.ppg to newfile.html
+     <td class=sample><mark>pb://file/copy</mark>/source/target
+     <td class=syntax>[pb://file/copy/powerpage.html/newfile.html]()
+     <td class=syntax>pb.file.copy( source, target, callback )
+  </tr>
+  <tr>
+     <td class=remark>Move/Rename newfile.html to another.html
+     <td class=sample><mark>pb://file/move</mark>/source/target
+     <td class=syntax>[pb://file/move/newfile.html/another.html]()
+     <td class=syntax>pb.file.move( source, target, callback )
+  </tr>
+  <tr>
+     <td class=remark>Read another.html
+     <td class=sample><mark>pb://file/read</mark>/file
+     <td class=syntax>[pb://file/read/another.html]()
+     <td class=syntax>pb.file.read( file, callback )
+  </tr>
+  <tr>
+     <td class=remark>Write to another.html
+     <td class=sample><mark>pb://file/write</mark>/file/text
+     <td class=syntax>[pb://file/write/another.html/@js1]()
+     <td class=syntax>pb.file.write( file, text, callback )
+  </tr>
+  <tr>
+     <td class=remark>Append to another.html
+     <td class=sample><mark>pb://file/append</mark>/file/text
+     <td class=syntax>[pb://file/append/another.html/@js2]()
+     <td class=syntax>pb.file.append( file, text, callback )
+  </tr>
+  <tr>
+     <td class=remark>Delete another.html
+     <td class=sample><mark>pb://file/delete</mark>/file
+     <td class=syntax>[pb://?sure to delete?/file/delete/another.html]() 
+     <td class=syntax>pb.file.delete( file, text, callback )
+  </tr>
+</table>
+</div>
+
+<div>
+<h3>Database Accessibility</h3>
+Query from database, execute sql or stored procedure.
+<table style="margin:10px;border-collapse: collapse;">
+  <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
+  <tr>
+     <td class=remark>run ah-hoc SQL, return json
+     <td class=sample><mark>pb://json</mark>/sqlString
+     <td class=syntax>[pb://json/select CategoryID, CategoryName from Categories]() 
+     <td class=syntax>[javascript:pb.db.json('select date(), now() ')]()
+  </tr>
+  <tr>
+     <td class=remark>query db by the sql stored in @sql1, return string in json format
+     <td class=sample><mark>pb://json</mark>/@Variable
+     <td class=syntax>[pb://json/@sql1]()
+     <td class=syntax>[javascript:pb.db.json('@sql1')](), [javascript:pb.db.json(sql1)]() 
+  </tr>
+  <tr>
+     <td class=remark>alt query command: pb://sql/query = pb://json
+     <td class=sample><mark>pb://sql/query</mark>/sql
+     <td class=syntax>[pb://sql/query/@sql1]()
+     <td class=syntax>[javascript:pb.db.query(sql1)]() or [javascript:pb.db.select(sql1)]()
+  </tr>
+  <tr>
+     <td class=remark>run SQL and return string in html table format
+     <td class=sample><mark>pb://table</mark>/sql
+     <td class=syntax>[pb://table/@sql2]() or [pb://sql/html/@sql2]()
+     <td class=syntax>[javascript:pb.db.table(sql1)]() or [javascript:pb.db.html(sql1)]()
+  </tr>
+  <tr>
+     <td class=remark>Execute update statement 
+     <td class=sample><mark>pb://sql/execute</mark>/sql     
+     <td class=syntax>[pb://sql/execute/@sql3]() 
+     <td class=syntax>[javascript:pb.db.execute(sql3)]() or [javascript:pb.db.update(sql3)]()
+  </tr>
+  <tr>
+     <td class=remark>Prompt SQL for confirmation, then Execute update statement 
+     <td class=sample><mark>pb://sql/prompt</mark>/sql     
+     <td class=syntax>[pb://sql/prompt/@sql3]()
+     <td class=syntax>[javascript:pb.db.prompt(sql3)]() or [javascript:pb.db.confirm(sql3)]()
+  </tr>
+  <tr>
+     <td class=remark>execute SQL by id, return json result
+     <td class=sample>
+     <td class=syntax>pb.db.executeById( sqlid, args[], callback )
+     <td class=syntax>pb.db.executeById( sqlid, args[], callback )
+  </tr>
+  <tr>
+     <td class=remark>run SQL Query by id, return json result
+     <td class=sample>
+     <td class=syntax>pb.db.queryById( sqlid, args[], callback )
+     <td class=syntax>pb.db.queryById( sqlid, args[], callback )
+  </tr>
+   
+</table>
+</div>
+
+<div>
+<h3>Work with Powerbuilder</h3>
+call powerbuilder customized window/dialog, which stored in extert pbl file.
+<table style="margin:10px;border-collapse: collapse;">
+  <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
+  <tr>
+     <td class=remark>Open PB window/dialog
+     <td class=sample><mark>pb://dialog</mark>/winName<br><mark>pb://window</mark>/winName
+     <td class=syntax>[pb://dialog/w_about]() <br>or [pb://window/w_about]()
+     <td class=syntax>[javascript:pb.dialog('w_about')]() <br>or [javascript:pb.window('w_about')]()
+  </tr>
+  <tr>
+     <td class=remark>Open PB window/dialog with parameters
+     <td class=sample><mark>pb://dialog</mark>/winName/parm<br><mark>pb://window</mark>/winName/parm
+     <td class=syntax>[pb://window/w_web_dialog/top=20,width=800,url=https://google.com]()
+     <td class=syntax>[javascript:pb.window('w_web_dialog','left=50,height=500,url=https://google.com')]()
+  </tr>
+  <tr>
+     <td class=remark>Call PB Function, return string
+     <td class=sample><mark>pb://function</mark>/funcName/parm
+     <td class=syntax>[pb://function/f_get_product]()
+     <td class=syntax>[javascript:pb.function('f_get_product')]()
+  </tr>
+</table>
+</div>
+
+<div>
+<h3>Session / Global Variables</h3>
+After page loaded, pb.session will be initialized by the setup in powerpage.ini, "pb.session" object serves as global variables between different page.
+These values can be updated in "pb.session", and share with another pages, to serve the purpose of sharing common information (or pass paramters).
+ 
+<table style="margin:10px;border-collapse: collapse;">
+  <tr>
+     <td class=remark>initialized by pwoerpage.ini
+     <td class=sample>[session]<br>var1 = name: CampoPage
+     <td class=syntax>[javascript:alert(pb.session.name)]()
+     <td class=syntax>[javascript:alert(pb.session('name'))]()
+  </tr>
+  <tr>
+     <td class=remark>support json value. e.g. {"key":"value"}
+     <td class=sample>[session]<br>var2 = user: { "id":"admin", "role":"admin" }
+     <td class=syntax>[javascript:alert(JSON.stringify(pb.session.user))]()  
+     <td class=syntax>[javascript:alert(JSON.stringify(pb.session('user')))]()
+  </tr>
+  <tr>
+     <td class=remark>update session variables
+     <td class=sample><mark>pb://session</mark>/name/value     
+     <td class=syntax>[pb://session/remarks/try update session remarks]() <button onclick="pb.popup('dialog.html')">check</button>
+     <td class=syntax>[javascript:pb.session('remarks','session remarks has been updated')]() <button onclick="pb.popup('dialog.html')">check</button>
+  </tr>
+</table>
+</div>
+
+<div>
+<h3>Url Navigation / Misc</h3>
+Misc..
+<table style="margin:10px;border-collapse: collapse;">
+  <tr>
+     <td class=remark>open link in popup dialog (share session info)
+     <td class=sample><mark>pb://popup</mark>/width=?,height=?,url=?
+     <td class=syntax>[pb://popup/height=400,url=dialog.html]()
+     <td class=syntax>[javascript:pb.popup('width=800,url=dialog.html')]()
+  </tr>  
+  <tr>
+     <td class=remark>popup dialog with callback
+     <td class=sample><mark>pb://callback/?/popup</mark>/width=?,height=?,url=?
+     <td class=syntax>[pb://callback/mycallback/popup/height=400,url=dialog.html]()
+     <td class=syntax>[javascript:pb.popup('width=500,url=dialog.html','mycallback')]()
+  </tr>  
+  <tr>
+     <td class=remark>open link in same window
+     <td class=sample>window.location=url
+     <td class=syntax>[markdown.html]()
+     <td class=syntax>[javascript:window.location=markdown.html)]()
+  </tr>  
+  <tr>
+     <td class=remark>
+     <td class=sample><a href='javascript:alert(navigator.userAgent)'>navigator.userAgent</a>
+     <td class=syntax><a target=_new href="http://google.com">Popup Google</a> | <a href="http://google.com">Goto Google</a>
+     <td class=syntax><a href='javascript:window.close()'>window.close()</a>
+  </tr>
+  <tr>
+     <td class=remark>Goto url, and Inject js code
+     <td class=sample>
+     <td class=syntax>[pb://inject/alert(document.getElementById("lga").innerHTML)/http://google.com]()
+     <td class=syntax>pb.url.inject('http://google.com','alert(document.getElementById("lga").innerHTML')
+  </tr>
+</table>
+</div>
+   
+<!--   
+<p><b>Call IE and Inject js</b></p>
+<ul>
+   <li>[pb://IE/script=@js1/http://160.100.1.251:8090/BAB]() run script after onload 
+   <li>[pb://IE/menu=0,macro=@loginBAB/http://160.100.1.251:8090/BAB]() BAB auto-login (macro) 
+   <li>[pb://IE/menu=1,macro=@loginNIS/http://160.100.3.140]() NIS auto-login (macro) 
+   <li>[pb://IE/fullscreen/http://google.com]() new browser (full screen) 
+</ul>
+-->
+
+</html>
+
+<script>
+//=========== my program ===========
+function mycallback(result, type, url) {
+  alert( 'From myCallback\n\nurl='+url+'\n\n Type='+type+'\n\n Result=' + result)
+}
+
+var sql1 = "SELECT * from Products where SupplierID=20";
+var sql2 = "SELECT * from Customers where City='London' ";
+var sql3 = "UPDATE Products set UnitsOnOrder = UnitsOnOrder + 1 where SupplierID=20 ";
+
+// link markup
+var s = document.body.innerHTML
+s = s.replace( /\[([^\]]+)\]\(\)/g, '<a href="$1">$1</a>' )
+s = s.replace( /\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2">$1</a>' )
+document.body.innerHTML = s
+
+function onPageReady() { pb.microhelp('page ready') }
+
+</script>
+
+
+
+

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<title>HTML Dialog</title>
+<body style="margin:12px; font-family:arial; font-size:14px;"
+<p>
+<b>Powerpage</b> is a lightweight web browser with DB capability 
+and windows accessibility, for rapid application development by html/css/js.
+</p>  
+<ul>
+  <li>(Run) Call External Program 
+  <li>(File) Access file system 
+  <li>(DB) Access Database 
+  <li>(PB) Call Powerbuilder Windows/Functions 
+  <li>(Misc) Variables, session information 
+</ul>
+
+<hr>
+<div id=info></div>
+<br><br>
+<button style="float:right" onclick="window.close()">Close</button>
+</body>
+
+<script>
+function onPageReady() {
+  var html = '<b>Session variables</b><br>'
+  html += '<br>Name = ' + pb.session.name
+  html += '<br>Version = ' + pb.session.version
+  html += '<br>Remarks = ' + pb.session.remarks
+  document.getElementById("info").innerHTML = html
+}
+</script>
+
+</html>
