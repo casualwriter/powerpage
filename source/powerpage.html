@@ -90,7 +90,7 @@ Run will call powerbuilder.run(), and RunAt will run program at its existing fol
      <td class=syntax>[javascript:pb.runat('c:\\app\\cis\\cis.exe')]()
   </tr>
   <tr>
-     <td class=remark>Shell: Open File (same as start.exe [prg])
+     <td class=remark>Shell: Open File (same as start.exe [file])
      <td class=sample><mark>pb://shell/open</mark>/file
      <td class=syntax>[pb://shell/open/calc.exe]() 
      <td class=syntax>[javascript:pb.shell.open('calc.exe')]()
@@ -219,23 +219,23 @@ Query from database, execute sql or stored procedure.
 
 <div>
 <h3>Work with Powerbuilder</h3>
-call powerbuilder customized window/dialog, which stored in extert pbl file.
+call powerbuilder customized window/function, which stored in extert pbl file.
 <table style="margin:10px;border-collapse: collapse;">
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
-     <td class=remark>Open PB window/dialog
-     <td class=sample><mark>pb://dialog</mark>/winName<br><mark>pb://window</mark>/winName
-     <td class=syntax>[pb://dialog/w_about]() <br>or [pb://window/w_about]()
-     <td class=syntax>[javascript:pb.dialog('w_about')]() <br>or [javascript:pb.window('w_about')]()
+     <td class=remark>Open PB window object
+     <td class=sample><mark>pb://window</mark>/winName
+     <td class=syntax>[pb://window/w_about]()
+     <td class=syntax>[javascript:pb.window('w_about')]()
   </tr>
   <tr>
-     <td class=remark>Open PB window/dialog with parameters
-     <td class=sample><mark>pb://dialog</mark>/winName/parm<br><mark>pb://window</mark>/winName/parm
+     <td class=remark>Open PB window with parameters
+     <td class=sample><mark>pb://window</mark>/winName/parm
      <td class=syntax>[pb://window/w_web_dialog/top=20,width=800,url=https://google.com]()
      <td class=syntax>[javascript:pb.window('w_web_dialog','left=50,height=500,url=https://google.com')]()
   </tr>
   <tr>
-     <td class=remark>Call PB Function, return string
+     <td class=remark>Call PB Global Function, return string
      <td class=sample><mark>pb://function</mark>/funcName/parm
      <td class=syntax>[pb://function/f_get_product]()
      <td class=syntax>[javascript:pb.function('f_get_product')]()
@@ -245,13 +245,13 @@ call powerbuilder customized window/dialog, which stored in extert pbl file.
 
 <div>
 <h3>Session / Global Variables</h3>
-After page loaded, pb.session will be initialized by the setup in powerpage.ini, "pb.session" object serves as global variables between different page.
-These values can be updated in "pb.session", and share with another pages, to serve the purpose of sharing common information (or pass paramters).
- 
+Session is important for applicaiton development. After page loaded, 
+``pb.session``` serves as session object sharing information between different pages.
+
 <table style="margin:10px;border-collapse: collapse;">
   <tr>
-     <td class=remark>initialized by pwoerpage.ini
-     <td class=sample>[session]<br>var1 = name: CampoPage
+     <td class=remark>initialized by powerpage.ini
+     <td class=sample>[session]<br>var1 = name: PowerPage
      <td class=syntax>[javascript:alert(pb.session.name)]()
      <td class=syntax>[javascript:alert(pb.session('name'))]()
   </tr>
