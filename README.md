@@ -1,7 +1,7 @@
 ## Introduction
 
 [powerpage](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
-and windows accessibility, for rapid application development by html/css/js. 
+and windows accessibility, for making Electron-like HTML/JS GUI apps
 
 Powerpage will connect to database, and load startup page by the setting of powerpage.ini, and open 
 OLE web-browser with new protocol pb:// or ps:// to provide below features
@@ -107,6 +107,6 @@ popup dialog with callback | pb://callback/mycallback/popup/height=400,url=dialo
 
 * 2021/05/07, beta version, v0.41 
 
-### Lisense
+### License
 
 MIT
