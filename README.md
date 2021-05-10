@@ -1,6 +1,6 @@
 ## Introduction
 
-[powerpage](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
+[**PowerPage**](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
 and windows accessibility, for making Electron-like HTML/JS GUI apps
 
 Powerpage will connect to database, and load startup page by the setting of powerpage.ini, and open 
