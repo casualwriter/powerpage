@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<title>Markdown Editor (SimpleMDE)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+<style>
+.CodeMirror {	height:calc(100vh - 160px); }
+</style>
+
+<body style="font-family:calibri">
+
+<div id=header style="padding:8px">
+   <span style="font-size:20px;font-weight:700;">Markdown Editor (SimpleMDE)</span>
+   &nbsp;&nbsp;&nbsp;&nbsp;<b>File: </b>
+   <span id=filename style="color:green">new file</span>  
+   <span style="float:right">
+    <button onclick="pb.callback('onOpenFile').file.open('Markdown (*.md),*md')" accesskey=o><b>O</b>pen</button>
+    <button onclick="onPrint()" accesskey=p disabled><b>P</b>rint</button>
+    &nbsp;&nbsp;&nbsp;
+    <button onclick="onSave()" accesskey=s><b>S</b>ave</button>
+    <button onclick="pb.callback('onSaveAs').file.saveas('Markdown (*.md),*md')" assesskey=a>Save <b>A</b>s</button>
+   </span> 
+</div>
+
+<textarea id="content"></textarea>
+
+</body>
+
+<script>
+// initial simple MDE (https://github.com/sparksuite/simplemde-markdown-editor)
+var simplemde = new SimpleMDE({ 
+  element: document.getElementById("content") 
+});
+
+var mdFile = document.getElementById("filename").innerText
+var mdText = ''
+
+// open file
+function onOpenFile(result, type, url) {
+  var rs = JSON.parse( result.split('\\').join('\\\\') )
+  pb.callback('onLoadFile').file.read(rs.path)
+  document.getElementById("filename").innerText = mdFile = (rs.path||mdFile) 
+}
+
+// load file
+function onLoadFile(result, type, url) {
+  simplemde.value( result )
+}
+
+// save file
+function onSave() {
+  if (mdFile == 'new file') {
+    pb.callback('onSaveAs').file.saveas('Markdown (*.md),*md')
+  } else {
+    md_text = simplemde.value()
+    pb.file.write( mdFile, '@md_text', 'onAfterSave' )
+  }  
+}
+
+function onAfterSave(result, type, url) {
+  alert('Saved to file ' + mdFile + '!')
+}
+
+// saveas
+function onSaveAs(result, type, url) {
+  var rs = JSON.parse( result.split('\\').join('\\\\') )
+  document.getElementById("filename").innerText = mdFile = (rs.path||mdFile)
+  onSave()
+}
+
+</script>
+
+
+                                                   

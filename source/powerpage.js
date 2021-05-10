@@ -11,6 +11,19 @@ var pb = function (n) { return n[0]=='#'? document.getElementById(n.substr(2)) :
 pb.microhelp = function (msg) { document.title='pb://microhelp/'+ msg } 
 pb.error = function(code,msg) { pb.microhelp( '[error='+ code +'] ' + msg ) }
 
+//=== router function for Powerbuilder, divert to callback 
+pb.router = function ( name, result, type, url ) {
+  if (typeof window[name] === "function") {
+      window[name]( result, type, url );
+  } else if (name) {
+      alert( 'callback function ' + name + '() not found!\n\n type:' + type + ' from url: ' + url 
+             + '\n function: '+name + '\n Result: \n\n' + result )
+  } else if (type=='json'||type=='table'||type=='sql'||type=='file') {
+      alert( 'callback (default)\n\n type:' + type + ' from url: ' + url 
+             + '\n function: '+name + '\n Result: \n\n' + result )
+  }  
+}
+
 //=== console support 
 if (typeof console=="undefined") var console = { }
 
@@ -39,34 +52,30 @@ pb.eval = function (exp) {
 pb.cmd = { protocol:'pb://' }
 pb.secure = function() { pb.cmd.protocol = 'ps://' ; return pb }
 
-//=== callback function for Powerbuilder
-pb.callback = function ( name, result, type, url ) {
-  if (typeof window[name] === "function") {
-      window[name]( result, type, url );
-  } else if (name) {
-      alert( 'callback function ' + name + '() not found!\n\n type:' + type + ' from url: ' + url 
-             + '\n function: '+name + '\n Result: \n\n' + result )
-  } else if (type=='json'||type=='table'||type=='sql'||type=='file') {
-      alert( 'callback (default)\n\n type:' + type + ' from url: ' + url 
-             + '\n function: '+name + '\n Result: \n\n' + result )
-  }  
-}
-
 //=== add Prompt to parepare queue
 pb.prompt = pb.confirm = function (msg) { 
   pb.cmd.prompt = msg; 
   return pb 
 }
+
+//=== add callback to prepare queue
+pb.callback = function (funcname) { 
+  pb.cmd.callback = funcname; 
+  return pb 
+}
  
+//=== submit command to Powerbuilder. (support cmd history later)
+pb.submit = function (cmd) {
+  window.location = pb.cmd.command = cmd
+}
+
 //=== prepare command prefix with Prompt and callback
 pb.cmd.prepare = function(callback) {
-   pb.cmd.prefix = pb.cmd.protocol 
-   if (pb.cmd.prompt) {
-     pb.cmd.prefix += '?' + pb.cmd.prompt + '?/'
-     pb.cmd.prompt = null  
-   }
-   
-   pb.cmd.prefix += (callback? 'callback/'+callback+'/' : '')
+   pb.cmd.prefix = pb.cmd.protocol
+   pb.cmd.prefix += (pb.cmd.prompt? '?' + pb.cmd.prompt + '?/' : '' )
+   pb.cmd.callback = (callback||pb.cmd.callback)
+   pb.cmd.prefix += (pb.cmd.callback? 'callback/'+pb.cmd.callback+'/' : '' )
+   pb.cmd.prompt = pb.cmd.callback = null  
    return pb.cmd.prefix
 }
 
@@ -83,11 +92,6 @@ pb.cmd.parameters = function(args) {
   } else {  
     pb.error( '01', "[error] unknow type of arguments! " + args )
   } 
-}
-
-//=== submit command to Powerbuilder. (support cmd history later)
-pb.submit = function (cmd) {
-  window.location = pb.cmd.command = cmd
 }
 
 //=== call run() commands
@@ -108,12 +112,24 @@ pb.function = function (win, args, callback) { pb.submit( pb.cmd.prepare(callbac
 pb.popup = function (url,callback) { pb.submit( pb.cmd.prepare(callback) + 'popup/' + url ) }
 
 //=== database function
-pb.db = { name: 'shell functions' }
+pb.db = { name: 'database functions' }
 pb.db.json  = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'json/' + sql ) };
 pb.db.table = pb.db.html  = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'table/' + sql ) };
 pb.db.query = pb.db.select = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'json/' + sql ) };  
 pb.db.execute = pb.db.update = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'sql/execute/' + sql ) };
 pb.db.confirm = pb.db.prompt = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'sql/prompt/' + sql ) };
+
+//=== file functions
+pb.file = { name: 'file functions' }
+pb.file.copy = function (from, to, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/copy/' + from + '/' + to ) }
+pb.file.move = function (from, to, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/move/' + from + '/' + to ) }
+pb.file.read = function (file, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/read/' + file ) }
+pb.file.write = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/write/' + file + '/' +  text ) }
+pb.file.append = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/append/' + file + '/' +  text ) }
+pb.file.delete = function (file, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/delete/' + file ) }
+pb.file.open = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/open/' + ext ) }
+pb.file.saveas = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/saveas/' + ext ) }
+
 
 //==== pb session. 
 // session(name) -> get value
@@ -129,3 +145,4 @@ pb.session = function ( name, value, from ) {
       pb.session[name] = (value.substr(0,1)=='{'? JSON.parse(value) : value )
    }
 }
+
