@@ -25,17 +25,16 @@ Powerpage is a single executable program. No installation is needed, Just downlo
 
 ### Files
 
-  * powerpage.exe   powerpage executable file. (single file)
-  * Powerpage.htlm  startup html file of powerpage 
-  * Powerpage.ini   ini file of powerpage
-  * Powerpage.js    javascript lib of powerpage
-  * *.dll           Powerbuilder run-tie files
+  * powerpage.exe  // powerpage executable file. (single file)
+  * Powerpage.htlm // Startup html file of powerpage 
+  * Powerpage.ini  // Ini file of powerpage
+  * Powerpage.js   // Javascript lib of powerpage
+  * *.dll          // Powerbuilder run-tie files
 
 
 ### Interface Overview
 
-API call provide in pb:// protocol command, or javascript ``pb`` funciton call. 
-
+Interface is provided by ``pb://`` protocol command, or javascript ``pb.`` function call. 
 
 #### Global Features (Callback, Prompt, @JsVar, Secured protocol)  
 
@@ -43,7 +42,7 @@ API call provide in pb:// protocol command, or javascript ``pb`` funciton call.
 
 Description | Protocol / javascript
 ------------|------------------------
-Prompt for confirmation, then run command | pb://?Open notepad?/run/notepad.exe <br> javascript: pb.confirm('Open notepad').run('notepad.exe')  
+Prompt for confirmation, then run command | pb://?Open notepad?/run/notepad.exe <br> javascript: pb.confirm('OpenNotepad').run('notepad.exe')  
 Callback js function after run command | pb://callback/mycallback/run/calc.exe <br> javascript: pb.run('calc.exe','mycallback')  
 use @jsVar as command parameter for long string | pb://sql/query/@sql1 <br> javascript: pb.db.query(sql1)  
 ``Secured`` Protocol (Prompt user login by windows account) | ps://run/resmon.exe <br> javascript: pb.secure().run('resmon.exe')  
