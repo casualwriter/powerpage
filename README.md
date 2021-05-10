@@ -12,10 +12,25 @@ OLE web-browser with new protocol pb:// or ps:// to provide below features
 * (PB) Call Powerbuilder Windows/Functions 
 * (Misc) Variables, session information 
 
-### Files and Installation
+![](powerpage.jpg)
+
+
+### Installation & Run
+
+Powerpage is a single executable program. No installation is needed, Just download and run.
 
 * Simply download from "release" folder, and unzip the file, and run ``powerpage.exe``
-* Source code, and latest version can be downloaded from "source" folder
+* Source code and latest version can be downloaded from "source" folder. 
+
+
+### Files
+
+  * powerpage.exe   powerpage executable file. (single file)
+  * Powerpage.htlm  startup html file of powerpage 
+  * Powerpage.ini   ini file of powerpage
+  * Powerpage.js    javascript lib of powerpage
+  * *.dll           Powerbuilder run-tie files
+
 
 ### Interface Overview
 
