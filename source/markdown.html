@@ -3,28 +3,23 @@
 <title>Markdown Editor (SimpleMDE)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-
 <style>
 .CodeMirror {	height:calc(100vh - 160px); }
 </style>
 
 <body style="font-family:calibri">
-
-<div id=header style="padding:8px">
-   <span style="font-size:20px;font-weight:700;">Markdown Editor (SimpleMDE)</span>
-   &nbsp;&nbsp;&nbsp;&nbsp;<b>File: </b>
-   <span id=filename style="color:green">new file</span>  
-   <span style="float:right">
+  <div id=header style="padding:8px">
+    <span style="font-size:20px;font-weight:700;">Markdown Editor </span>
+    <a target=_new href="https://github.com/sparksuite/simplemde-markdown-editor">(SimpleMDE)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>File: </b><span id=filename style="color:green">new file</span>  
+    <span style="float:right">
     <button onclick="pb.callback('onOpenFile').file.open('Markdown (*.md),*md')" accesskey=o><b>O</b>pen</button>
-    <button onclick="onPrint()" accesskey=p disabled><b>P</b>rint</button>
-    &nbsp;&nbsp;&nbsp;
+    <button onclick="onPrint()" accesskey=p disabled><b>P</b>rint</button>&nbsp;&nbsp;&nbsp;
     <button onclick="onSave()" accesskey=s><b>S</b>ave</button>
     <button onclick="pb.callback('onSaveAs').file.saveas('Markdown (*.md),*md')" assesskey=a>Save <b>A</b>s</button>
-   </span> 
-</div>
-
-<textarea id="content"></textarea>
-
+    </span> 
+  </div>
+  <textarea id="content"></textarea>
 </body>
 
 <script>
@@ -39,8 +34,11 @@ var mdText = ''
 // open file
 function onOpenFile(result, type, url) {
   var rs = JSON.parse( result.split('\\').join('\\\\') )
-  pb.callback('onLoadFile').file.read(rs.path)
-  document.getElementById("filename").innerText = mdFile = (rs.path||mdFile) 
+  if (rs.status>0) {
+    pb.callback('onLoadFile').file.read(rs.path)
+    document.getElementById("filename").innerText = mdFile = (rs.path||mdFile)
+    pb.microhelp( 'File ' + mdFile + ' loaded.' )
+  }   
 }
 
 // load file
@@ -59,16 +57,17 @@ function onSave() {
 }
 
 function onAfterSave(result, type, url) {
-  alert('Saved to file ' + mdFile + '!')
+  alert('File has been saved to ' + mdFile + '!')
 }
 
 // saveas
 function onSaveAs(result, type, url) {
   var rs = JSON.parse( result.split('\\').join('\\\\') )
-  document.getElementById("filename").innerText = mdFile = (rs.path||mdFile)
-  onSave()
+  if (rs.status>0) {
+    document.getElementById("filename").innerText = mdFile = (rs.path||mdFile)
+    onSave()
+  }  
 }
-
 </script>
 
 
