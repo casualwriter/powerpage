@@ -1,16 +1,16 @@
 ## API documentation
 
-Interface is provided by ``pb://`` protocol command, or javascript ``pb.`` function call.  within html, may use 
+Interface is provided by ``pb://`` protocol command, or javascript ``pb.`` API function call.  HTML Page may use 
 
-``<a href="pb://protocol/command"> pb://protocol/command</a> `` or javascript:pb.command()`` to make powerpage API call.
+``<a href="pb://protocol/command"> pb://protocol/command</a> `` or javascript:pb.apiFunction()`` to make powerpage API call.
 
 for example:
 
-* Run notepad.exe to edit powerpage.ini -> ``pb://run/notepade.exe powerpage.ini`` or ``javascript: pb.run('notepad.exe powerpage.ini')``
+* Run notepad.exe to edit powerpage.ini -> ``pb://run/notepad.exe powerpage.ini`` or ``javascript: pb.run('notepad.exe powerpage.ini')``
 * Run SQL1 and callback showData() -> ``pb://callback/showData/sql/query/@sql1`` or ``javascript: pb.callback('showData').db.query(sql1)`` 
 * Run update SQL2 -> ``pb://sql/execute/@sql2`` or  ``javascript: pb.db.execute(sql2)`` 
 
-#### How PowerPage work?
+### How PowerPage work?
 
 Powerpage main program is window with MS OLE Web brwoser. HTML page may via the following channel to talk to main program
 
@@ -22,7 +22,7 @@ Powerpage will interpret and execute command, and pass the result to HTML page b
 When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb`` javascript object to provide pwoerpage interface.
 
 
-#### Global Features (Callback, Prompt, @JsVar, Secured protocol)  
+### Global Features (Callback, Prompt, @JsVar, Secured protocol)  
 
 "Callback, Prompt/Confirm, @JsVar, Secured protocol" are supported in all commands. 
 
@@ -105,9 +105,6 @@ To popup dialog with callback, by protocol ``pb://callback/mycallback/popup/heig
 
 ### Modification History
 
-* 2021/05/07, beta version, v0.41 
+* 2021/05/11
 
-### License
-
-MIT
 

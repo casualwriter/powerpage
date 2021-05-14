@@ -337,8 +337,13 @@ s = s.replace( /\[([^\]]+)\]\(\)/g, '<a href="$1">$1</a>' )
 s = s.replace( /\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2">$1</a>' )
 document.body.innerHTML = s
 
+// onPageRead will be called when page loaded
 function onPageReady() { pb.microhelp('page ready') }
 
+// onPageClose will be called when window close
+function onPageClose() {
+  return confirm('Close this page?')? 'yes' : 'no'
+}
 </script>
 
 

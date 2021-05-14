@@ -3,8 +3,7 @@
 [**PowerPage**](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
 and windows accessibility, for making Electron-like HTML/JS GUI apps
 
-Powerpage will connect to database, and load startup page by the setting of powerpage.ini, and open 
-OLE web-browser with new protocol pb:// or ps:// to provide below features
+Powerpage will connect to database, and load startup page using MS web-browser control with new protocol pb:// or ps:// to provide below features
  
 * (Run) Call External Program 
 * (File) Access file system 
@@ -15,32 +14,32 @@ OLE web-browser with new protocol pb:// or ps:// to provide below features
 ![](powerpage.jpg)
 
 
-### Installation & Run
+## Installation & Run
 
-Powerpage is a single executable program. No installation is needed, Just download and run.
+Powerpage is a single executable program. No installation is needed, Just download and run ``powerpage.exe``.
 
-* Simply download from "release" folder, and unzip the file, and run ``powerpage.exe``
+* Simply download from "release" folder, unzip the file, and run ``powerpage.exe``
 * Source code and latest version can be downloaded from "source" folder. 
 
 
-### Files
+## Files
 
   * powerpage.exe  // powerpage executable file. (single file)
-  * Powerpage.htlm // Startup html file of powerpage 
+  * Powerpage.htlm // Startup html file
   * Powerpage.ini  // Ini file of powerpage
   * Powerpage.js   // Javascript lib of powerpage
   * *.dll          // Powerbuilder run-tie files
 
 
-### How PowerPage work?
+## How PowerPage work?
 
-Powerpage open a window with MS OLE Web brwoser. When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb`` javascript object to provide powerpage interface.
+Powerpage open a window with MS WebBrowser Control. When HTML page is loaded, Powerpage will import ``powerpage.js`` to initialize ``pb`` javascript object to provide Powerpage interface.
 
 HTML page may via the following channel to talk to main program
 
-1. window.location = "pb://protocol/command"
-2. doument.title = "pb://protocol/command"
-3. javascript pb.apiFunction()
+1. by url: window.location = "pb://protocol/command"
+2. by title: document.title = "pb://protocol/command"
+3. by javascript pb.apiFunction()
 
 Powerpage will interpret and execute the command, and pass the result to HTML page by calling js function ``pb.router( result, type, cmd)``
 
@@ -52,7 +51,7 @@ Interface is provided by ``pb://`` protocol command, or javascript ``pb.`` API f
 
 for example:
 
-* Run notepad.exe to edit powerpage.ini -> ``pb://run/notepade.exe powerpage.ini`` or ``javascript: pb.run('notepad.exe powerpage.ini')``
+* Run notepad.exe to edit powerpage.ini -> ``pb://run/notepad.exe powerpage.ini`` or ``javascript: pb.run('notepad.exe powerpage.ini')``
 * Run SQL1 and callback showData() -> ``pb://callback/showData/sql/query/@sql1`` or ``javascript: pb.callback('showData').db.query(sql1)`` 
 * Run update SQL2 -> ``pb://sql/execute/@sql2`` or  ``javascript: pb.db.execute(sql2)`` 
 
@@ -60,14 +59,19 @@ For more details, please refer to [API documentation](interface.md)
 
 
 
-### Modification History
+## Modification History
 
 * 2021/05/07, beta version, v0.41 
-* 2021/05/10, beta version, v0.42, with sample of markdown editor
+* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](../powerpage-md)
 
-### License
+## License
 
 MIT
+
+
+
+
+
 
 
 

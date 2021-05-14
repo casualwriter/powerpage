@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>Markdown Editor (SimpleMDE)</title>
+<title>Powerpage Markdown Editor</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <style>
@@ -13,10 +13,11 @@
     <a target=_new href="https://github.com/sparksuite/simplemde-markdown-editor">(SimpleMDE)</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <b>File: </b><span id=filename style="color:green">new file</span>  
     <span style="float:right">
-    <button onclick="pb.callback('onOpenFile').file.open('Markdown (*.md),*md')" accesskey=o><b>O</b>pen</button>
+    <button onclick="window.location='powerpage.html'">PowerPage</button>&nbsp;&nbsp;&nbsp;
+    <button onclick="pb.callback('onOpenFile').file.select('Markdown (*.md),*md')" accesskey=o><b>O</b>pen</button>
     <button onclick="onPrint()" accesskey=p disabled><b>P</b>rint</button>&nbsp;&nbsp;&nbsp;
     <button onclick="onSave()" accesskey=s><b>S</b>ave</button>
-    <button onclick="pb.callback('onSaveAs').file.saveas('Markdown (*.md),*md')" assesskey=a>Save <b>A</b>s</button>
+    <button onclick="pb.callback('onSaveAs').file.select('Markdown (*.md),*md')" assesskey=a>Save <b>A</b>s</button>
     </span> 
   </div>
   <textarea id="content"></textarea>
@@ -24,10 +25,7 @@
 
 <script>
 // initial simple MDE (https://github.com/sparksuite/simplemde-markdown-editor)
-var simplemde = new SimpleMDE({ 
-  element: document.getElementById("content") 
-});
-
+var simplemde = new SimpleMDE( { element: document.getElementById("content") } );
 var mdFile = document.getElementById("filename").innerText
 var mdText = ''
 
@@ -43,16 +41,18 @@ function onOpenFile(result, type, url) {
 
 // load file
 function onLoadFile(result, type, url) {
-  simplemde.value( result )
+  simplemde.value( mdText = result )
 }
 
 // save file
 function onSave() {
   if (mdFile == 'new file') {
     pb.callback('onSaveAs').file.saveas('Markdown (*.md),*md')
+  } else if ( simplemde.value() == mdText ) {
+    alert('Data no change. no need to save!')
   } else {
-    md_text = simplemde.value()
-    pb.file.write( mdFile, '@md_text', 'onAfterSave' )
+    mdText = simplemde.value()
+    pb.file.write( mdFile, '@mdText', 'onAfterSave' )
   }  
 }
 
@@ -64,11 +64,19 @@ function onAfterSave(result, type, url) {
 function onSaveAs(result, type, url) {
   var rs = JSON.parse( result.split('\\').join('\\\\') )
   if (rs.status>0) {
-    document.getElementById("filename").innerText = mdFile = (rs.path||mdFile)
+    mdFile = (rs.path.substr(-3)=='.md') ? rs.path : rs.path+'.md'
+    document.getElementById("filename").innerText = mdFile 
     onSave()
   }  
 }
+
+// prompt save data when close
+function onPageClose() {
+  if ( simplemde.value() !== mdText && mdFile !== 'new file' && confirm('Data has been change. Save Data?')) {
+    mdText = simplemde.value()
+    pb.file.write( mdFile, '@mdText', 'close' )
+    return 'no'
+  }  
+}
 </script>
-
-
                                                    

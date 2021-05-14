@@ -127,9 +127,7 @@ pb.file.read = function (file, callback) { pb.submit( pb.cmd.prepare(callback) +
 pb.file.write = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/write/' + file + '/' +  text ) }
 pb.file.append = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/append/' + file + '/' +  text ) }
 pb.file.delete = function (file, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/delete/' + file ) }
-pb.file.open = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/open/' + ext ) }
-pb.file.saveas = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/saveas/' + ext ) }
-
+pb.file.select = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/select/' + ext ) }
 
 //==== pb session. 
 // session(name) -> get value
