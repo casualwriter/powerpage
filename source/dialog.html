@@ -14,7 +14,6 @@ for making Electron-like HTML/JS GUI apps
   <li>(Misc) Variables, session information 
 </ul>
 
-<hr>
 <div id=info></div>
 <br><br>
 <button style="float:right" onclick="window.close()">Close</button>
@@ -22,12 +21,22 @@ for making Electron-like HTML/JS GUI apps
 
 <script>
 function onPageReady() {
-  var html = '<b>Session variables</b><br>'
+
+  var html = '<hr><b>Session variables</b><br>'
   html += '<br>title = ' + pb.session.title
   html += '<br>version = ' + pb.session.version
   html += '<br>about = ' + pb.session.about
   html += '<br>github = ' + pb.session.github
+  
+  html += '<hr><b>Global Variable (from Powerpage)</b>'
+  html += '<br>gv_version = ' + pb.session.gv_version
+  html += '<br>gv_hostname = ' + pb.session.gv_hostname
+  html += '<br>gv_currentpath = ' + pb.session.gv_currentpath
+  html += '<br>gv_commandline = ' + pb.session.gv_commandline
+  html += '<br>gv_loginuser = ' + pb.session.gv_loginuser
+  
   document.getElementById("info").innerHTML = html
+  
 }
 </script>
 
