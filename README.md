@@ -28,7 +28,7 @@ Powerpage is a single executable program. No installation is needed, Just downlo
   * Powerpage.htlm // Startup html file
   * Powerpage.ini  // Ini file of powerpage
   * Powerpage.js   // Javascript lib of powerpage
-  * *.dll          // Powerbuilder run-tie files
+  * *.dll          // Powerbuilder run-time files
 
 
 ## How PowerPage work?
