@@ -72,8 +72,10 @@ LogId     = db-login-id (or @encrypted-string)
 LogPass   = db-login-passowrd (or @encrypted-string)
 
 [browser]
+icon   = iconfile (or pbicon!)
 title  = [html] | file | {fix-title} 
 button = ABC  (a-about, b-goBack(), c-console)
+silent = yes| no (show error of js script)
 status = [yes] | pure | noweb | hide | no
 status.backcolor=status-background-color (default=67108864)
 status.textcolor=status-text-color (default=0)
