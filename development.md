@@ -10,8 +10,8 @@ Requirement | Provider | Description
 (V) Visual GUI |  HTML | make use of HTML powerful presentation ability
 (C) Control    | javascript   | Code business rule in js, with all kind of js library
 Share Informaiton | powerpage  | Powerpage provide pb.session object to share information between html pages.
-Shell Accessbility    | powerpage | Powerpage provide file accessibility, and run/shell command forjavacript
-File Accessbility    | powerpage | Read/write fileby javascript    
+Shell Accessbility    | powerpage | Powerpage provide run/shell command forjavacript
+File Accessbility    | powerpage | Powerpage provide file accessibility   
 Debug| Powerpage | Console, Log, etc.
 
 ## How Powerpage work
@@ -27,17 +27,67 @@ For example,
 
 ## Intreface / API
 
-Powerpage provides "pb protocol command" to talk to html pages. the command isalso packaged as javascript object ``pb`` as interface service provider.
+Powerpage provides "pb protocol command" to talk to html pages. When html page loaded, javascript object ``pb`` is provided as interface service provider.
 
-for details, please refer to interface  guide.
+for details, please refer to [interface  guide](interface.md).
 
+## start page
 
-## Deployment
+Start page can be defined by commandline, or ini. Powerpage load the start html by the following sequence
 
+1. from commandline. ``powerpage.exe your-start-page.html``
+2. from powerpage.ini if no commandline option is found
+```
+[system]
+start=your-start-page.html
+````
+3. if not defined in ini file, by default, powerpage load index.html if found or load powerpage.html if found. 
+
+## commandline options
+
+powerpage.exe {url} | {ini}
+
+## Ini setting
+
+The following setting can be customized for your application.
+
+~~~
+[system]
+start   = ap
+p-start-page.html
+script  = powerpage.js
+version = version-info-of-about-dialog
+credit  = copyright-info-of-about-dialog
+about   = brief-description-of-applicaiton
+github  = url-of-github
+home    = url-of-app-home
+title   = fix-title ( or [html] for show html title, [file]to show url)
+extLibrary=Powerbuilder Extend Library (e.g. powerExt1.pbl,powerExt2.pbl)
+
+[database]
+DBMS      = ODBC | O90 | etc..
+DbParm    = db-connection-parameter
+SeverName = db-server-name (or @encrypted-string)
+LogId     = db-login-id (or @encrypted-string)
+LogPass   = db-login-passowrd (or @encrypted-string)
+
+[browser]
+title  = [html] | file | {fix-title} 
+button = ABC  (a-about, b-goBack(), c-console)
+status = [yes] | pure | noweb | hide | no
+status.backcolor=status-background-color (default=67108864)
+status.textcolor=status-text-color (default=0)
+left  = left-position
+right = right-position
+width = window-width
+height= window-height
+~~~
 
 ## Samples
 
-* Markdown editor
+Several sample applications are provided to demonstrated the powerpage application:
+
+* [Markdown editor](https://github.com/casualwriter/powerpage-md)
 * Database Schema (Oracle)
 * Database Browser
 * Display Board
