@@ -63,10 +63,12 @@ For more details, please refer to [API documentation](interface.md)
 
 * 2021/05/07, beta version, v0.41 
 * 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](../powerpage-md)
+* 2021/05/19, beta version, v0.45, minor fix.
 
 ## License
 
 MIT
+
 
 
 

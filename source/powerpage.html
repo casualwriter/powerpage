@@ -17,6 +17,7 @@
 <button onclick="location.href='dbbrowser.html'" disabled>DB Browser</button> 
 <button onclick="location.href='document.html'" disabled>Documentation</button> 
 <button onclick="pb.run('notepad.exe powerpage.html')" accesskey=e style="float:right"><u>E</u>dit This Page</button> 
+<button onclick="alert(navigator.userAgent)" style="float:right">navigator.userAgent</button> 
 <button onclick="pb.window('w_about')" accesskey=a style="float:right"><u>A</u>bout</button> 
 
 <p><b>Powerpage is a lightweight web browser with DB capability and windows accessibility, for rapid application development by html/css/js. </b>
@@ -158,16 +159,10 @@ calling powerbuilder.filecopy(), filemove(), fileread(), filewrite to provide fi
      <td class=syntax>[javascript:pb.confirm('sure to delete?').file.delete('another.html')]()
   </tr>
   <tr>
-     <td class=remark>Open file dialog
-     <td class=sample><mark>pb://file/open</mark>/{desc},{*.ext}
-     <td class=syntax>[pb://file/open/HTML (*.html),*.html]() 
-     <td class=syntax>[javascript:pb.file.open('HTML (*.html),*.html')]()
-  </tr>
-  <tr>
-     <td class=remark>SaveAs file dialog
-     <td class=sample><mark>pb://file/save</mark>/{desc},{*.ext}
-     <td class=syntax>[pb://file/saveas/HTML (*.html),*.html]() 
-     <td class=syntax>[javascript:pb.file.saveas('HTML (*.html),*.html')]()
+     <td class=remark>Select File dialog
+     <td class=sample><mark>pb://file/select</mark>/{desc},{*.ext}
+     <td class=syntax>[pb://file/select/HTML (*.html),*.html]() 
+     <td class=syntax>[javascript:pb.file.select('HTML (*.html),*.html')]()
   </tr>
 </table>
 </div>
@@ -264,8 +259,8 @@ Session is important for applicaiton development. After page loaded,
   <tr>
      <td class=remark>initialized by powerpage.ini
      <td class=sample>[session]<br>var1 = name: PowerPage
-     <td class=syntax>[javascript:alert(pb.session.name)]()
-     <td class=syntax>[javascript:alert(pb.session('name'))]()
+     <td class=syntax>[javascript:alert(pb.session.version)]()
+     <td class=syntax>[javascript:alert(pb.session('version'))]()
   </tr>
   <tr>
      <td class=remark>support json value. e.g. {"key":"value"}
@@ -276,8 +271,8 @@ Session is important for applicaiton development. After page loaded,
   <tr>
      <td class=remark>update session variables
      <td class=sample><mark>pb://session</mark>/name/value     
-     <td class=syntax>[pb://session/remarks/try update session remarks]() <button onclick="pb.popup('dialog.html')">check</button>
-     <td class=syntax>[javascript:pb.session('remarks','session remarks has been updated')]() <button onclick="pb.popup('dialog.html')">check</button>
+     <td class=syntax>[pb://session/about/new description]() <button onclick="pb.popup('dialog.html')">check</button>
+     <td class=syntax>[javascript:pb.session('about','new description')]() <button onclick="pb.popup('dialog.html')">check</button>
   </tr>
 </table>
 </div>
@@ -338,7 +333,7 @@ s = s.replace( /\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2">$1</a>' )
 document.body.innerHTML = s
 
 // onPageRead will be called when page loaded
-function onPageReady() { pb.microhelp('page ready') }
+function onPageReady(cmdline) { pb.microhelp( cmdline||'page ready.') }
 
 // onPageClose will be called when window close
 function onPageClose() {

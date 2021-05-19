@@ -144,3 +144,6 @@ pb.session = function ( name, value, from ) {
    }
 }
 
+//disable right-click
+document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
+
