@@ -294,22 +294,22 @@ Misc..
      <td class=syntax>[javascript:pb.popup('width=500,url=dialog.html','mycallback')]()
   </tr>  
   <tr>
-     <td class=remark>open link in same window
+     <td class=remark>open url in same window
      <td class=sample>window.location=url
      <td class=syntax>[markdown.html]()
-     <td class=syntax>[javascript:window.location=markdown.html)]()
+     <td class=syntax>[javascript:window.location='markdown.html']()
   </tr>  
   <tr>
-     <td class=remark>
-     <td class=sample><a href='javascript:alert(navigator.userAgent)'>navigator.userAgent</a>
-     <td class=syntax><a target=_new href="http://google.com">Popup Google</a> | <a href="http://google.com">Goto Google</a> | <a href="http://something-wrong.com">Invalid Url</a>
-     <td class=syntax><a href='javascript:window.close()'>window.close()</a>
+     <td class=remark>Print, Preview, PageSetup 
+     <td class=sample><mark>pb://print</mark>/[now|preview|setup]
+     <td class=syntax>[pb://print](), [pb://print/now](), [pb://print/preview](), [pb://print/setup]()
+     <td class=syntax>[javascript:pb.print()](), [javascript:pb.print('preview')]()
   </tr>
   <tr>
-     <td class=remark>Goto url, and Inject js code
-     <td class=sample>
-     <td class=syntax>[pb://inject/alert(document.getElementById("lga").innerHTML)/http://google.com]()
-     <td class=syntax>pb.url.inject('http://google.com','alert(document.getElementById("lga").innerHTML')
+     <td class=remark>Misc
+     <td class=sample><a href="javascript:alert('Mode:IE'+document.documentMode+'\n userAgent:'+navigator.userAgent)">navigator.userAgent</a>
+     <td class=syntax><a target=_new href="http://google.com">Popup Google</a> | <a href="http://google.com">Goto Google</a> | <a href="http://something-wrong.com">Invalid Url</a>
+     <td class=syntax><a href='javascript:window.close()'>window.close()</a>
   </tr>
 </table>
 </div>
