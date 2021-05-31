@@ -2,21 +2,8 @@
 
 Powerpage is a ready-make Electron-like solution. No install, no compile, no packing. Just open editor to start coding.
 
-A electon like solution make use of HTML for GUI, and javascript for business rule. Powerpage, as the  host engine, work out the rest requirement of application.
-
-Requirement | Provider | Description
-------------|-----------|-----------
-(M) Data model | DBMS | Powerpage provide database accessbility for javascript.
-(V) Visual GUI |  HTML | make use of HTML powerful presentation ability
-(C) Control    | javascript   | Code business rule in js, with all kind of js library
-Share Informaiton | powerpage  | Powerpage provide pb.session object to share information between html pages.
-Shell Accessbility    | powerpage | Powerpage provide run/shell command forjavacript
-File Accessbility    | powerpage | Powerpage provide file accessibility   
-Debug| Powerpage | Console, Log, etc.
-
-## How Powerpage work
-
-Powerpage is very simple. It is a window with MS webbrowser control. html talk to powerpage when there is any additional requirement which browser cannot handle.
+Powerpage is very simple. It is a window with MS webbrowser control (equivalent to IE11). 
+HTML Page talk to Powerpage when there is any additional requirement which web-browser cannot handle.
 
 For example, 
 
@@ -31,30 +18,31 @@ Powerpage provides "pb protocol command" to talk to html pages. When html page l
 
 for details, please refer to [interface  guide](interface.md).
 
-## start page
+## Start page
 
 Start page can be defined by commandline, or ini. Powerpage load the start html by the following sequence
 
 1. from commandline. ``powerpage.exe your-start-page.html``
+
 2. from powerpage.ini if no commandline option is found
 ```
 [system]
 start=your-start-page.html
-````
+```
+
 3. if not defined in ini file, by default, powerpage load index.html if found or load powerpage.html if found. 
 
-## commandline options
+## Commandline Options
 
 powerpage.exe {url} | {ini}
 
-## Ini setting
+## INI Setting
 
 The following setting can be customized for your application.
 
 ~~~
 [system]
-start   = ap
-p-start-page.html
+start   = app-start-page.html
 script  = powerpage.js
 version = version-info-of-about-dialog
 credit  = copyright-info-of-about-dialog
@@ -74,7 +62,7 @@ LogPass   = db-login-passowrd (or @encrypted-string)
 [browser]
 icon   = iconfile (or pbicon!)
 title  = [html] | file | {fix-title} 
-button = ABC  (a-about, b-goBack(), c-console)
+button = ABC  (a-about, b-goback, c-console)
 silent = yes| no (show error of js script)
 status = [yes] | pure | noweb | hide | no
 status.backcolor=status-background-color (default=67108864)
@@ -100,6 +88,4 @@ Several sample applications are provided to demonstrated the powerpage applicati
 ## Senario
 
 to-be-continue...
-
-
 

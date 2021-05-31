@@ -3,6 +3,7 @@
 // 20210301. ck.  pb.callback(), run commands, and all basic features
 // 20210505. ck.  pb.session()
 // 20210507. ck.  pb.console(), pb.eval() for console support
+// 20210529. ck.  pb.print() 
 //========================================================================
 // pb main function, pb('varname') = js.varname, pb('#div') = getElementById
 var pb = function (n) { return n[0]=='#'? document.getElementById(n.substr(2)) : window[n]; }
@@ -127,7 +128,8 @@ pb.file.read = function (file, callback) { pb.submit( pb.cmd.prepare(callback) +
 pb.file.write = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/write/' + file + '/' +  text ) }
 pb.file.append = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/append/' + file + '/' +  text ) }
 pb.file.delete = function (file, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/delete/' + file ) }
-pb.file.select = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/select/' + ext ) }
+pb.file.opendialog = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/opendialog/' + ext ) }
+pb.file.savedialog = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/savedialog/' + ext ) }
 
 //==== pb session. 
 // session(name) -> get value
@@ -143,6 +145,9 @@ pb.session = function ( name, value, from ) {
       pb.session[name] = (value.substr(0,1)=='{'? JSON.parse(value) : value )
    }
 }
+
+//====== print support. pb://print/[now|preview|setup]
+pb.print = function (opt, callback) { pb.submit( pb.cmd.prepare(callback) + 'print/' + opt ) }
 
 //disable right-click
 document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);

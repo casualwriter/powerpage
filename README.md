@@ -11,9 +11,6 @@ Powerpage will connect to database, and load startup page using MS web-browser c
 * (PB) Call Powerbuilder Windows/Functions 
 * (Misc) Variables, session information 
 
-![](powerpage.jpg)
-
-
 ## Installation & Run
 
 Powerpage is a single executable program. No installation is needed, Just download and run ``powerpage.exe``.
@@ -58,24 +55,16 @@ for example:
 For more details, please refer to [API documentation](interface.md)
 
 
+## Sample
+
+* [Screen Layout](powerpage.jpg)
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-md)
+
 
 ## Modification History
 
 * 2021/05/07, beta version, v0.41 
-* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](../powerpage-md)
+* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](https://github.com/casualwriter/powerpage-md)
 * 2021/05/19, beta version, v0.45, minor fix.
-
-## License
-
-MIT
-
-
-
-
-
-
-
-
-
-
+* 2021/05/25, beta version, v0.46, command for print. 
 
