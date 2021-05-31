@@ -19,7 +19,7 @@ Powerpage main program is window with MS OLE Web brwoser. HTML page may via the 
 
 Powerpage will interpret and execute command, and pass the result to HTML page by calling js function ``pb.router( result, type, cmd)``
 
-When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb`` javascript object to provide pwoerpage interface.
+When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb`` javascript object to provide powerpage interface.
 
 
 ### Global Features (Callback, Prompt, @JsVar, Secured protocol)  
@@ -29,8 +29,8 @@ When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb`` 
 Description | Protocol / javascript
 ------------|------------------------
 Prompt for confirmation, then run command | pb://?Open notepad?/run/notepad.exe <br> javascript: pb.confirm('OpenNotepad').run('notepad.exe')  
-Callback js function after run command | pb://callback/mycallback/run/calc.exe <br> javascript: pb.run('calc.exe','mycallback')  
-use @jsVar as command parameter for long string | pb://sql/query/@sql1 <br> javascript: pb.db.query(sql1)  
+Callback js function after run command | pb://callback/mycallback/run/calc.exe <br> javascript: pb.callback('mycallback').run('calc.exe')  
+use @jsVar as command parameter for long string | pb://sql/query/@sql1 <br> javascript:pb.db.query('@sql1') <<br> or javascript: pb.db.query(sql1) 
 ``Secured`` Protocol (Prompt user login by windows account) | ps://run/resmon.exe <br> javascript: pb.secure().run('resmon.exe')  
 
 
@@ -85,7 +85,7 @@ Call PB Global Function | pb://function/f_get_product   <br> javascript: pb.func
 
 #### Session / Global Variables
 
-``pb.session``` serves as session object sharing information between different pages. initialized by ``powerpage.ini``, e.g.
+``pb.session`` serves as session object sharing information between different pages. initialized by ``powerpage.ini``, e.g.
 
           [session]
           var1 = name: PowerPage 
@@ -99,12 +99,20 @@ to update session variables, may use protocol ``pb://session/remarks/new content
 
 To open url in popup dialog (share session info), use protocol ``pb://popup/height=400,url=dialog.html`` or javascript ``pb.popup('width=800,url=dialog.html')`` 
 
-To popup dialog with callback, by protocol ``pb://callback/mycallback/popup/height=400,url=dialog.html`` or by js ``pb.popup('width=500,url=dialog.html','mycallback')``
+To popup dialog with callback, by protocol ``pb://callback/mycallback/popup/height=400,url=dialog.html`` or 
+by javascript ``pb.popup('width=500,url=dialog.html','mycallback') or pb.callback('mycallback').popup('width=500,url=dialog.html')``
 
+#### Print / Print Preview
+
+* Print (default, with prompt) => ``pb://print`` or js ``pb.print()``
+* Print without prompt => ``pb://print.now`` or js ``pb.print('now')``
+* Print Preview => ``pb://print/preview`` or js ``pb.print('preview')`` 
+* Print Setup => ``pb://print/setup`` or js ``pb.print('setup')``
 
 
 ### Modification History
 
-* 2021/05/11
+* 2021/05/11  initial
+* 2021/05/31  add print commands  
 
 
