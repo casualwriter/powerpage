@@ -20,7 +20,7 @@
 <button onclick="alert(navigator.userAgent)" style="float:right">navigator.userAgent</button> 
 <button onclick="pb.window('w_about')" accesskey=a style="float:right"><u>A</u>bout</button> 
 
-<p><b>Powerpage is a lightweight web browser with DB capability and windows accessibility, for rapid application development by html/css/js. </b>
+<p id=brief><b>Powerpage is a lightweight web browser with DB capability and windows accessibility, for rapid application development by html/css/js. </b>
 <p>Powerpage will connect to database, and load startup page by the setting of powerpage.ini, and open OLE web-browser with new protocol <mark>pb:// or ps://</mark> supported below features</b>
 <ul>
 <li>(Run)  Call External Program 
@@ -33,7 +33,7 @@
 
 <hr>
 
-<div>
+<div id=global>
 <h3>Global Features (Callback, Prompt, @JsVar, Secured protocol)</h3> 
 "Callback, Prompt/Confirm, @JsVar, Secured protocol" are supported in all commands.
 
@@ -87,14 +87,14 @@ Run will call powerbuilder.run(), and RunAt will run program at its existing fol
   <tr>
      <td class=remark>Run program in its directory
      <td class=sample><mark>pb://runat</mark>/Command, <br> <mark>pb://run@</mark>/Command
-     <td class=syntax>[pb://runat/c:\app\cis\cis.exe](), [pb://run@/c:\app\cis\cis.exe]()
-     <td class=syntax>[javascript:pb.runat('c:\\app\\cis\\cis.exe')]()
+     <td class=syntax>[pb://runat/c:\app\notepad2.exe](), [pb://run@/c:\app\notepad2.exe]()
+     <td class=syntax>[javascript:pb.runat('c:\\app\\notepad2.exe')]()
   </tr>
   <tr>
      <td class=remark>Shell: Open File (same as start.exe [file])
      <td class=sample><mark>pb://shell/open</mark>/file
-     <td class=syntax>[pb://shell/open/calc.exe]() 
-     <td class=syntax>[javascript:pb.shell.open('calc.exe')]()
+     <td class=syntax>[pb://shell/open/__temp__file.pdf]() 
+     <td class=syntax>[javascript:pb.shell.open('__temp__file.pdf.pdf')]()
   </tr>
   <tr>
      <td class=remark>Shell: Open folder (e.g. c:\temp)
@@ -105,14 +105,14 @@ Run will call powerbuilder.run(), and RunAt will run program at its existing fol
   <tr>
      <td class=remark>Shell: Run program (similar to runat())
      <td class=sample><mark>pb://shell/run</mark>/filename
-     <td class=syntax>[pb://shell/run/c:\app\cis\cis.exe]() 
-     <td class=syntax>[javascript:pb.shell.run('c:\\app\\cis\\cis.exe')]()
+     <td class=syntax>[pb://shell/run/c:\app\notepad2.exe]() 
+     <td class=syntax>[javascript:pb.shell.run('c:\\app\\notepad2.exe')]()
   </tr>
   <tr>
      <td class=remark>Shell: Print File
      <td class=sample><mark>pb://shell/print</mark>/filename
-     <td class=syntax>[pb://?Print PDF?/shell/print/powerpage.pdf]()
-     <td class=syntax>[javascript:pb.shell.print('powerpage.pdf')]()
+     <td class=syntax>[pb://?Print PDF?/shell/print/interface.pdf]()
+     <td class=syntax>[javascript:pb.shell.print('__temp_file.pdf')]()
   </tr>
 </table>
 </div>
@@ -159,10 +159,16 @@ calling powerbuilder.filecopy(), filemove(), fileread(), filewrite to provide fi
      <td class=syntax>[javascript:pb.confirm('sure to delete?').file.delete('another.html')]()
   </tr>
   <tr>
-     <td class=remark>Select File dialog
-     <td class=sample><mark>pb://file/select</mark>/{desc},{*.ext}
-     <td class=syntax>[pb://file/select/HTML (*.html),*.html]() 
-     <td class=syntax>[javascript:pb.file.select('HTML (*.html),*.html')]()
+     <td class=remark>OpenFile dialog
+     <td class=sample><mark>pb://file/opendialog</mark>/{desc},{*.ext}
+     <td class=syntax>[pb://file/opendialog/HTML (*.html),*.html]() 
+     <td class=syntax>[javascript:pb.file.opendialog('HTML (*.html),*.html')]()
+  </tr>
+  <tr>
+     <td class=remark>SaveFile dialog
+     <td class=sample><mark>pb://file/savedialog</mark>/{desc},{*.ext}
+     <td class=syntax>[pb://file/savedialog/HTML (*.html),*.html]() 
+     <td class=syntax>[javascript:pb.file.savedialog('HTML (*.html),*.html')]()
   </tr>
 </table>
 </div>
@@ -306,10 +312,22 @@ Misc..
      <td class=syntax>[javascript:pb.print()](), [javascript:pb.print('preview')]()
   </tr>
   <tr>
+     <td class=remark>PDF Report Generation 
+     <td class=sample><mark>pb://pdf</mark>/[open|print|dialog|div][/querySelector]
+     <td class=syntax>[pb://pdf](), [pb://pdf/open](), [pb://pdf/print](), [pb://pdf/dialog]() 
+     <td class=syntax>[javascript:pb.pdf()](), [javascript:pb.pdf('open')](), [javascript:pb.pdf('print')]()
+  </tr>
+  <tr>
+     <td class=remark>Select Elements for PDF report 
+     <td class=sample>pb://pdf/[now|print|div|id]<mark>[/querySelector]</mark>
+     <td class=syntax>[pb://pdf/div/*brief,*global,.sample](), [pb://pdf/open/p,hr,button]()
+     <td class=syntax>[javascript:pb.pdf('div','#brief,#global,.sample')](), [javascript:pb.pdf('print','p,hr,button')]()
+  </tr>
+  <tr>
      <td class=remark>Misc
      <td class=sample><a href="javascript:alert('Mode:IE'+document.documentMode+'\n userAgent:'+navigator.userAgent)">navigator.userAgent</a>
      <td class=syntax><a target=_new href="http://google.com">Popup Google</a> | <a href="http://google.com">Goto Google</a> | <a href="http://something-wrong.com">Invalid Url</a>
-     <td class=syntax><a href='javascript:window.close()'>window.close()</a>
+     <td class=syntax><a href='javascript:window.close()'>window.close()</a> 
   </tr>
 </table>
 </div>

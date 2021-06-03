@@ -66,5 +66,7 @@ For more details, please refer to [API documentation](interface.md)
 * 2021/05/07, beta version, v0.41 
 * 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](https://github.com/casualwriter/powerpage-md)
 * 2021/05/19, beta version, v0.45, minor fix.
-* 2021/05/25, beta version, v0.46, command for print. 
+* 2021/05/25, beta version, v0.46, command for html printing
+* 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
+
 

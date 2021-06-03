@@ -109,10 +109,30 @@ by javascript ``pb.popup('width=500,url=dialog.html','mycallback') or pb.callbac
 * Print Preview => ``pb://print/preview`` or js ``pb.print('preview')`` 
 * Print Setup => ``pb://print/setup`` or js ``pb.print('setup')``
 
+#### PDF Report
+
+Powerpage using ``wkhtmltopdf.exe`` to generate PDF report. please setup the path in INI file. You may also setup "pdf-preview" for preview window, and "pdf-timeout" if need.
+
+~~~
+[system]
+pdf-factory=C:\PortableWork\wkhtmltox\wkhtmltopdf.exe
+pdf-preview=width=1024,height=768
+pdf-timeout=10
+~~~
+
+* Generate PDF report, (by default, preview PDF in browser) => ``pb://pdf`` or js ``pb.pdf()``
+* Generate PDF, and open (=shell.open, open by installed PDF reader) => ``pb://pdf/open`` or js ``pb.pdf('open')``
+* Generate PDF, and print (=shell.print, print by installed PDF reader) => ``pb://pdf/print`` or js ``pb.pdf('print')``
+* Generate PDF, open in browser, and call print dialog => ``pb://pdf/dialog`` or js ``pb.pdf('dialog')``
+* Generate PDF with selected elements => ``pb://div/*elm-id1,*elm-id2,.class,p`` or js ``pb.pdf( 'div', '#elm-id1,#elm-id2,.class,p' )``
+
 
 ### Modification History
 
 * 2021/05/11  initial
 * 2021/05/31  add print commands  
+* 2021/06/03  add PDF report generation, and pdf print support 
+
+
 
 

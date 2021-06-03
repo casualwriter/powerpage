@@ -53,21 +53,15 @@ pb.eval = function (exp) {
 pb.cmd = { protocol:'pb://' }
 pb.secure = function() { pb.cmd.protocol = 'ps://' ; return pb }
 
-//=== add Prompt to parepare queue
-pb.prompt = pb.confirm = function (msg) { 
-  pb.cmd.prompt = msg; 
-  return pb 
-}
-
-//=== add callback to prepare queue
-pb.callback = function (funcname) { 
-  pb.cmd.callback = funcname; 
-  return pb 
-}
+//=== add Prompt or callback to parepare queue
+pb.prompt = pb.confirm = function (msg) { pb.cmd.prompt = msg; return pb }
+pb.callback = function (funcname) { pb.cmd.callback = funcname; return pb }
  
-//=== submit command to Powerbuilder. (support cmd history later)
-pb.submit = function (cmd) {
-  window.location = pb.cmd.command = cmd
+//=== submit command to Main Program. (support cmd history later)
+pb.submit = function ( cmd, parm, callback ) { 
+   pb.cmd.command = pb.cmd.prepare(callback) + cmd + '/' + encodeURIComponent(parm);
+   window.location = pb.cmd.command
+   return pb
 }
 
 //=== prepare command prefix with Prompt and callback
@@ -96,45 +90,45 @@ pb.cmd.parameters = function(args) {
 }
 
 //=== call run() commands
-pb.run = function ( cmd, callback ) { pb.submit( pb.cmd.prepare(callback) + 'run/' + cmd ) }
-pb.runat = function ( cmd, callback ) { pb.submit( pb.cmd.prepare(callback) + 'run@/' + cmd ) }   
+pb.run = function ( cmd, callback ) { pb.submit( 'run', cmd, callback ) }
+pb.runat = function ( cmd, callback ) { pb.submit( 'run@', cmd, callback ) }   
 
 //=== shell functions
 pb.shell = { name: 'shell functions' }
-pb.shell.open = function (path,callback) { pb.submit( pb.cmd.prepare(callback) + 'shell/open/' + path ) };
-pb.shell.max  = function (path,callback) { pb.submit( pb.cmd.prepare(callback) + 'shell/max/' + path ) };
-pb.shell.print = function (path,callback) { pb.submit( pb.cmd.prepare(callback) + 'shell/print/' + path ) }; 
-pb.shell.run = function (path,callback) { pb.submit( pb.cmd.prepare(callback) + 'shell/run/' + path ) };
+pb.shell.open = function (path, callback) { pb.submit( 'shell/open', path, callback ) };
+pb.shell.max  = function (path, callback) { pb.submit( 'shell/max', path, callback ) };
+pb.shell.print = function (path, callback) { pb.submit( 'shell/print', path, callback ) }; 
+pb.shell.run = function (path, callback) { pb.submit( 'shell/run', path, callback ) };
 
 //=== call Powerbuilder dialog, window, function
-pb.dialog = function (win, args, callback) { pb.submit( pb.cmd.prepare(callback) + 'dialog/' + win + pb.cmd.parameters(args) ) }
-pb.window = function (win, args, callback) { pb.submit( pb.cmd.prepare(callback) + 'window/' + win + pb.cmd.parameters(args) ) }
-pb.function = function (win, args, callback) { pb.submit( pb.cmd.prepare(callback) + 'function/' + win + pb.cmd.parameters(args) ) }
-pb.popup = function (url,callback) { pb.submit( pb.cmd.prepare(callback) + 'popup/' + url ) }
+pb.dialog = function (win, args, callback) { pb.submit( 'dialog', win + pb.cmd.parameters(args), callback ) }
+pb.window = function (win, args, callback) { pb.submit( 'window', win + pb.cmd.parameters(args), callback ) }
+pb.function = function (func, args, callback) { pb.submit( 'function', win + pb.cmd.parameters(args), callback ) }
+pb.popup = function (url,callback) { pb.submit( 'popup', url, callback ) }
 
 //=== database function
 pb.db = { name: 'database functions' }
-pb.db.json  = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'json/' + sql ) };
-pb.db.table = pb.db.html  = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'table/' + sql ) };
-pb.db.query = pb.db.select = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'json/' + sql ) };  
-pb.db.execute = pb.db.update = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'sql/execute/' + sql ) };
-pb.db.confirm = pb.db.prompt = function ( sql, callback ) { pb.submit( pb.cmd.prepare(callback) + 'sql/prompt/' + sql ) };
+pb.db.json  = function ( sql, callback ) { pb.submit( 'json', sql, callback ) };
+pb.db.table = pb.db.html  = function ( sql, callback ) { pb.submit( 'table', sql, callback ) };
+pb.db.query = pb.db.select = function ( sql, callback ) { pb.submit( 'json', sql, callback ) };  
+pb.db.execute = pb.db.update = function ( sql, callback ) { pb.submit( 'sql/execute', sql, callback ) };
+pb.db.confirm = pb.db.prompt = function ( sql, callback ) { pb.submit( 'sql/prompt', sql, callback ) };
 
 //=== file functions
 pb.file = { name: 'file functions' }
-pb.file.copy = function (from, to, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/copy/' + from + '/' + to ) }
-pb.file.move = function (from, to, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/move/' + from + '/' + to ) }
-pb.file.read = function (file, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/read/' + file ) }
-pb.file.write = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/write/' + file + '/' +  text ) }
-pb.file.append = function (file, text, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/append/' + file + '/' +  text ) }
-pb.file.delete = function (file, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/delete/' + file ) }
-pb.file.opendialog = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/opendialog/' + ext ) }
-pb.file.savedialog = function (ext, callback) { pb.submit( pb.cmd.prepare(callback) + 'file/savedialog/' + ext ) }
+pb.file.copy = function (from, to, callback) { pb.submit( 'file/copy', from + '/' + to, callback ) }
+pb.file.move = function (from, to, callback) { pb.submit( 'file/move', from + '/' + to, callback ) }
+pb.file.read = function (file, callback) { pb.submit( 'file/read', file, callback ) }
+pb.file.write = function (file, text, callback) { pb.submit( 'file/write', file + '/' +  text, callback ) }
+pb.file.append = function (file, text, callback) { pb.submit( 'file/append', file + '/' +  text, callback ) }
+pb.file.delete = function (file, callback) { pb.submit( 'file/delete', file, callback ) }
+pb.file.opendialog = function (ext, callback) { pb.submit( 'file/opendialog', ext, callback ) }
+pb.file.savedialog = function (ext, callback) { pb.submit( 'file/savedialog', ext, callback ) }
 
 //==== pb session. 
 // session(name) -> get value
 // session(name,value) -> set value and sync to pb
-// session(name,value,'init') -> call from pb, init value (no call back)    
+// session(name,value,'host') -> call from pb(host), init value (no call back)    
 pb.session = function ( name, value, from ) {
    if (arguments.length == 1) {
       return pb.session[name]
@@ -147,7 +141,18 @@ pb.session = function ( name, value, from ) {
 }
 
 //====== print support. pb://print/[now|preview|setup]
-pb.print = function (opt, callback) { pb.submit( pb.cmd.prepare(callback) + 'print/' + opt ) }
+pb.print = function ( opt, callback ) { pb.submit( 'print', opt, callback ) }
+
+//====== PDF report. pb://pdf/[print|open|dialog|div]/{querySelector}
+pb.pdf = function ( opt, parm, callback ) { 
+  var html=''
+  if (opt=='host') { 
+     var divs = document.querySelectorAll(parm.replace(/\*/g,'#'))
+     for (var i=0; i<divs.length; i++ ) html += divs[i].outerHTML + '\n'
+     return html
+  }    
+  return pb.submit( 'pdf', opt + (parm? '/' + parm : '' ), callback ) 
+}
 
 //disable right-click
 document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
