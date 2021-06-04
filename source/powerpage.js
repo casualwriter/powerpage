@@ -93,6 +93,9 @@ pb.cmd.parameters = function(args) {
 pb.run = function ( cmd, callback ) { pb.submit( 'run', cmd, callback ) }
 pb.runat = function ( cmd, callback ) { pb.submit( 'run@', cmd, callback ) }   
 
+//====== call wsh.sendkeys. pb://sendkeys/{run=cmd/title=activeApp}/s=sleep/keys}
+pb.sendkeys = function (cmd) { pb.submit( 'sendkeys', cmd ) }
+
 //=== shell functions
 pb.shell = { name: 'shell functions' }
 pb.shell.open = function (path, callback) { pb.submit( 'shell/open', path, callback ) };

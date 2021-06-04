@@ -26,7 +26,8 @@
 <li>(Run)  Call External Program 
 <li>(File) Access file system
 <li>(DB)   Access Database
-<li>(PB)   Call Powerbuilder Windows/Functions
+<li>(PB)   Call Powerbuilder Windows/Functions                     
+<li>(Print) Printing, PDF rerport generation
 <li>(Misc)  Variables, session information
 </ul>
 </p>
@@ -283,9 +284,33 @@ Session is important for applicaiton development. After page loaded,
 </table>
 </div>
 
+
+<div>
+<h3>Print and PDF Report Generation</h3>
+<table style="margin:10px;border-collapse: collapse;">
+  <tr>
+     <td class=remark>Print, Preview, PageSetup 
+     <td class=sample><mark>pb://print</mark>/[now|preview|setup]
+     <td class=syntax>[pb://print](), [pb://print/now](), [pb://print/preview](), [pb://print/setup]()
+     <td class=syntax>[javascript:pb.print()](), [javascript:pb.print('preview')]()
+  </tr>
+  <tr>
+     <td class=remark>PDF Report Generation 
+     <td class=sample><mark>pb://pdf</mark>/[open|print|dialog|div][/querySelector]
+     <td class=syntax>[pb://pdf](), [pb://pdf/open](), [pb://pdf/print](), [pb://pdf/dialog]() 
+     <td class=syntax>[javascript:pb.pdf()](), [javascript:pb.pdf('open')](), [javascript:pb.pdf('print')]()
+  </tr>
+  <tr>
+     <td class=remark>Select Elements for PDF Report 
+     <td class=sample>pb://pdf/[now|print|div|id]<mark>[/querySelector]</mark>
+     <td class=syntax>[pb://pdf/div/*brief,*global,.sample](), [pb://pdf/open/p,hr,button]()
+     <td class=syntax>[javascript:pb.pdf('div','#brief,#global,.sample')](), [javascript:pb.pdf('print','p,hr,button')]()
+  </tr>
+</table>
+</div>
+
 <div>
 <h3>Url Navigation / Misc</h3>
-Misc..
 <table style="margin:10px;border-collapse: collapse;">
   <tr>
      <td class=remark>open link in popup dialog (share session info)
@@ -306,26 +331,14 @@ Misc..
      <td class=syntax>[javascript:window.location='markdown.html']()
   </tr>  
   <tr>
-     <td class=remark>Print, Preview, PageSetup 
-     <td class=sample><mark>pb://print</mark>/[now|preview|setup]
-     <td class=syntax>[pb://print](), [pb://print/now](), [pb://print/preview](), [pb://print/setup]()
-     <td class=syntax>[javascript:pb.print()](), [javascript:pb.print('preview')]()
-  </tr>
-  <tr>
-     <td class=remark>PDF Report Generation 
-     <td class=sample><mark>pb://pdf</mark>/[open|print|dialog|div][/querySelector]
-     <td class=syntax>[pb://pdf](), [pb://pdf/open](), [pb://pdf/print](), [pb://pdf/dialog]() 
-     <td class=syntax>[javascript:pb.pdf()](), [javascript:pb.pdf('open')](), [javascript:pb.pdf('print')]()
-  </tr>
-  <tr>
-     <td class=remark>Select Elements for PDF report 
-     <td class=sample>pb://pdf/[now|print|div|id]<mark>[/querySelector]</mark>
-     <td class=syntax>[pb://pdf/div/*brief,*global,.sample](), [pb://pdf/open/p,hr,button]()
-     <td class=syntax>[javascript:pb.pdf('div','#brief,#global,.sample')](), [javascript:pb.pdf('print','p,hr,button')]()
-  </tr>
+     <td class=remark>Send keystrokes (WScript.shell)
+     <td class=sample><mark>pb://sendkeys</mark>/{run=cmd/app=title/s=1/keys}
+     <td class=syntax>[pb://sendkeys/run=notepad.exe/title=Untitled - Notepad/s=2/this is a test]()
+     <td class=syntax>[javascript:pb.sendkeys(keys)](), [javascript:pb.sendkeys('%a')]()
+  </tr>  
   <tr>
      <td class=remark>Misc
-     <td class=sample><a href="javascript:alert('Mode:IE'+document.documentMode+'\n userAgent:'+navigator.userAgent)">navigator.userAgent</a>
+     <td class=sample><a href="javascript:alert('Mode:IE'+document.documentMode+'\n userAgent:'+navigator.userAgent)">documentMode + navigator.userAgent</a>
      <td class=syntax><a target=_new href="http://google.com">Popup Google</a> | <a href="http://google.com">Goto Google</a> | <a href="http://something-wrong.com">Invalid Url</a>
      <td class=syntax><a href='javascript:window.close()'>window.close()</a> 
   </tr>
@@ -343,6 +356,7 @@ function mycallback(result, type, url) {
 var sql1 = "SELECT * from Products where SupplierID=20";
 var sql2 = "SELECT * from Customers where City='London' ";
 var sql3 = "UPDATE Products set UnitsOnOrder = UnitsOnOrder + 1 where SupplierID=20 ";
+var keys = 'js=mycallback/run=notepad.exe/title=Untitled - Notepad/ms=500/test/ms=300/{bs}/ms=300/123/ms=500/456/~new line'
 
 // link markup
 var s = document.body.innerHTML
@@ -358,7 +372,4 @@ function onPageClose() {
   return confirm('Close this page?')? 'yes' : 'no'
 }
 </script>
-
-
-
 
