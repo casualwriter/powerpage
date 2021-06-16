@@ -68,9 +68,8 @@
 </div>
 
 <div>
-<h3>Run / RunAt / Shell</h3>
-Run will call powerbuilder.run(), and RunAt will run program at its existing folder.
-<br>Shell command will be diverted to shell32.dll -> ShellExecuteW()
+<h3>Run / Shell</h3>
+Run will call Wscript.run() and Shell command will be diverted to shell32.dll -> ShellExecuteW()
 <table style="margin:10px;border-collapse: collapse;">
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
@@ -86,34 +85,34 @@ Run will call powerbuilder.run(), and RunAt will run program at its existing fol
      <td class=syntax>[javascript:pb.run('notepad.exe powerpage.html')]()
   </tr>
   <tr>
-     <td class=remark>Run program in its directory
-     <td class=sample><mark>pb://runat</mark>/Command, <br> <mark>pb://run@</mark>/Command
-     <td class=syntax>[pb://runat/c:\app\notepad2.exe](), [pb://run@/c:\app\notepad2.exe]()
-     <td class=syntax>[javascript:pb.runat('c:\\app\\notepad2.exe')]()
+     <td class=remark>Run program with directory, and wait
+     <td class=sample>pb://run/<mark>path=?,cmd=?,style=?</mark>
+     <td class=syntax>[pb://run/path=c:\app,cmd=notepad.exe,style=wait]()
+     <td class=syntax>[javascript:pb.run('notepad.exe','c:\\app','max+wait')]()
   </tr>
   <tr>
      <td class=remark>Shell: Open File (same as start.exe [file])
-     <td class=sample><mark>pb://shell/open</mark>/file
-     <td class=syntax>[pb://shell/open/__temp__file.pdf]() 
-     <td class=syntax>[javascript:pb.shell.open('__temp__file.pdf.pdf')]()
+     <td class=sample><mark>pb://shell/</mark>file
+     <td class=syntax>[pb://shell/interface.pdf]() 
+     <td class=syntax>[javascript:pb.shell('interface.pdf')]()
   </tr>
   <tr>
      <td class=remark>Shell: Open folder (e.g. c:\temp)
-     <td class=sample><mark>pb://shell/open</mark>/folder
-     <td class=syntax>[pb://shell/open/c:\temp]() 
-     <td class=syntax>[javascript:pb.shell.open('c:\\temp')]()
+     <td class=sample><mark>pb://shell/</mark>/folder
+     <td class=syntax>[pb://shell/c:\temp]() 
+     <td class=syntax>[javascript:pb.shell('c:\\temp')]()
   </tr>
   <tr>
-     <td class=remark>Shell: Run program (similar to runat())
-     <td class=sample><mark>pb://shell/run</mark>/filename
-     <td class=syntax>[pb://shell/run/c:\app\notepad2.exe]() 
-     <td class=syntax>[javascript:pb.shell.run('c:\\app\\notepad2.exe')]()
+     <td class=remark>Shell: Run program
+     <td class=sample><mark>pb://shell</mark>/filename
+     <td class=syntax>[pb://shell/notepad.exe]() 
+     <td class=syntax>[javascript:pb.shell('notepad.exe')]()
   </tr>
   <tr>
-     <td class=remark>Shell: Print File
-     <td class=sample><mark>pb://shell/print</mark>/filename
-     <td class=syntax>[pb://?Print PDF?/shell/print/interface.pdf]()
-     <td class=syntax>[javascript:pb.shell.print('__temp_file.pdf')]()
+     <td class=remark>Shell: Advanced Options, e.g. print
+     <td class=sample>pb://shell/<mark>action=print,file=?,path=?,style=?</mark>
+     <td class=syntax>[pb://?Print PDF?/shell/action=print,file=interface.pdf]()
+     <td class=syntax>[javascript:pb.shell('print','interface.pdf')]()
   </tr>
 </table>
 </div>
@@ -249,10 +248,10 @@ call powerbuilder customized window/function, which stored in extert pbl file.
      <td class=syntax>[javascript:pb.window('w_web_dialog','left=50,height=500,url=https://google.com')]()
   </tr>
   <tr>
-     <td class=remark>Call PB Global Function, return string
-     <td class=sample><mark>pb://function</mark>/funcName/parm
-     <td class=syntax>[pb://function/f_get_product]()
-     <td class=syntax>[javascript:pb.function('f_get_product')]()
+     <td class=remark>Call PB function, return string
+     <td class=sample><mark>pb://func</mark>/funcName/parm
+     <td class=syntax>[pb://func/f_get_product/id=356/K123]()
+     <td class=syntax>[javascript:pb.func('f_get_product', 'id=365')]()
   </tr>
 </table>
 </div>
@@ -304,7 +303,7 @@ Session is important for applicaiton development. After page loaded,
      <td class=remark>Select Elements for PDF Report 
      <td class=sample>pb://pdf/[now|print|div|id]<mark>[/querySelector]</mark>
      <td class=syntax>[pb://pdf/div/*brief,*global,.sample](), [pb://pdf/open/p,hr,button]()
-     <td class=syntax>[javascript:pb.pdf('div','#brief,#global,.sample')](), [javascript:pb.pdf('print','p,hr,button')]()
+     <td class=syntax>[javascript:pb.pdf('open','#brief,#global,.sample')](), [javascript:pb.pdf('div','p,hr,button')]()
   </tr>
 </table>
 </div>

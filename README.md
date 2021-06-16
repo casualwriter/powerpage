@@ -40,9 +40,9 @@ HTML page may via the following channel to talk to main program
 
 Powerpage will interpret and execute the command, and pass the result to HTML page by calling js function ``pb.router( result, type, cmd)``
 
-## Protocol Commands
+## Interface / PB Protocol Commands
 
-Interface is provided by ``pb://`` protocol command, or javascript ``pb.`` API function call.  HTML Page may use 
+Interface is provided by ``pb://`` protocol command, or javascript ``pb.api()`` API function call.  HTML Page may use 
 
 ``<a href="pb://protocol/command"> pb://protocol/command</a> `` or javascript:pb.apiFunction()`` to make powerpage API call.
 
@@ -54,6 +54,19 @@ for example:
 
 For more details, please refer to [API documentation](interface.md)
 
+## Command Line
+
+Powerpage support the following commandline parameters.
+
+       powerpage.exe /ini={ini-file} /url={start-url} /print /save={save-html} /pdf={output-pdf-file} /delay={1000}
+
+* ``/ini={ini-file}`` specifies ini setting file.   
+* ``/url={start-url}`` is used to specify startup link
+* ``/print`` will load startup url, print and close program.
+* ``/save={save-html}`` will load startup url, save to html file, and close program
+* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program
+* ``delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
+ 
 
 ## Sample
 
@@ -65,8 +78,8 @@ For more details, please refer to [API documentation](interface.md)
 
 * 2021/05/07, beta version, v0.41 
 * 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](https://github.com/casualwriter/powerpage-md)
-* 2021/05/19, beta version, v0.45, minor fix.
 * 2021/05/25, beta version, v0.46, command for html printing
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
+* 2021/06/16, beta version, v0.50, handle command line
 
 

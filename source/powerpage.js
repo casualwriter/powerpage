@@ -3,7 +3,8 @@
 // 20210301. ck.  pb.callback(), run commands, and all basic features
 // 20210505. ck.  pb.session()
 // 20210507. ck.  pb.console(), pb.eval() for console support
-// 20210529. ck.  pb.print() 
+// 20210529. ck.  pb.print(), pd.pdf() 
+// 20210615. ck.  add pb.sendkeys(), rewrite pb.run(), pb.shell() 
 //========================================================================
 // pb main function, pb('varname') = js.varname, pb('#div') = getElementById
 var pb = function (n) { return n[0]=='#'? document.getElementById(n.substr(2)) : window[n]; }
@@ -89,24 +90,32 @@ pb.cmd.parameters = function(args) {
   } 
 }
 
-//=== call run() commands
-pb.run = function ( cmd, callback ) { pb.submit( 'run', cmd, callback ) }
+//=== call run(), shell(), sendkeys() commands
 pb.runat = function ( cmd, callback ) { pb.submit( 'run@', cmd, callback ) }   
 
-//====== call wsh.sendkeys. pb://sendkeys/{run=cmd/title=activeApp}/s=sleep/keys}
+pb.run = function ( cmd, path, style, callback ) { 
+  if (arguments.length==1) {
+    pb.submit( 'run', cmd )   // compatible. pb://run/cmd, or pb.run('cmd=,path=')
+  } else {
+    var ls_opt = 'cmd=' + cmd + (path? ',path='+path : '' ) + (style? ',style='+style : '' )
+    pb.submit( 'run', ls_opt, callback )
+  } 
+}
+
+pb.shell = function ( action, file, parm, path, show, callback ) { 
+  if (arguments.length==1) {
+    pb.submit( 'shell', action )
+  } else {
+    var ls_opt = 'file=' + file + (action? ',action='+action : '' ) + (parm? ',parm='+parm : '' )
+    pb.submit( 'shell', ls_opt + (path? ',path='+path : '' ) + (show? ',show='+show : '' ), callback )
+  } 
+}
+
 pb.sendkeys = function (cmd) { pb.submit( 'sendkeys', cmd ) }
 
-//=== shell functions
-pb.shell = { name: 'shell functions' }
-pb.shell.open = function (path, callback) { pb.submit( 'shell/open', path, callback ) };
-pb.shell.max  = function (path, callback) { pb.submit( 'shell/max', path, callback ) };
-pb.shell.print = function (path, callback) { pb.submit( 'shell/print', path, callback ) }; 
-pb.shell.run = function (path, callback) { pb.submit( 'shell/run', path, callback ) };
-
-//=== call Powerbuilder dialog, window, function
-pb.dialog = function (win, args, callback) { pb.submit( 'dialog', win + pb.cmd.parameters(args), callback ) }
+//=== call Powerbuilder window, function; pop url in dialog window
 pb.window = function (win, args, callback) { pb.submit( 'window', win + pb.cmd.parameters(args), callback ) }
-pb.function = function (func, args, callback) { pb.submit( 'function', win + pb.cmd.parameters(args), callback ) }
+pb.func = function (name, args, callback) { pb.submit( 'func', name + pb.cmd.parameters(args), callback ) }
 pb.popup = function (url,callback) { pb.submit( 'popup', url, callback ) }
 
 //=== database function
@@ -159,4 +168,5 @@ pb.pdf = function ( opt, parm, callback ) {
 
 //disable right-click
 document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
+document.location='pb://microhelp/Mode=IE'+document.documentMode+', userAgent='+navigator.userAgent
 

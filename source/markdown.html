@@ -74,11 +74,16 @@ function onSaveAs(result, type, url) {
   }  
 }
 
-// prompt save data when close
+// When page ready. open file if has commandline parm (i.e. "powerpage.exe {markdown-file}")
+function onPageReady(cmdline) {
+   if (cmdline>' ') onOpenFile( '{"status":2, "path":"' + cmdline + '" }' ) 
+}
+
+// When close window, prompt to save data
 function onPageClose() {
   if ( simplemde.value() !== mdText && mdFile !== 'new file' && confirm('Data has been change. Save Data?')) {
     mdText = simplemde.value()
-    pb.callback('close').file.write( mdFile, '@mdText' )
+    pb.file.write( mdFile, '@mdText', 'close' )
     return 'no'
   }
   //return 'yes'  
@@ -90,4 +95,3 @@ function onPrint() {
   setTimeout( function() { pb.print('preview') }, 500); 
 }
 </script>
-                                                   
