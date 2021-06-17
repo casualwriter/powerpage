@@ -18,11 +18,11 @@ pb.router = function ( name, result, type, url ) {
   if (typeof window[name] === "function") {
       window[name]( result, type, url );
   } else if (name) {
-      alert( 'callback function ' + name + '() not found!\n\n type:' + type + ' from url: ' + url 
-             + '\n function: '+name + '\n Result: \n\n' + result )
+      alert( 'callback function ' + name + '() not found!\n\n type:' + type + '\n cmd: ' + url 
+             + '\n function: '+name + '\n result: \n\n' + result )
   } else if (type=='json'||type=='table'||type=='sql'||type=='file') {
-      alert( 'callback (default)\n\n type:' + type + ' from url: ' + url 
-             + '\n function: '+name + '\n Result: \n\n' + result )
+      alert( 'callback (default)\n\n type:' + type + '\n cmd: ' + url 
+             + '\n Result: \n\n' + result )
   }  
 }
 
