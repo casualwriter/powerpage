@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<title>Powerpage Web Crawler</title>
+<style>
+body, input, button { font-family:calibri, arial }
+#left  { float:left; width:60%; height:calc(100vh - 100px); border:1px solid grey; overflow:auto; padding:6px }
+#right { float:right; width:38%; height:calc(100vh - 100px); border:1px solid grey; overflow:auto; padding:6px }
+li:hover { background:lightgreen; }
+</style>
+<body style="font-family:calibri">
+<div id=header style="padding:8px">
+  <table>
+    <tr>
+      <td><b>base link</b> 
+      <td><input id=baseurl name=baseurl size=48 value='https://ckhung.wordpress.com/' /> 
+      <td><b>for index like  
+      <td><input id=idxpage name=idxpage size=48 value='/category/' />
+      <td><input id=silent name=silent type=checkbox>Silent</input> 
+      <td><button onclick="crawlStart(1)">Crawl Once</button>
+      <td><button onclick="saveToHtml()" disabled>Save All to html</button>  
+      <td><button onclick="saveToHtml()" disabled>Load Sites</button>
+    </tr>
+    <tr>
+      <td><b>find page like</b>  
+      <td><input id=pattern name=pattern size=48 value='/20[0-2][0-9]/[01][0-9]/[0-3][0-9]/' />
+      <td><b>select content  
+      <td><input id=capture name=capture size=48 value='#content' />
+      <td><button id=btnStop onclick="maxLevel=0" disabled>Stop</button>
+      <td><button id=btnCrawlAll onclick="crawlStart()">Crawl All</button>
+      <td><button onclick="saveToHtml()" disabled>Save All to pdf</button>  
+      <td><button onclick="saveToHtml()" disabled>Save2DB</button> 
+    </tr>
+  </table>
+</div>  
+<div id=left>
+<p>Recommended input the base url, and click [Crawl Once] to check url pattern</p>
+<p>please use <b>RegExp</b> to filter the proper index link and page link, and input the css select string for "select content"</p>
+</div>
+<div id=right></div>
+</body>
+
+<script>
+var baseUrl, pattern, idxpage, capture, count=0, maxLevel=1
+var listPage, listTodo, result, silent
+
+// start/stop crawl index
+function crawlStart(level) {
+  document.getElementById('btnStop').disabled = false
+  baseUrl = document.getElementById('baseurl').value  
+  pattern = document.getElementById('pattern').value
+  idxpage = document.getElementById('idxpage').value
+  listTodo = [ baseUrl ]
+  listPage = []
+  result = []
+  count = -1
+  maxLevel = (level||999) 
+  crawlNext()
+}
+
+// crawl next
+function crawlNext() {
+  count++
+  console.log('now='+count+', max='+maxLevel+', url='+listTodo[count])
+  if ( count<maxLevel && count < listTodo.length ) {  
+     silent = ( document.getElementById('silent').checked? ',silent=yes' : '' )           
+     pb.callback('captureIndex').popup( 'mode=crawl'+silent+',key=a,url=' + listTodo[count] )
+  } else {
+    document.getElementById('btnStop').disabled = true
+  } 
+}       
+
+function captureContent( result, type, url ) {
+  var rs = JSON.parse( result||'{}' )
+  document.getElementById('right').innerHTML = rs.html
+}
+
+function showContent (n) {
+  capture = document.getElementById('capture').value
+  silent = ( document.getElementById('silent').checked? ';silent=yes' : '' )
+  pb.callback('captureContent').popup( 'delim=;mode=crawl' + silent + ';key=' + capture + ';url=' + listPage[n] )
+}
+
+function captureIndex ( result, type, url ) {
+  var i, link, html='', msg=''
+  var rs = JSON.parse( result||'{}' )
+  document.getElementById('right').innerHTML = result
+  
+  for (i=0; i<rs.links.length; i++) {
+    link = rs.links[i].url.split('#')[0]
+    if ( link.search(/\.(jpg|png|pdf)$/i)>=0 ) continue;
+    if (!idxpage || link.search(idxpage)>=0 ) {
+      if ( listTodo.indexOf(link)<0 ) listTodo.push(link); 
+    }
+    if (!pattern || link.search(pattern)>=0 ) {
+      if ( listPage.indexOf(link)<0 ) listPage.push(link);
+    }  
+  }
+
+  for (i in listTodo) html += (i<=count? '<b style="color:green">crawled: </b>' : '[to-do]: ') + listTodo[i] + '\n<br>'
+  html += '<hr/><b>Content Pages</b>(double-click to crawl content)<ul>'
+  for (i=0; i<listPage.length; i++) html += '\n <li ondblclick="showContent('+i+')">' + listPage[i]
+      
+  document.getElementById('left').innerHTML = html + '</ul>'
+  document.getElementById('right').innerHTML = msg
+
+  setTimeout("crawlNext()", 600 ); 
+}
+
+//x=''; document.querySelectorAll('#Blog1').forEach(function(v,i){x+=v.innerText}); x 
+function setTemplate(name) {
+  if (name=='pt') {
+    document.getElementById('baseurl').value = 'https://program-think.blogspot.com/'  
+    document.getElementById('pattern').value = '/20[0-2][0-9]/[01][0-9]/(.+)html$'
+    document.getElementById('idxpage').value = '/search/label/' 
+    document.getElementById('capture').value = '.post'
+  } else if (name=='ck') {
+    document.getElementById('baseurl').value = 'https://ckhung.wordpress.com/'  
+    document.getElementById('pattern').value = '/20[0-2][0-9]/[01][0-9]/[0-3][0-9]/'
+    document.getElementById('idxpage').value = '/category/' 
+    document.getElementById('capture').value = '#content'
+  } else if (name=='ryf') {    
+    document.getElementById('baseurl').value = 'https://www.ruanyifeng.com/blog/'
+    document.getElementById('pattern').value = '/blog/20'
+    document.getElementById('idxpage').value = '/blog/[a-z]' 
+    document.getElementById('capture').value = 'article'
+  }  
+}
+
+</script>

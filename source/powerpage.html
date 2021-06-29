@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
+<title>Power Page</title>
 <style>
   body { margin:12px; font-family:arial; font-size:14px; }
+  button { font-family:arial; font-size:13px }
   li { padding-top: 6px; }
   td.remark {border:1px solid grey; width:350px; padding:4px; }
   td.sample {border:1px solid grey; width:250px; padding:4px; }
@@ -13,11 +15,11 @@
 </style>
 <body>
 
-<button onclick="location.href='markdown.html'">Markdown Editor</button> 
-<button onclick="location.href='dbbrowser.html'" disabled>DB Browser</button> 
-<button onclick="location.href='document.html'" disabled>Documentation</button> 
+<button onclick="location.href='pp-markdown.html'">Markdown Editor</button> 
+<button onclick="location.href='pp-web-crawler.html'">Web Crawler</button> 
+<button onclick="location.href='pp-db-browser.html'" disabled>DB Browser</button> 
+<button onclick="location.href='pp-document.html'" disabled>Documentation</button> 
 <button onclick="pb.run('notepad.exe powerpage.html')" accesskey=e style="float:right"><u>E</u>dit This Page</button> 
-<button onclick="alert(navigator.userAgent)" style="float:right">navigator.userAgent</button> 
 <button onclick="pb.window('w_about')" accesskey=a style="float:right"><u>A</u>bout</button> 
 
 <p id=brief><b>Powerpage is a lightweight web browser with DB capability and windows accessibility, for rapid application development by html/css/js. </b>
@@ -35,6 +37,7 @@
 <hr>
 
 <div id=global>
+<h2>Quick Reference of API (pb-protocol)</h2><hr>
 <h3>Global Features (Callback, Prompt, @JsVar, Secured protocol)</h3> 
 "Callback, Prompt/Confirm, @JsVar, Secured protocol" are supported in all commands.
 
@@ -85,7 +88,7 @@ Run will call Wscript.run() and Shell command will be diverted to shell32.dll ->
      <td class=syntax>[javascript:pb.run('notepad.exe powerpage.html')]()
   </tr>
   <tr>
-     <td class=remark>Run program with directory, and wait
+     <td class=remark>Run program within directory, and wait
      <td class=sample>pb://run/<mark>path=?,cmd=?,style=?</mark>
      <td class=syntax>[pb://run/path=c:\app,cmd=notepad.exe,style=wait]()
      <td class=syntax>[javascript:pb.run('notepad.exe','c:\\app','max+wait')]()
@@ -119,7 +122,7 @@ Run will call Wscript.run() and Shell command will be diverted to shell32.dll ->
 
 <div>
 <h3>File Accessibility</h3>
-calling powerbuilder.filecopy(), filemove(), fileread(), filewrite to provide file support.
+calling powerbuilder file/diretory funcitons to provide file support.
 <table style="margin:10px;border-collapse: collapse;">
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
@@ -169,6 +172,36 @@ calling powerbuilder.filecopy(), filemove(), fileread(), filewrite to provide fi
      <td class=sample><mark>pb://file/savedialog</mark>/{desc},{*.ext}
      <td class=syntax>[pb://file/savedialog/HTML (*.html),*.html]() 
      <td class=syntax>[javascript:pb.file.savedialog('HTML (*.html),*.html')]()
+  </tr>
+  <tr>
+     <td class=remark>Current Directory
+     <td class=sample><mark>pb://dir</mark>
+     <td class=syntax>[pb://dir]()
+     <td class=syntax>[javascript:pb.dir()]()
+  </tr>
+  <tr>
+     <td class=remark>Create Directory
+     <td class=sample><mark>pb://dir/create</mark>/directory
+     <td class=syntax>[pb://dir/create/samples]()
+     <td class=syntax>[javascript:pb.dir('create','samples')]()
+  </tr>
+  <tr>
+     <td class=remark>Change Directory
+     <td class=sample><mark>pb://dir/change</mark>/directory
+     <td class=syntax>[pb://dir/change/samples](), [pb://dir/change/$parent](),  
+     <td class=syntax>[javascript:pb.dir('change','samples')](), [javascript:pb.dir('change','$home')]() 
+  </tr>
+  <tr>
+     <td class=remark>Delete Directory
+     <td class=sample><mark>pb://dir/delete</mark>/directory
+     <td class=syntax>[pb://dir/delete/samples]()
+     <td class=syntax>[javascript:pb.dir('delete','samples')]()
+  </tr>
+  <tr>
+     <td class=remark>Open Dialog to select folder 
+     <td class=sample><mark>pb://dir/select</mark>
+     <td class=syntax>[pb://dir/select]()
+     <td class=syntax>[javascript:pb.dir('select')]()
   </tr>
 </table>
 </div>
@@ -244,8 +277,8 @@ call powerbuilder customized window/function, which stored in extert pbl file.
   <tr>
      <td class=remark>Open PB window with parameters
      <td class=sample><mark>pb://window</mark>/winName/parm
-     <td class=syntax>[pb://window/w_web_dialog/top=20,width=800,url=https://google.com]()
-     <td class=syntax>[javascript:pb.window('w_web_dialog','left=50,height=500,url=https://google.com')]()
+     <td class=syntax>[pb://window/w_power_dialog/top=20,width=800,url=https://google.com]()
+     <td class=syntax>[javascript:pb.window('w_power_dialog','left=50,height=500,url=https://google.com')]()
   </tr>
   <tr>
      <td class=remark>Call PB function, return string
@@ -261,7 +294,7 @@ call powerbuilder customized window/function, which stored in extert pbl file.
 Session is important for applicaiton development. After page loaded, 
 ``pb.session``` serves as session object sharing information between different pages.
 
-<table style="margin:10px;border-collapse: collapse;">
+<table style="margin:10px;border-collapse: collapse;">spid
   <tr>
      <td class=remark>initialized by powerpage.ini
      <td class=sample>[session]<br>var1 = name: PowerPage
@@ -323,6 +356,12 @@ Session is important for applicaiton development. After page loaded,
      <td class=syntax>[pb://callback/mycallback/popup/height=500,url=dialog.html]()
      <td class=syntax>[javascript:pb.popup('width=500,url=dialog.html','mycallback')]()
   </tr>  
+  <tr>
+     <td class=remark>Capture url content and callback
+     <td class=sample><mark>pb://popup/<mark>mode=crawl,url=?</mark>
+     <td class=syntax>[pb://callback/mycallback/popup/mode=crawl,url=https://campodesktop.com]()
+     <td class=syntax>[javascript:pb.callback('mycallback').popup('mode=crawl,url=https://campodesktop.com,key=#main')]()
+  </tr>
   <tr>
      <td class=remark>open url in same window
      <td class=sample>window.location=url

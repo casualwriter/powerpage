@@ -13,14 +13,14 @@ var pb = function (n) { return n[0]=='#'? document.getElementById(n.substr(2)) :
 pb.microhelp = function (msg) { document.title='pb://microhelp/'+ msg } 
 pb.error = function(code,msg) { pb.microhelp( '[error='+ code +'] ' + msg ) }
 
-//=== router function for Powerbuilder, divert to callback 
+//=== router function. call from Powerbuilder, divert to callback function
 pb.router = function ( name, result, type, url ) {
   if (typeof window[name] === "function") {
       window[name]( result, type, url );
   } else if (name) {
       alert( 'callback function ' + name + '() not found!\n\n type:' + type + '\n cmd: ' + url 
              + '\n function: '+name + '\n result: \n\n' + result )
-  } else if (type=='json'||type=='table'||type=='sql'||type=='file') {
+  } else if (type=='json'||type=='table'||type=='sql'||type=='file'||type=='dir') {
       alert( 'callback (default)\n\n type:' + type + '\n cmd: ' + url 
              + '\n Result: \n\n' + result )
   }  
@@ -38,7 +38,7 @@ console.log = pb.console = function () {
       msg += (i==0?'':', ') + arguments[i]
     }
   }
-  pb.microhelp( '> ' + msg )   
+  document.location='pb://microhelp/> ' + msg   
 }
 
 pb.eval = function (exp) {
@@ -60,7 +60,7 @@ pb.callback = function (funcname) { pb.cmd.callback = funcname; return pb }
  
 //=== submit command to Main Program. (support cmd history later)
 pb.submit = function ( cmd, parm, callback ) { 
-   pb.cmd.command = pb.cmd.prepare(callback) + cmd + '/' + encodeURIComponent(parm);
+   pb.cmd.command = pb.cmd.prepare(callback) + cmd + '/' + encodeURIComponent(parm||'');
    window.location = pb.cmd.command
    return pb
 }
@@ -136,6 +136,7 @@ pb.file.append = function (file, text, callback) { pb.submit( 'file/append', fil
 pb.file.delete = function (file, callback) { pb.submit( 'file/delete', file, callback ) }
 pb.file.opendialog = function (ext, callback) { pb.submit( 'file/opendialog', ext, callback ) }
 pb.file.savedialog = function (ext, callback) { pb.submit( 'file/savedialog', ext, callback ) }
+pb.dir = function (action, folder, callback) { pb.submit( 'dir/'+(action||''), folder, callback ) }
 
 //==== pb session. 
 // session(name) -> get value
@@ -166,7 +167,22 @@ pb.pdf = function ( opt, parm, callback ) {
   return pb.submit( 'pdf', opt + (parm? '/' + parm : '' ), callback ) 
 }
 
-//disable right-click
+//====== function for web crawler (mode=crawl), key:=body|querySelector; special handle :not() 
+pb.crawl = function ( key ) {
+  var i, text='', html='', links=[]
+  var divs = document.querySelectorAll( (key||'body').replace(/\@/g,'#') )
+        
+  for (i=0; i<divs.length; i++) { 
+    text += divs[i].innerText + '\n'
+    html += divs[i].outerHTML + '\n'
+    if (divs[i].nodeName=='A') links.push({ url:decodeURI(divs[i].href), text:divs[i].innerText, id:divs[i].id });     
+  }
+  return JSON.stringify( { text:text, html:html, links:links, head:document.head.outerHTML } )
+}
+
+// disable right-click
 document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
+
+// watch: IE mode and userAgent
 document.location='pb://microhelp/Mode=IE'+document.documentMode+', userAgent='+navigator.userAgent
 
