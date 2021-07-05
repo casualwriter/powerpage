@@ -56,6 +56,7 @@ for example:
 
 For more details, please refer to [API documentation](interface.md)
 
+
 ## Command Line
 
 Powerpage support the following commandline parameters.
@@ -65,15 +66,15 @@ Powerpage support the following commandline parameters.
 * ``/ini={ini-file}`` specifies ini setting file.   
 * ``/url={start-url}`` is used to specify startup link
 * ``/print`` will load startup url, print and close program.
-* ``/fullscreen`` or ``kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
-* ``/save={save-html}`` will load startup url, save to html file, and close program
-* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program
-* ``delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
+* ``/fullscreen`` or ``/kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
+* ``/save={save-html}`` will load startup url, save to html file, and close program. useful for web-crawler
+* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program. useful for PDF report generation.
+* ``/delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
  
 
 ## Samples
 
-* [Screen Layout](powerpage.jpg)
+* Screen Layout: (PowerPage)](powerpage.jpg), [Markdown Editor](powerpage-markdown.jpg), [Web Crawler](powerpage-web-crawler.jpg)
 * [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown)
 * [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler)
 
