@@ -1,6 +1,7 @@
 ## API documentation
 
-Interface is provided by ``pb://`` protocol command, or javascript ``pb.`` API function call.  HTML Page may use 
+Applciation Interface is provided by ``pb://`` protocol command, or javascript ``pb.()`` API function call.  
+HTML Page may use 
 
 ``<a href="pb://protocol/command"> pb://protocol/command</a> `` or javascript:pb.apiFunction()`` to make powerpage API call.
 
@@ -10,16 +11,18 @@ for example:
 * Run SQL1 and callback showData() -> ``pb://callback/showData/sql/query/@sql1`` or ``javascript: pb.callback('showData').db.query(sql1)`` 
 * Run update SQL2 -> ``pb://sql/execute/@sql2`` or  ``javascript: pb.db.execute(sql2)`` 
 
+
 ### How PowerPage work?
 
-Powerpage main program is window with MS OLE Web brwoser. HTML page may via the following channel to talk to main program
+Powerpage main program is window with MS OLE Web brwoser. 
+When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb.()`` javascript object to provide powerpage API call.
+
+HTML page may via the following channel to talk to main program
 
 1. window.location = "pb://protocol/command"
 2. doument.title = "pb://protocol/command"
 
 Powerpage will interpret and execute command, and pass the result to HTML page by calling js function ``pb.router( result, type, cmd)``
-
-When HTML page load, powerpage will import ``powerpage.js`` to initalize ``pb`` javascript object to provide powerpage interface.
 
 
 ### Global Features (Callback, Prompt, @JsVar, Secured protocol)  
@@ -31,7 +34,7 @@ Description | Protocol / javascript
 Prompt for confirmation, then run command | pb://?Open notepad?/run/notepad.exe <br> javascript: pb.confirm('OpenNotepad').run('notepad.exe')  
 Callback js function after run command | pb://callback/mycallback/run/calc.exe <br> javascript: pb.callback('mycallback').run('calc.exe')  
 use @jsVar as command parameter for long string | pb://sql/query/@sql1 <br> javascript:pb.db.query('@sql1') <<br> or javascript: pb.db.query(sql1) 
-``Secured`` Protocol (Prompt user login by windows account) | ps://run/resmon.exe <br> javascript: pb.secure().run('resmon.exe')  
+``ps://`` Secured Protocol (Prompt user login by windows account) | ps://run/resmon.exe <br> javascript: pb.secure().run('resmon.exe')  
 
 
 #### Run Program
@@ -40,9 +43,11 @@ Description | Protocol / javascript
 ------------|---------------------------
 Run a program, e.g. resmon.exe | pb://run/mspaint.exe <br> javascript: pb.run('resmon.exe')  
 Run command with parameter | pb://run/notepad.exe powerpage.html <br> javascript: pb.run('notepad.exe powerpage.html')  
-Run program in its directory | pb://runat/c:\powerpage\powerpage.exe <br> javascript: pb.runat('c:\\powerpage\\powerpage.exe')  
-Shell: Open File (same as start.exe [file]) | pb://shell/open/calc.exe <br> javascript: pb.shell.open('calc.exe')  
-Shell: Run program (similar to runat()) | pb://shell/run/c:\powerpage\powerpage.exe <br> javascript: pb.shell.run('c:\\powerpage\\powerpage.exe')  
+Run program within directory, and wait  | pb://run/path=c:\app,cmd=notepad.exe,style=wait  <br> javascript:pb.run('notepad.exe','c:\\app','max+wait')
+Shell: Open File (same as start.exe [file]) | pb://shell/interface.pdf <br> javascript:pb.shell('interface.pdf')  
+Shell: Open folder (e.g. c:\temp)  | pb://shell/c:\temp <br> javascript:pb.shell('c:\\temp')  
+Shell: Run program  | pb://shell/notepad.exe  <br> javascript:pb.shell('notepad.exe')  
+Shell: Advanced Options, e.g. print | pb://shell/action=print,file=interface.pdf | javascript:pb.shell('print','interface.pdf')  
 
                                                                
 #### File Accessibility
@@ -55,6 +60,13 @@ Read another.html | pb://file/read/another.html <br> javascript:pb.file.read( 'a
 Write to another.html | pb://file/write/another.html/@sql1 <br> javascript:pb.file.write( 'another.html', sql1, callback )  
 Append to another.html | pb://file/append/another.html/@sql2 <br> javascript: pb.file.append( 'another.html', sql2, callback )  
 Delete another.html | pb://?sure to delete?/file/delete/another.html <br> javascript: pb.confirm('sure to delete?').file.delete( 'another.html', callback )  
+OpenFile dialog  | pb://file/opendialog/HTML (*.html),*.html  <br> javascript:pb.file.opendialog('HTML (*.html),*.html')  
+SaveFile dialog  | pb://file/savedialog/HTML (*.html),*.html   <br> javascript:pb.file.savedialog('HTML (*.html),*.html')  
+Current Directory | pb://dir  <br> javascript:pb.dir()  
+Create Directory  | pb://dir/create/samples  <br> javascript:pb.dir('create','samples')  
+Change Directory  | pb://dir/change/samples, pb://dir/change/$parent  <br> javascript:pb.dir('change','samples'), javascript:pb.dir('change','$home')  
+Delete Directory  | pb://dir/delete/samples  <br> javascript:pb.dir('delete','samples')  
+Open Dialog to select folder | pb://dir/select  <br> javascript:pb.dir('select')  
 
 
 #### Database Accessibility
@@ -80,8 +92,8 @@ This program is developed using Powerbuilder 10.5. It is supported to call power
 Description | Protocol / javascript
 ------------|---------------------------
 Open PB window object | pb://window/w_about <br> javascript:pb.window('w_about')  
-Open PB window with parameters | pb://window/w_web_dialog/top=20,width=800,url=https://google.com <br> javascript: pb.window('w_web_dialog','left=50,height=500,url=https://google.com')  
-Call PB Global Function | pb://function/f_get_product   <br> javascript: pb.function('f_get_product')  
+Open PB window with parameters | pb://window/w_power_dialog/top=20,width=800,url=https://google.com  <br> javascript:pb.window('w_power_dialog','left=50,height=500,url=https://google.com')  
+Call PB function, return string | pb://func/f_get_product/id=356/K123  <br> javascript:pb.func('f_get_product', 'id=365')  
 
 #### Session / Global Variables
 
@@ -97,10 +109,14 @@ to update session variables, may use protocol ``pb://session/remarks/new content
 
 #### Pop HTML Dialog
 
-To open url in popup dialog (share session info), use protocol ``pb://popup/height=400,url=dialog.html`` or javascript ``pb.popup('width=800,url=dialog.html')`` 
+To open url in popup dialog, use protocol ``pb://popup/width=800,url=dialog.html`` or javascript ``pb.popup('width=800,url=dialog.html')`` 
 
-To popup dialog with callback, by protocol ``pb://callback/mycallback/popup/height=400,url=dialog.html`` or 
+To popup html dialog with callback, by protocol ``pb://callback/mycallback/popup/height=400,url=dialog.html`` or 
 by javascript ``pb.popup('width=500,url=dialog.html','mycallback') or pb.callback('mycallback').popup('width=500,url=dialog.html')``
+
+1. Print Mode ``pb://popup/mode=print,url=dialog.html`` will popup the page, and print
+2. Preview mode ``pb://popup/mode=preview,url=dialog.html`` will popup the page, and open print preview dialog
+3. Crawl mode ``pb://popup/mode=crawl,url=dialog.html`` will popup the page, crawl content, and return json string.
 
 #### Print / Print Preview
 
@@ -111,20 +127,20 @@ by javascript ``pb.popup('width=500,url=dialog.html','mycallback') or pb.callbac
 
 #### PDF Report
 
-Powerpage using ``wkhtmltopdf.exe`` to generate PDF report. please setup the path in INI file. You may also setup "pdf-preview" for preview window, and "pdf-timeout" if need.
+Powerpage using ``wkhtmltopdf.exe`` to generate PDF report. please setup the path in INI file. 
+You may also setup "pdf-preview" for preview window, and "pdf-timeout" if need.
 
 ~~~
 [system]
 pdf-factory=C:\PortableWork\wkhtmltox\wkhtmltopdf.exe
 pdf-preview=width=1024,height=768
-pdf-timeout=10
 ~~~
 
 * Generate PDF report, (by default, preview PDF in browser) => ``pb://pdf`` or js ``pb.pdf()``
 * Generate PDF, and open (=shell.open, open by installed PDF reader) => ``pb://pdf/open`` or js ``pb.pdf('open')``
 * Generate PDF, and print (=shell.print, print by installed PDF reader) => ``pb://pdf/print`` or js ``pb.pdf('print')``
 * Generate PDF, open in browser, and call print dialog => ``pb://pdf/dialog`` or js ``pb.pdf('dialog')``
-* Generate PDF with selected elements => ``pb://div/*elm-id1,*elm-id2,.class,p`` or js ``pb.pdf( 'div', '#elm-id1,#elm-id2,.class,p' )``
+* Generate PDF with selected elements => ``pb://pdf/div/@elm-id1,@elm-id2,.class,p`` or js ``pb.pdf( 'div', '#elm-id1,#elm-id2,.class,p' )``
 
 
 ### Modification History

@@ -160,7 +160,7 @@ pb.print = function ( opt, callback ) { pb.submit( 'print', opt, callback ) }
 pb.pdf = function ( opt, parm, callback ) { 
   var html=''
   if (opt=='host') { 
-     var divs = document.querySelectorAll(parm.replace(/\*/g,'#'))
+     var divs = document.querySelectorAll(parm.replace(/\$/g,'#'))
      for (var i=0; i<divs.length; i++ ) html += divs[i].outerHTML + '\n'
      return html
   }    
@@ -184,5 +184,5 @@ pb.crawl = function ( key ) {
 document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
 
 // watch: IE mode and userAgent
-document.location='pb://microhelp/Mode=IE'+document.documentMode+', userAgent='+navigator.userAgent
+//document.location='pb://microhelp/Mode=IE'+document.documentMode+', userAgent='+navigator.userAgent
 

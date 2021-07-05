@@ -1,9 +1,10 @@
 # Development Guide
 
-Powerpage is a ready-make Electron-like solution. No install, no compile, no packing. Just open editor to start coding.
+Powerpage is portable, lightweight, ready-make javascript application solution. 
+No install, no compile, no packing. Just open editor to start coding.
 
-Powerpage is very simple. It is a window with MS webbrowser control (equivalent to IE11). 
-HTML Page talk to Powerpage when there is any additional requirement which web-browser cannot handle.
+Powerpage is very simple. It is a window with MS webbrowser control (best-run/equivalent to IE11). 
+HTML Page talka to Powerpage when there is any additional requirement which web-browser cannot handle.
 
 For example, 
 
@@ -14,7 +15,8 @@ For example,
 
 ## Intreface / API
 
-Powerpage provides "pb protocol command" to talk to html pages. When html page loaded, javascript object ``pb`` is provided as interface service provider.
+Powerpage provides API called "pb-protocol" to talk to html pages. When html page loaded, 
+javascript object ``pb`` is provided as interface service provider.
 
 for details, please refer to [interface  guide](interface.md).
 
@@ -32,9 +34,22 @@ start=your-start-page.html
 
 3. if not defined in ini file, by default, powerpage load index.html if found or load powerpage.html if found. 
 
-## Commandline Options
 
-powerpage.exe {url} | {ini}
+## Command Line
+
+Powerpage support the following commandline parameters.
+
+       powerpage.exe /ini={ini-file} /url={start-url} /print /fullscreen /save={save-html} /pdf={output-pdf-file} /delay={1000} /watch={watch}
+
+* ``/ini={ini-file}`` specifies ini setting file.   
+* ``/url={start-url}`` is used to specify startup link
+* ``/print`` will load startup url, print and close program.
+* ``/fullscreen`` or ``kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
+* ``/save={save-html}`` will load startup url, save to html file, and close program
+* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program
+* ``delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options
+* ``watch={watch}`` specifies "watch" setting for debug console output
+ 
 
 ## INI Setting
 
@@ -51,6 +66,7 @@ github  = url-of-github
 home    = url-of-app-home
 title   = fix-title ( or [html] for show html title, [file]to show url)
 extLibrary=Powerbuilder Extend Library (e.g. powerExt1.pbl,powerExt2.pbl)
+watch   = [cmd][ole][parm]
 
 [database]
 DBMS      = ODBC | O90 | etc..
@@ -75,14 +91,14 @@ height= window-height
 
 ## Samples
 
-Several sample applications are provided to demonstrated the powerpage application:
+Several sample applications are provided to demonstrate powerpage javascript application:
 
-* [Markdown editor](https://github.com/casualwriter/powerpage-md)
-* Database Schema (Oracle)
-* Database Browser
+* [Powerpage Markdown editor](https://github.com/casualwriter/powerpage-markdown)
+* [Powerpage Web Crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* Powerpage DB Schema (Oracle)
+* Powerpage DB Report
+* Powerpage js monkey 
 * Display Board
-* Web Scarper
-* PowerJsMonkey 
 * Application Framework
 
 ## Senario

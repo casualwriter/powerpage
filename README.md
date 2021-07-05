@@ -3,7 +3,8 @@
 [**PowerPage**](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
 and windows accessibility, for making Electron-like HTML/JS GUI apps
 
-Powerpage will connect to database, and load startup page using MS web-browser control with new protocol pb:// or ps:// to provide below features
+Powerpage will connect to database, and load startup page using MS web-browser control with new protocol 
+pb:// or ps:// to provide below features
  
 * (Run) Call External Program 
 * (File) Access file system 
@@ -30,13 +31,14 @@ Powerpage is a single executable program. No installation is needed, Just downlo
 
 ## How PowerPage work?
 
-Powerpage open a window with MS WebBrowser Control. When HTML page is loaded, Powerpage will import ``powerpage.js`` to initialize ``pb`` javascript object to provide Powerpage interface.
+Powerpage open a window with MS WebBrowser Control. When HTML page is loaded, Powerpage will import ``powerpage.js`` 
+to initialize ``pb`` javascript object to provide Powerpage interface.
 
 HTML page may via the following channel to talk to main program
 
-1. by url: window.location = "pb://protocol/command"
-2. by title: document.title = "pb://protocol/command"
-3. by javascript pb.apiFunction()
+1. by javascript: pb.apiFunction(), e.g. pb.run('notepad.exe')
+2. by url: window.location = "pb://protocol/command"
+3. by title: document.title = "pb://protocol/command" (has limitation)
 
 Powerpage will interpret and execute the command, and pass the result to HTML page by calling js function ``pb.router( result, type, cmd)``
 
@@ -58,28 +60,31 @@ For more details, please refer to [API documentation](interface.md)
 
 Powerpage support the following commandline parameters.
 
-       powerpage.exe /ini={ini-file} /url={start-url} /print /save={save-html} /pdf={output-pdf-file} /delay={1000}
+       powerpage.exe /ini={ini-file} /url={start-url} /print /fullscreen /save={save-html} /pdf={output-pdf-file} /delay={1000}
 
 * ``/ini={ini-file}`` specifies ini setting file.   
 * ``/url={start-url}`` is used to specify startup link
 * ``/print`` will load startup url, print and close program.
+* ``/fullscreen`` or ``kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
 * ``/save={save-html}`` will load startup url, save to html file, and close program
 * ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program
 * ``delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
  
 
-## Sample
+## Samples
 
 * [Screen Layout](powerpage.jpg)
-* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-md)
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown)
+* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler)
 
 
 ## Modification History
 
 * 2021/05/07, beta version, v0.41 
-* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md](https://github.com/casualwriter/powerpage-md)
+* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-markdown](https://github.com/casualwriter/powerpage-markdown)
 * 2021/05/25, beta version, v0.46, command for html printing
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
 * 2021/06/16, beta version, v0.50, handle command line
+* 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 
 
