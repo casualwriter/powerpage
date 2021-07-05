@@ -74,9 +74,9 @@ Powerpage support the following commandline parameters.
 
 ## Samples
 
-* Screen Layout: (PowerPage)](powerpage.jpg), [Markdown Editor](powerpage-markdown.jpg), [Web Crawler](powerpage-web-crawler.jpg)
-* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown)
-* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* Screen Layout of [PowerPage](powerpage.jpg)
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown), [Screen](powerpage-markdown.jpg) 
+* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler), [Screen](powerpage-web-crawler.jpg)
 
 
 ## Modification History

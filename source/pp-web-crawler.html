@@ -91,10 +91,10 @@ function captureIndex ( result, type, url ) {
   }
 
   for (i in listTodo) html += (i<=count? '<b style="color:green">crawled: </b>' : '[to-do]: ') + listTodo[i] + '\n<br>'
-  html += '<hr/><b>Content Pages</b>(double-click to crawl content)<ul>'
-  for (i=0; i<listPage.length; i++) html += '\n <li ondblclick="captureContent('+i+')">' + listPage[i]
+  html += '<hr/><b>Content Pages</b>(double-click to crawl content)<ol>'
+  for (i in listPage) html += '\n <li ondblclick="captureContent('+i+')">' + listPage[i]
       
-  document.getElementById('left').innerHTML = html + '</ul> Total ' + listPage.length + ' pages'
+  document.getElementById('left').innerHTML = html + '</ol>'
   document.getElementById('right').innerHTML = ''
   setTimeout("crawlNext()", 600 ); 
 }
@@ -126,7 +126,7 @@ function showSites ( result, type, url ) {
     html += ' &nbsp;&nbsp;<small style="color:blue">' + sites.data[i][1] + '</small>'
     html += ' <span style="float:right" onclick="deleteSite(\'' + sites.data[i][1] + '\')">X</span>'
   }  
-  document.getElementById('right').innerHTML = '<b>Click to load setting of below sites</b><br><ol>' + html + '</ol>'  
+  document.getElementById('right').innerHTML = '<b>Click to load setting of below sites</b><br><ul>' + html + '</ul>'  
 }
 
 // load site setting
@@ -197,7 +197,7 @@ function saveCheck(result) {
 
 function saveExecuted(result) { alert('Site setting has been saved to database.\n'+result) }
 
-// svae site to database
+// delete site from database
 function deleteSite(url) {
    if ( confirm('Delete site ' + url + '?') ) {
       sql = "DELETE FROM pp_sites WHERE base_url='" + url + "' "
