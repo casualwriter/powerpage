@@ -8,8 +8,8 @@ HTML Page may use
 for example:
 
 * Run notepad.exe to edit powerpage.ini -> ``pb://run/notepad.exe powerpage.ini`` or ``javascript: pb.run('notepad.exe powerpage.ini')``
-* Run SQL1 and callback showData() -> ``pb://callback/showData/sql/query/@sql1`` or ``javascript: pb.callback('showData').db.query(sql1)`` 
-* Run update SQL2 -> ``pb://sql/execute/@sql2`` or  ``javascript: pb.db.execute(sql2)`` 
+* Run SQL1 and callback showData() -> ``pb://callback/showData/db/query/@sql1`` or ``javascript: pb.callback('showData').db.query(sql1)`` 
+* Run update SQL2 -> ``pb://db/execute/@sql2`` or  ``javascript: pb.db.execute(sql2)`` 
 
 
 ### How PowerPage work?
@@ -33,7 +33,7 @@ Description | Protocol / javascript
 ------------|------------------------
 Prompt for confirmation, then run command | pb://?Open notepad?/run/notepad.exe <br> javascript: pb.confirm('OpenNotepad').run('notepad.exe')  
 Callback js function after run command | pb://callback/mycallback/run/calc.exe <br> javascript: pb.callback('mycallback').run('calc.exe')  
-use @jsVar as command parameter for long string | pb://sql/query/@sql1 <br> javascript:pb.db.query('@sql1') <<br> or javascript: pb.db.query(sql1) 
+use @jsVar as command parameter for long string | pb://db/query/@sql1 <br> javascript:pb.db.query('@sql1') <<br> or javascript: pb.db.query(sql1) 
 ``ps://`` Secured Protocol (Prompt user login by windows account) | ps://run/resmon.exe <br> javascript: pb.secure().run('resmon.exe')  
 
 
@@ -77,10 +77,10 @@ Description | Protocol / javascript
 ------------|------------------------
 run ah-hoc SQL, return string in json format | pb://json/select CategoryID, CategoryName from Categories <br> javascript: pb.db.json('select date(), now() ')  
 query db by the sql stored in @sql1, return string in json format | pb://json/@sql1 <br> javascript: pb.db.json(sql1)  
-alt query command: pb://sql/query = pb://json | pb://sql/query/@sql1 <br> javascript: pb.db.query(sql1) or pb.db.select(sql1)  
-run SQL and return string in html table format | pb://table/@sql2 or pb://sql/html/@sql2 <br> javascript: pb.db.table(sql2) or pb.db.html(sql2)  
-Execute update statement |pb://sql/execute/@sql3 <br> javascript: pb.db.execute(sql3) 
-Prompt SQL for confirmation, then Execute update statement | pb://sql/prompt/@sql3 <br> javascript: pb.db.prompt(sql3) or pb.db.confirm(sql3)  
+alt query command: pb://db/query = pb://json | pb://db/query/@sql1 <br> javascript: pb.db.query(sql1) or pb.db.select(sql1)  
+run SQL and return string in html table format | pb://table/@sql2 or pb://db/html/@sql2 <br> javascript: pb.db.table(sql2) or pb.db.html(sql2)  
+Execute update statement |pb://db/execute/@sql3 <br> javascript: pb.db.execute(sql3) 
+Prompt SQL for confirmation, then Execute update statement | pb://db/prompt/@sql3 <br> javascript: pb.db.prompt(sql3) or pb.db.confirm(sql3)  
 execute SQL by id, return json result | javascript: pb.db.executeById( sqlid, args[], callback )  
 run SQL Query by id, return json result | javascript: pb.db.queryById( sqlid, args[], callback ) 
   

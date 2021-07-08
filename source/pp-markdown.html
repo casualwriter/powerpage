@@ -34,7 +34,7 @@ var mdText = ''
 
 // open file
 function onOpenFile(result, type, url) {
-  var rs = JSON.parse( result.split('\\').join('\\\\') )
+  var rs = JSON.parse(result)
   if (rs.status>0) {
     pb.callback('onLoadFile').file.read(rs.path)
     document.getElementById("filename").innerText = mdFile = (rs.path||mdFile)
@@ -67,7 +67,7 @@ function onAfterSave(result, type, url) {
 
 // saveas
 function onSaveAs(result, type, url) {
-  var rs = JSON.parse( result.split('\\').join('\\\\') )
+  var rs = JSON.parse(result)
   if (rs.status>0) {
     mdFile = (rs.path.substr(-3)=='.md') ? rs.path : rs.path+'.md'
     document.getElementById("filename").innerText = mdFile 

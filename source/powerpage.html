@@ -52,13 +52,13 @@
   <tr>
      <td class=remark>Callback js function after run command
      <td class=sample><mark>pb://callback/jsFunction</mark>/AnyCommand
-     <td class=syntax>[pb://callback/mycallback/run/calc.exe]() 
-     <td class=syntax>[javascript:pb.callback('mycallback').run('calc.exe')]()
+     <td class=syntax>[pb://callback/mycallback/run/notepad.exe]() 
+     <td class=syntax>[javascript:pb.callback('mycallback').run('notepad.exe')]()
   </tr>
   <tr>
      <td class=remark>use @jsVar as command parameter for long string
      <td class=sample>pb://AnyCommand/<mark>@jsVarName</mark>
-     <td class=syntax>[pb://sql/query/@sql1]()
+     <td class=syntax>[pb://db/query/@sql1]()
      <td class=syntax>[javascript:pb.db.query(sql1)]() 
   </tr>
   <tr>
@@ -224,27 +224,27 @@ Query from database, execute sql or stored procedure.
      <td class=syntax>[javascript:pb.db.json('@sql1')](), [javascript:pb.db.json(sql1)]() 
   </tr>
   <tr>
-     <td class=remark>alt query command: pb://sql/query = pb://json
-     <td class=sample><mark>pb://sql/query</mark>/sql
-     <td class=syntax>[pb://sql/query/@sql1]()
+     <td class=remark>alt query command: pb://db/query = pb://json
+     <td class=sample><mark>pb://db/query</mark>/sql
+     <td class=syntax>[pb://db/query/@sql1]()
      <td class=syntax>[javascript:pb.db.query(sql1)]() or [javascript:pb.db.select(sql1)]()
   </tr>
   <tr>
      <td class=remark>run SQL and return string in html table format
      <td class=sample><mark>pb://table</mark>/sql
-     <td class=syntax>[pb://table/@sql2]() or [pb://sql/html/@sql2]()
+     <td class=syntax>[pb://table/@sql2]() or [pb://db/html/@sql2]()
      <td class=syntax>[javascript:pb.db.table(sql1)]() or [javascript:pb.db.html(sql1)]()
   </tr>
   <tr>
      <td class=remark>Execute update statement 
-     <td class=sample><mark>pb://sql/execute</mark>/sql     
-     <td class=syntax>[pb://sql/execute/@sql3]() 
+     <td class=sample><mark>pb://db/execute</mark>/sql     
+     <td class=syntax>[pb://db/execute/@sql3]() 
      <td class=syntax>[javascript:pb.db.execute(sql3)]() or [javascript:pb.db.update(sql3)]()
   </tr>
   <tr>
      <td class=remark>Prompt SQL for confirmation, then Execute update statement 
-     <td class=sample><mark>pb://sql/prompt</mark>/sql     
-     <td class=syntax>[pb://sql/prompt/@sql3]()
+     <td class=sample><mark>pb://db/prompt</mark>/sql     
+     <td class=syntax>[pb://db/prompt/@sql3]()
      <td class=syntax>[javascript:pb.db.prompt(sql3)]() or [javascript:pb.db.confirm(sql3)]()
   </tr>
   <tr>
@@ -334,7 +334,7 @@ Session is important for applicaiton development. After page loaded,
   </tr>
   <tr>
      <td class=remark>Select Elements for PDF Report 
-     <td class=sample>pb://pdf/[now|print|div|id]<mark>[/querySelector]</mark>
+     <td class=sample>pb://pdf/[open|print|dialog|div]<mark>[/querySelector]</mark>
      <td class=syntax>[pb://pdf/div/$brief,$global,.sample](), [pb://pdf/open/p,hr,button]()
      <td class=syntax>[javascript:pb.pdf('open','#brief,#global,.sample')](), [javascript:pb.pdf('div','p,hr,button')]()
   </tr>
@@ -386,7 +386,22 @@ Session is important for applicaiton development. After page loaded,
 </html>
 
 <script>
-//=========== my program ===========
+//=== onCallback will be called if no callback specified. set default callback for type=json/tbale/sql/file/dir
+function onCallback(result, type, url) {
+   if (type=='db'||type=='sql'||type=='file'||type=='dir') {
+     alert( 'callback (default)\n\n type:' + type + '\n cmd: ' + url + '\n result: \n\n' + result )
+   }
+}   
+
+//=== onPageRead will be called when page loaded
+function onPageReady(cmdline) { pb.microhelp( cmdline||'page ready.') }
+
+//=== onPageClose will be called when window close
+function onPageClose() {
+  return confirm('Close this page?')? 'yes' : 'no'
+}
+
+//=== My callback
 function mycallback(result, type, url) {
   alert( 'From myCallback\n\nurl='+url+'\n\n Type='+type+'\n\n Result=' + result)
 }
@@ -396,18 +411,10 @@ var sql2 = "SELECT * from Customers where City='London' ";
 var sql3 = "UPDATE Products set UnitsOnOrder = UnitsOnOrder + 1 where SupplierID=20 ";
 var keys = 'js=mycallback/run=notepad.exe/title=Untitled - Notepad/ms=500/test/ms=300/{bs}/ms=300/123/ms=500/456/~new line'
 
-// link markup
+//== simple markup for links
 var s = document.body.innerHTML
 s = s.replace( /\[([^\]]+)\]\(\)/g, '<a href="$1">$1</a>' )
 s = s.replace( /\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2">$1</a>' )
 document.body.innerHTML = s
-
-// onPageRead will be called when page loaded
-function onPageReady(cmdline) { pb.microhelp( cmdline||'page ready.') }
-
-// onPageClose will be called when window close
-function onPageClose() {
-  return confirm('Close this page?')? 'yes' : 'no'
-}
 </script>
 

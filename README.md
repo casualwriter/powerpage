@@ -87,5 +87,6 @@ Powerpage support the following commandline parameters.
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
 * 2021/06/16, beta version, v0.50, handle command line
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 
 

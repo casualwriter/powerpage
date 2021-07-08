@@ -20,9 +20,8 @@ pb.router = function ( name, result, type, url ) {
   } else if (name) {
       alert( 'callback function ' + name + '() not found!\n\n type:' + type + '\n cmd: ' + url 
              + '\n function: '+name + '\n result: \n\n' + result )
-  } else if (type=='json'||type=='table'||type=='sql'||type=='file'||type=='dir') {
-      alert( 'callback (default)\n\n type:' + type + '\n cmd: ' + url 
-             + '\n Result: \n\n' + result )
+  } else if (typeof onCallback === "function") {
+      onCallback( result, type, url );
   }  
 }
 
@@ -120,16 +119,17 @@ pb.popup = function (url,callback) { pb.submit( 'popup', url, callback ) }
 
 //=== database function
 pb.db = { name: 'database functions' }
-pb.db.json  = function ( sql, callback ) { pb.submit( 'json', sql, callback ) };
-pb.db.table = pb.db.html  = function ( sql, callback ) { pb.submit( 'table', sql, callback ) };
-pb.db.query = pb.db.select = function ( sql, callback ) { pb.submit( 'json', sql, callback ) };  
-pb.db.execute = pb.db.update = function ( sql, callback ) { pb.submit( 'sql/execute', sql, callback ) };
-pb.db.confirm = pb.db.prompt = function ( sql, callback ) { pb.submit( 'sql/prompt', sql, callback ) };
+pb.db.json = function ( sql, callback ) { pb.submit( 'db/json', sql, callback ) };
+pb.db.html = pb.db.html  = function ( sql, callback ) { pb.submit( 'db/html', sql, callback ) };
+pb.db.query = pb.db.select = function ( sql, callback ) { pb.submit( 'db/query', sql, callback ) };  
+pb.db.execute = pb.db.update = function ( sql, callback ) { pb.submit( 'db/execute', sql, callback ) };
+pb.db.confirm = pb.db.prompt = function ( sql, callback ) { pb.submit( 'db/prompt', sql, callback ) };
 
 //=== file functions
 pb.file = { name: 'file functions' }
 pb.file.copy = function (from, to, callback) { pb.submit( 'file/copy', from + '/' + to, callback ) }
 pb.file.move = function (from, to, callback) { pb.submit( 'file/move', from + '/' + to, callback ) }
+pb.file.exists = function (file, callback) { pb.submit( 'file/exists', file, callback ) }
 pb.file.read = function (file, callback) { pb.submit( 'file/read', file, callback ) }
 pb.file.write = function (file, text, callback) { pb.submit( 'file/write', file + '/' +  text, callback ) }
 pb.file.append = function (file, text, callback) { pb.submit( 'file/append', file + '/' +  text, callback ) }
@@ -167,8 +167,10 @@ pb.pdf = function ( opt, parm, callback ) {
   return pb.submit( 'pdf', opt + (parm? '/' + parm : '' ), callback ) 
 }
 
-//====== function for web crawler (mode=crawl), key:=body|querySelector; special handle :not() 
+//====== function for web crawler (mode=crawl), key:=body|css-selector 
 pb.crawl = function ( key ) {
+  if (key.indexOf('|')>=0) return pb.spider(key);
+
   var i, text='', html='', links=[]
   var divs = document.querySelectorAll( (key||'body').replace(/\@/g,'#') )
         
@@ -180,9 +182,26 @@ pb.crawl = function ( key ) {
   return JSON.stringify( { text:text, html:html, links:links, head:document.head.outerHTML } )
 }
 
+//====== grab data for web crawler (mode=spider), key:=name1=select1|name2=select2;
+pb.spider = function ( key ) {
+  var i, item, divs, name, css, text, html='', result={}
+  var keys = key.split('|')
+  
+  for (var k in keys) {
+    name = keys[k].split('=')[0].trim()
+    css  = (keys[k].split('=')[1]).trim().replace(/\@/g,'#')
+    divs = document.querySelectorAll( css )
+    for (text='', i=0; i<divs.length; i++) {
+      text += (i==0?'':'\n') + divs[i].innerText
+      html += divs[i].outerHTML + '\n'
+    }   
+    result[name] = text
+  }
+  
+  result.html = html
+  return JSON.stringify(result)
+}
+
 // disable right-click
 document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
-
-// watch: IE mode and userAgent
-//document.location='pb://microhelp/Mode=IE'+document.documentMode+', userAgent='+navigator.userAgent
 
