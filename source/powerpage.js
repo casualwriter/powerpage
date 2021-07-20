@@ -5,9 +5,11 @@
 // 20210507. ck.  pb.console(), pb.eval() for console support
 // 20210529. ck.  pb.print(), pd.pdf() 
 // 20210615. ck.  add pb.sendkeys(), rewrite pb.run(), pb.shell() 
+// 20210701. ck.  add crawl(), spider() for web-crawler
+// 20210710. ck.  simple polyfill for crawling IE7 pages
 //========================================================================
 // pb main function, pb('varname') = js.varname, pb('#div') = getElementById
-var pb = function (n) { return n[0]=='#'? document.getElementById(n.substr(2)) : window[n]; }
+var pb = function (n) { return n[0]=='#'? document.getElementById(n.substr(1)) : window[n]; }
 
 //=== show message for microhelp, internal error 
 pb.microhelp = function (msg) { document.title='pb://microhelp/'+ msg } 
@@ -15,13 +17,17 @@ pb.error = function(code,msg) { pb.microhelp( '[error='+ code +'] ' + msg ) }
 
 //=== router function. call from Powerbuilder, divert to callback function
 pb.router = function ( name, result, type, url ) {
-  if (typeof window[name] === "function") {
-      window[name]( result, type, url );
-  } else if (name) {
-      alert( 'callback function ' + name + '() not found!\n\n type:' + type + '\n cmd: ' + url 
-             + '\n function: '+name + '\n result: \n\n' + result )
-  } else if (typeof onCallback === "function") {
-      onCallback( result, type, url );
+  try {
+    if (typeof window[name] === "function") {
+        window[name]( result, type, url );
+    } else if (name) {
+        alert( 'callback function ' + name + '() not found!\n\n type:' + type + '\n cmd: ' + url 
+               + '\n function: '+name + '\n result: \n\n' + result )
+    } else if (typeof onCallback === "function") {
+        onCallback( result, type, url );
+    }
+  } catch (e) {
+    alert( 'Error in callback! \n\n Name: ' + name + '\nMessage:' + e.message )
   }  
 }
 
@@ -167,23 +173,14 @@ pb.pdf = function ( opt, parm, callback ) {
   return pb.submit( 'pdf', opt + (parm? '/' + parm : '' ), callback ) 
 }
 
-//====== function for web crawler (mode=crawl), key:=body|css-selector 
-pb.crawl = function ( key ) {
-  if (key.indexOf('|')>=0) return pb.spider(key);
+// spider protocol
+pb.spider = function ( url, key, callback ) { pb.submit( 'spider', 'key='+key+'; url='+url, callback ) }
 
-  var i, text='', html='', links=[]
-  var divs = document.querySelectorAll( (key||'body').replace(/\@/g,'#') )
-        
-  for (i=0; i<divs.length; i++) { 
-    text += divs[i].innerText + '\n'
-    html += divs[i].outerHTML + '\n'
-    if (divs[i].nodeName=='A') links.push({ url:decodeURI(divs[i].href), text:divs[i].innerText, id:divs[i].id });     
-  }
-  return JSON.stringify( { text:text, html:html, links:links, head:document.head.outerHTML } )
-}
+// disable right-click
+document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
 
-//====== grab data for web crawler (mode=spider), key:=name1=select1|name2=select2;
-pb.spider = function ( key ) {
+//====== [not-use] grab data for web crawler, key:=name1=select1|name2=select2;
+pb.crawlData = function ( key ) {
   var i, item, divs, name, css, text, html='', result={}
   var keys = key.split('|')
   
@@ -202,6 +199,60 @@ pb.spider = function ( key ) {
   return JSON.stringify(result)
 }
 
-// disable right-click
-document.addEventListener("contextmenu", function(e){ e.preventDefault();}, false);
+//====== function for web crawler (poup/mode=crawl), key:=body|css-selector 
+pb.crawl = function ( key ) {
+  var i, text='', html='', links=[], divs=[], url  
+  try {
+    divs = (key=='a'? document.getElementsByTagName('a') : document.querySelectorAll(key||'body'))
+    for (i=0; i<divs.length; i++) { 
+      text += divs[i].innerText + '\n'
+      html += divs[i].outerHTML + '\n'
+      if (typeof divs[i].href=="string") links.push( { url: decodeURI(divs[i].href), text:divs[i].innerText } );
+    }
+  } catch (e) {
+    html = text = 'Error: ' + e.message 
+  }   
+  return JSON.stringify( { url:location.href, title:document.title, text:text, html:html, links:links } )
+}
 
+// simple polyfill for crawling IE7 pages
+// querySelectorAll() from https://github.com/inexorabletash/polyfill/blob/master/polyfill.js  (buggy)
+if (!document.querySelectorAll) {
+    document.querySelectorAll = function (selectors) {
+        var style = document.createElement('style'), elements = [], element;
+        document.documentElement.firstChild.appendChild(style);
+        document._qsa = [];
+
+        style.styleSheet.cssText = selectors + '{x-qsa:expression(document._qsa && document._qsa.push(this))}';
+        window.scrollBy(0, 0);
+        style.parentNode.removeChild(style);
+
+        while (document._qsa.length) {
+            element = document._qsa.shift();
+            element.style.removeAttribute('x-qsa');
+            elements.push(element);
+        }
+        document._qsa = null;
+        return elements;
+    };
+}
+
+if (typeof JSON === "undefined" ) {
+  JSON = {}
+  JSON.stringify = function (value) {
+      var tmp = [], res = '[';
+      if (value == null) return 'null';
+      if (typeof value === 'number') return value.toString();
+      if (typeof value === 'boolean') return value.toString();
+      if ( (typeof value == "object") && (typeof value.length == "undefined") ) {
+        for (var k in value) {
+           tmp.push( JSON.stringify(k) + ': ' + JSON.stringify(value[k]));
+          }
+        return '{' + tmp.join(', ') + '}';
+      } else if ( (typeof value == "object") && (value.length>=0) ) {
+          for (var i = 0; i < value.length; i++) res += (i ? ', ' : '') + JSON.stringify(value[i]);
+          return res + ']';
+      } 
+      return '"' + value.toString().replace(/\\/g,'\\').replace(/\"/g,'\\"').replace(/(\r\n|\r|\n)/g,'\\n') + '"';
+  }
+}

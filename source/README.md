@@ -56,6 +56,7 @@ for example:
 
 For more details, please refer to [API documentation](interface.md)
 
+
 ## Command Line
 
 Powerpage support the following commandline parameters.
@@ -65,17 +66,17 @@ Powerpage support the following commandline parameters.
 * ``/ini={ini-file}`` specifies ini setting file.   
 * ``/url={start-url}`` is used to specify startup link
 * ``/print`` will load startup url, print and close program.
-* ``/fullscreen`` or ``kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
-* ``/save={save-html}`` will load startup url, save to html file, and close program
-* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program
-* ``delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
+* ``/fullscreen`` or ``/kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
+* ``/save={save-html}`` will load startup url, save to html file, and close program. useful for web-crawler
+* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program. useful for PDF report generation.
+* ``/delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
  
 
 ## Samples
 
-* [Screen Layout](powerpage.jpg)
-* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown)
-* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* Screen Layout of [PowerPage](powerpage.jpg)
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown), [Screen](powerpage-markdown.jpg) 
+* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler), [Screen](powerpage-web-crawler.jpg)
 
 
 ## Modification History
@@ -86,5 +87,7 @@ Powerpage support the following commandline parameters.
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
 * 2021/06/16, beta version, v0.50, handle command line
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 
 
