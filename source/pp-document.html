@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<title>Powerpage Documentation</title>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+  #header { background-color:#6B5876; color:white; }
+  #left-panel { width:400px; top:58px; border:1px solid grey; overflow:auto }
+  #right-panel { left:400px; top:58px; border:1px solid grey; overflow:auto }
+  h2 { color:#6B5876; background:#eee; padding:4px; }
+  h3 { color:darkblue; padding:4px; }
+  code { background-color:#eee; color:darkblue; border-radius:3px; padding:2px; font-family:calibri; }
+  pre { margin-left:12px; border:1px solid grey; background-color:#eee; padding:8px; }  
+</style>
+<body>
+
+<div id=header class="w3-container">
+  <div class="w3-left"><h4>Powerpage - Documentation</h4></div>
+  <div class="w3-right" style="padding:10px">
+    <li class="w3-button" onclick="loadMdFile('readme.md',this.innerText)">Readme</li>
+    <li class="w3-button" onclick="loadMdFile('interface.md',this.innerText)">Interface</li>
+    <li class="w3-button" onclick="loadMdFile('development.md',this.innerText)">Development</li>
+    <li class="w3-button" onclick="location='powerpage.html'">Home</li>
+  </div>
+</div>
+
+<div id=content>
+  <div id="left-panel" class="w3-container w3-display-bottomleft"></div>
+  <div id="right-panel" class="w3-container w3-display-bottomright"></div>
+</div>
+
+</body>
+
+<script>
+var sql1 = "SELECT * from Products where SupplierID=20";
+var sql2 = "SELECT * from Customers where City='London' ";
+var sql3 = "UPDATE Products set UnitsOnOrder = UnitsOnOrder + 1 where SupplierID=20 ";
+var keys = 'js=mycallback/run=notepad.exe/title=Untitled - Notepad/ms=500/test/ms=300/{bs}/ms=300/123/ms=500/456/~new line'
+
+//=== onCallback will be called if no callback specified. set default callback for type=json/table/sql/file/dir
+function onCallback(result, type, url) {
+   if (type=='db'||type=='sql'||type=='file'||type=='dir') {
+     alert( 'callback (default)\n\n type:' + type + '\n cmd: ' + url + '\n result: \n\n' + result )
+   }
+}   
+
+//=== Load markdown file (i.e. readme.md, interface.md, development.md)
+function loadMdFile( fname, title ) {
+  pb.tocTitle = title
+  pb.callback('showMdFile').file.read( fname )
+}
+
+//=== show markdown file
+function showMdFile(text) {
+  //text = marked( text.replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>') )
+  text = simpleMarkdown(text)
+  
+  // special handling for powerpage links (call chrome for github.com, call pb.function for API)
+  text = text.replace(/<a href="https/g,'<a href="pb://shell/file=chrome.exe,parm=https')
+  text = text.replace(/<code\>javascript:(.*?)<\/code\>/gm,'<code><a href="javascript:$1">javascript:$1</a></code>')
+  text = text.replace(/<code\>pb:\/\/(.*?)<\/code\>/gm,'<code><a href="pb://$1">pb://$1</a></code>')
+  text = text.replace(/<code\>ps:\/\/(.*?)<\/code\>/gm,'<code><a href="ps://$1">ps://$1</a></code>')
+  document.getElementById('right-panel').innerHTML =  text + '<br>'
+	 
+  simpleTOC( pb.tocTitle )
+}
+
+//=== simpleTOC: show Table of Content
+function simpleTOC( title, srcDiv, toDiv ) {
+
+  var toc = document.getElementById(srcDiv||'right-panel').querySelectorAll('h2,h3,h4')
+  var html = '<h4 class="w3-sand w3-container">' + (title||'Content') + '</h4><ul class="w3-ul">';
+
+  for (var i=0; i<toc.length; i++ ) {
+  	if (!toc[i].id) toc[i].id = "toc-item-" + i;
+    
+  	if (toc[i].nodeName === "H2") {
+  		html += "<li class='w3-light-grey' onclick=\"location='#" + toc[i].id + "'\">" + toc[i].textContent + "</a></li>";
+  	} else if (toc[i].nodeName === "H3") {
+  		html += "<li style='margin-left:12px' onclick=\"location='#" + toc[i].id + "'\">" + toc[i].textContent + "</a></li>";
+  	} else if (toc[i].nodeName === "H4") {
+  		html += "<li style='margin-left:24px'><a href='#" + toc[i].id + "'>" + toc[i].textContent + "</a></li>";
+  	}
+  }
+
+  document.getElementById(toDiv||'left-panel').innerHTML = html   
+}
+
+//=== simple markdown
+function simpleMarkdown(mdText) {
+	mdText = mdText.replace(/\r\n/g, '\n')
+    .replace(/^##### (.*$)/gm, '<h5>$1</h5>')
+    .replace(/^#### (.*$)/gm, '<h4 id="$1">$1</h4>')
+    .replace(/^### (.*$)/gm, '<h3 id="$1">$1</h3>')
+    .replace(/^## (.*$)/gm, '<h2 id="$1">$1</h2>')
+    .replace(/^# (.*$)/gm, '<h1 id="$1">$1</h1>')    
+    .replace(/^-{3,99}(.*$)/gm, '<hr>')    
+    .replace(/``(.*?)``/gm, '<code>$1</code>' )
+		.replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>')
+		.replace(/!\[(.*?)\]\((.*?)\)/gm, "<img alt='$1' src='$2' />")
+    .replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')
+		.replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>')
+    .replace(/^\*[ |.](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
+    .replace(/^\d[ |.](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
+    .replace(/\n[`|~]{3,30}(.*)\n([\s\S]*?)\n[`|~]{3,30}/g, '<pre><code>$2</code></pre>' )
+    //.replace(/^ {4,10}(.*)/gm, '<pre><code>$1</code></pre>' ).replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
+		.replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
+		.replace(/\*(.*)\*/gm, '<i>$1</i>')
+    .replace(/\n\n/g, '\n<p>')
+	return mdText.trim()
+}
+
+window.onload = function () { 
+  loadMdFile('readme.md', 'Overview' ) 
+}
+</script>
+
