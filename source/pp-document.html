@@ -2,10 +2,10 @@
 <title>Powerpage Documentation</title>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
-  #header { background-color:#6B5876; color:white; }
+  #header { background-color:#695874; color:white; }
   #left-panel { width:400px; top:58px; border:1px solid grey; overflow:auto }
   #right-panel { left:400px; top:58px; border:1px solid grey; overflow:auto }
-  h2 { color:#6B5876; background:#eee; padding:4px; }
+  h2 { color:#695874; background:#eee; padding:4px; }
   h3 { color:darkblue; padding:4px; }
   code { background-color:#eee; color:darkblue; border-radius:3px; padding:2px; font-family:calibri; }
   pre { margin-left:12px; border:1px solid grey; background-color:#eee; padding:8px; }  
@@ -15,9 +15,9 @@
 <div id=header class="w3-container">
   <div class="w3-left"><h4>Powerpage - Documentation</h4></div>
   <div class="w3-right" style="padding:10px">
-    <li class="w3-button" onclick="loadMdFile('readme.md',this.innerText)">Readme</li>
-    <li class="w3-button" onclick="loadMdFile('interface.md',this.innerText)">Interface</li>
-    <li class="w3-button" onclick="loadMdFile('development.md',this.innerText)">Development</li>
+    <li class="w3-button" onclick="loadMdFile('doc/readme.md',this.innerText)">Readme</li>
+    <li class="w3-button" onclick="loadMdFile('doc/interface.md',this.innerText)">Interface</li>
+    <li class="w3-button" onclick="loadMdFile('doc/development.md',this.innerText)">Development</li>
     <li class="w3-button" onclick="location='powerpage.html'">Home</li>
   </div>
 </div>
@@ -50,7 +50,6 @@ function loadMdFile( fname, title ) {
 
 //=== show markdown file
 function showMdFile(text) {
-  //text = marked( text.replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>') )
   text = simpleMarkdown(text)
   
   // special handling for powerpage links (call chrome for github.com, call pb.function for API)
@@ -58,8 +57,8 @@ function showMdFile(text) {
   text = text.replace(/<code\>javascript:(.*?)<\/code\>/gm,'<code><a href="javascript:$1">javascript:$1</a></code>')
   text = text.replace(/<code\>pb:\/\/(.*?)<\/code\>/gm,'<code><a href="pb://$1">pb://$1</a></code>')
   text = text.replace(/<code\>ps:\/\/(.*?)<\/code\>/gm,'<code><a href="ps://$1">ps://$1</a></code>')
-  document.getElementById('right-panel').innerHTML =  text + '<br>'
-	 
+  
+  document.getElementById('right-panel').innerHTML =  text + '<br>'	 
   simpleTOC( pb.tocTitle )
 }
 
@@ -101,15 +100,15 @@ function simpleMarkdown(mdText) {
     .replace(/^\*[ |.](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
     .replace(/^\d[ |.](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
     .replace(/\n[`|~]{3,30}(.*)\n([\s\S]*?)\n[`|~]{3,30}/g, '<pre><code>$2</code></pre>' )
-    //.replace(/^ {4,10}(.*)/gm, '<pre><code>$1</code></pre>' ).replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
 		.replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
 		.replace(/\*(.*)\*/gm, '<i>$1</i>')
     .replace(/\n\n/g, '\n<p>')
+    //.replace(/^ {4,10}(.*)/gm, '<pre><code>$1</code></pre>' ).replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
 	return mdText.trim()
 }
 
 window.onload = function () { 
-  loadMdFile('readme.md', 'Overview' ) 
+  loadMdFile('doc/readme.md', 'Overview' ) 
 }
 </script>
 

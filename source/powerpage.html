@@ -2,13 +2,10 @@
 <html>
 <title>Power Page</title>
 <style>
-body { margin:12px; font-family:verdana,sans-serif; font-size:14px; line-height:1.2; }
+body { margin:12px; font-family:verdana,sans-serif; font-size:15px; line-height:1.2; }
 div { padding: 8px } 
 h3 { color:darkblue; }
 li { padding-top: 8px; }
-button { font-family:calibri,arial; font-size:14px; font-weight:500; margin:2px;  }
-button:hover {color:#000!important;background-color:#ccc!important }
-
 table { margin:8px; border-collapse: collapse; }
 th { border:1px solid grey; background:lightgrey; padding:4px; }
 td { border:1px solid grey; font-family:arial; padding:4px; }
@@ -16,21 +13,35 @@ td.remark { width:350px; }
 td.sample { width:250px; }
 td.syntax { width:30%; }
 a { text-decoration: none; } a:hover { background-color: lightgreen; }
+.pp-title { background-color:#695874; color:white; font-weight:700; font-size:18px;padding:12px }
+.pp-right { float: right }
+.pp-left { float: left }
+.pp-button { font-family:calibri,arial; font-size:14px; font-weight:500; margin:2px; }
+.pp-button:hover {color:#000!important;background-color:#ccc!important }
 </style>
 <body>
 
-<div style="background-color:#6B5876; color:white; ">
-	<button onclick="location.href='pp-document.html'">Documentation</button> 
-	<button onclick="location.href='pp-markdown.html'">Markdown Editor</button> 
-	<button onclick="location.href='pp-web-crawler.html'">Web Crawler</button> 
-	<button onclick="location.href='pp-db-reports.html'" disabled>DB Reports</button> 
-	<button onclick="location.href='pp-db-browser.html'" disabled>DB Browser</button> 
-	<button onclick="pb.run('notepad.exe powerpage.html')" accesskey=e style="float:right"><u>E</u>dit This Page</button> 
-	<button onclick="pb.window('w_about')" accesskey=a style="float:right"><u>A</u>bout</button> 
+<div class="pp-title">
+	Power Page
+  <span class="pp-right">
+		<button class="pp-button" onclick="location.href='pp-document.html'">Documentation</button> 
+		<button class="pp-button" onclick="location.href='pp-markdown.html'">Markdown Editor</button> 
+		<button class="pp-button" onclick="location.href='pp-web-crawler.html'">Web Crawler</button> 
+		<button class="pp-button" onclick="location.href='pp-db-reports.html'" disabled>DB Reports</button> 
+		<button class="pp-button" onclick="location.href='pp-db-browser.html'" disabled>DB Browser</button> 
+		<button class="pp-button" onclick="pb.run('notepad.exe powerpage.html')" accesskey=e style="float:right"><u>E</u>dit This Page</button> 
+		<button class="pp-button" onclick="pb.window('w_about')" accesskey=a style="float:right"><u>A</u>bout</button>
+	</span>	 
 </div>
 
-<p id=brief><b>Powerpage is a lightweight web browser with DB capability and windows accessibility, for rapid application development by html/css/js. </b>
-<p>Powerpage will connect to database, and load startup page by the setting of powerpage.ini, and open OLE web-browser with new protocol <mark>pb:// or ps://</mark> supported below features</b>
+<div>
+<p>
+<b>Powerpage</b> is is a lightweight web browser with DB capability and windows accessibility, 
+for rapid development of javascript/html application.
+<p>
+Powerpage will connect to database, load startup page using Microsoft web-browser control (**equivalent to IE11**), 
+and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to provide below features
+</p> 
 <ul>
 	<li>(Run)  Call External Program 
 	<li>(File) Access file system
@@ -39,12 +50,11 @@ a { text-decoration: none; } a:hover { background-color: lightgreen; }
 	<li>(Print) Printing, PDF rerport generation
 	<li>(Misc)  Variables, session information
 </ul>
-</p>
-<br>
 
-<div style="background-color:#6B5876; color:white; font-weight:700; font-size:18px;padding:12px">
-	Quick Reference of API (pb-protocol)
+<br/>
 </div>
+
+<div class="pp-title">Quick Reference of API (pb-protocol)</div>
 
 <div id=global>
 <h3>Global Features (Callback, Prompt, @JsVar, Secured protocol)</h3> 

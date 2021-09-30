@@ -67,14 +67,13 @@ For more details, please refer to [API documentation](interface.md)
 Beside running javascript applications, Powerpage has wide usage by using commandline parameters.
 
 ~~~
-	powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-html} /pdf={output-pdf-file} /delay={1000}
+powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-html} /pdf={output-pdf-file} /delay={1000}
 ~~~
 	
-	next line
-	* ``/ini={ini-file}`` specifies ini setting file. Aplication could be changed by change the ini file.
-	* ``/url={start-url}`` is used to specify startup link. Aplication could be changed by change startup link. 
-	* ``/print`` will load startup url, print and close program.
-	* 
+* ``/ini={ini-file}`` specifies ini setting file. Aplication could be changed by change the ini file.
+* ``/url={start-url}`` is used to specify startup link. Aplication could be changed by change startup link. 
+* ``/print`` will load startup url, print and close program.
+* 
 * ``/fullscreen`` or ``/kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
 * ``/save={save-html}`` will load startup url, save to html file, and close program. Useful for web-crawler
 * ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program. useful for PDF generation.
@@ -109,6 +108,5 @@ Powerpage is released with some sample applications.
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
-* 2021/09/29, beta version, v0.57, code pp_document.html, and update document.
 
 
