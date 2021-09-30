@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <title>Powerpage Documentation</title>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
-  #header { background-color:#695874; color:white; }
-  #left-panel { width:400px; top:58px; border:1px solid grey; overflow:auto }
-  #right-panel { left:400px; top:58px; border:1px solid grey; overflow:auto }
-  h2 { color:#695874; background:#eee; padding:4px; }
-  h3 { color:darkblue; padding:4px; }
-  code { background-color:#eee; color:darkblue; border-radius:3px; padding:2px; font-family:calibri; }
-  pre { margin-left:12px; border:1px solid grey; background-color:#eee; padding:8px; }  
+html { box-sizing:border-box } *,*:before, *:after {box-sizing:inherit}
+body { font-family:Verdana,sans-serif; font-size:14px; line-height:1.5; margin:0; }
+h1,h2,h3,h4,h5,h6 {font-family:"Segoe UI",Arial,sans-serif;font-weight:600;margin:10px 0}
+h2 { font-size:30px; padding:8px; color:#695874; background:#f0f0f0;  }
+h3 { font-size:24px; padding:8px; color:darkblue; }
+h4 { font-size:20px; padding:8px; }
+code { font-family:monospace,calibri; background-color:#f6f6f6; color:darkblue; border-radius:2px; padding:2px;  }
+pre  { font-family:monospace,calibri; margin-left:12px; border:1px solid #eee; background:#f6f6f6; padding:8px; }  
+a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outline-width:0; background:#CED; }
+#header { background-color:#695874; color:white; width:100%; height:50px; }
+#title 	{ float:left; font-size:18px; font-weight:700; padding:8px }
+#menu button { font-family:Verdana,Arial; border:none; padding:4px 8px; vertical-align:middle; color:inherit; background:#695874; }
+#menu button:hover { color:#000; background-color:#ccc }
+#menu button:disabled {cursor:not-allowed; opacity:0.5}: disabled *{pointer-events:none}
+#toc 		{ list-style-type:none; padding:0; margin:0 }
+#toc li	{ padding:4px 8px; border-bottom:1px solid #eee }
+#left-panel 	{ position:absolute; left:0; bottom:0; width:400px; top:48px; border:1px solid grey; overflow:auto; padding:4px 8px }
+#right-panel 	{ position:absolute; right:0; bottom:0; left:400px; top:48px; border:1px solid grey; overflow:auto; padding:4px 8px }
 </style>
+
 <body>
-
-<div id=header class="w3-container">
-  <div class="w3-left"><h4>Powerpage - Documentation</h4></div>
-  <div class="w3-right" style="padding:10px">
-    <li class="w3-button" onclick="loadMdFile('doc/readme.md',this.innerText)">Readme</li>
-    <li class="w3-button" onclick="loadMdFile('doc/interface.md',this.innerText)">Interface</li>
-    <li class="w3-button" onclick="loadMdFile('doc/development.md',this.innerText)">Development</li>
-    <li class="w3-button" onclick="location='powerpage.html'">Home</li>
-  </div>
+<div id=header>
+  <span id=title>Powerpage - Documentation</span>
+  <span id=menu style="float:right; padding:12px">
+    <button onclick="loadMdFile('doc/readme.md',this.innerText)">Readme</button>
+    <button onclick="loadMdFile('doc/interface.md',this.innerText)">Interface</button>
+    <button onclick="loadMdFile('doc/development.md',this.innerText)">Development</button>
+    <button onclick="loadMdFile('doc/version.md',this.innerText)" disabled>Version</button>
+    <button onclick="location='powerpage.html'">Home</button>
+  </span>
 </div>
-
 <div id=content>
-  <div id="left-panel" class="w3-container w3-display-bottomleft"></div>
-  <div id="right-panel" class="w3-container w3-display-bottomright"></div>
+  <div id="left-panel"></div>
+  <div id="right-panel"></div>
 </div>
-
 </body>
 
 <script>
@@ -66,17 +75,17 @@ function showMdFile(text) {
 function simpleTOC( title, srcDiv, toDiv ) {
 
   var toc = document.getElementById(srcDiv||'right-panel').querySelectorAll('h2,h3,h4')
-  var html = '<h4 class="w3-sand w3-container">' + (title||'Content') + '</h4><ul class="w3-ul">';
+  var html = '<h4> ' + (title||'Content') + '</h4><ul id="toc">';
 
   for (var i=0; i<toc.length; i++ ) {
   	if (!toc[i].id) toc[i].id = "toc-item-" + i;
     
   	if (toc[i].nodeName === "H2") {
-  		html += "<li class='w3-light-grey' onclick=\"location='#" + toc[i].id + "'\">" + toc[i].textContent + "</a></li>";
+  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
   	} else if (toc[i].nodeName === "H3") {
-  		html += "<li style='margin-left:12px' onclick=\"location='#" + toc[i].id + "'\">" + toc[i].textContent + "</a></li>";
+  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
   	} else if (toc[i].nodeName === "H4") {
-  		html += "<li style='margin-left:24px'><a href='#" + toc[i].id + "'>" + toc[i].textContent + "</a></li>";
+  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
   	}
   }
 
