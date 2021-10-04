@@ -16,65 +16,178 @@ for example:
 * Run notepad.exe to edit powerpage.ini -> ``javascript:pb.run('notepad.exe powerpage.ini')`` or ``pb://run/notepad.exe powerpage.ini``
 * Run SQL1 and callback showData() -> ``javascript:pb.callback('showData').db.query(sql1)`` or ``pb://callback/showData/db/query/@sql1``  
 * Run update SQL2 -> ``javascript:pb.db.execute(sql3)`` or ``pb://db/execute/@sql3``
-* Call About window -> ``javascript:pb.window('w_about')`` or ``pb://window/w_about`` 
-
-
-## Global Features  
+* Call About window -> ``javascript:pb.window('w_about')`` or ``pb://window/w_about``
+ 
+ 
+## Global Features  ##
 
 ``Callback, Prompt/Confirm, @JsVar and Secure Protocol`` are supported in all commands. 
+ 
+ 
+-----------------------------------------------------------------------------------
+### Callback ###
 
-### Callback
+Every command may specify callback function. If not specify, program will call onCallback() as default.
 
-* Description: Callback js function after run command 
-* ``javascript:pb.callback('mycallback').run('mstsc.exe')`` 
-* ``javascript:pb.callback('mycallback').run('cmd=notepad.exe,style=wait')`` 
-* pb-protocal: ``pb://callback/mycallback/run/mstsc.exe`` 
+#### Syntax
 
+* url-protocol: **pb://callback**/{callback-function-name}/command 
+* javascript : **javascript:pb.callback({callback-function-name})**.apiFunction()
+
+#### Sample
+
+* `pb://callback/mycallback/run/mstsc.exe` 
+* `javascript:pb.callback('mycallback').run('mstsc.exe')` 
+* `javascript:pb.callback('mycallback').run('cmd=notepad.exe,style=wait')` 
+
+#### Source Code (powerpage.js)
+
+Powerpage will call `pb.rounter()` in powerpage.js to route to callback-function() by ``window[name]( result, type, url )``,
+
+* callback-function should be a window-level function which is accessible by `window[{callback-function-name}]` in javascript.
+* if callback-function is specified but not found, program will show alert message. 
+* if callback not specify, pb.router() will call onCallback() as default.
+
+~~~ powerpage.js
+//=== router function. call from Powerbuilder, divert to callback function
+pb.router = function ( name, result, type, url ) {
+  try {
+    if (typeof window[name] === "function") {
+        window[name]( result, type, url );
+    } else if (name) {
+        alert( 'callback function ' + name + '() not found!\n\n type:' + type + '\n cmd: ' + url 
+               + '\n function: '+name + '\n result: \n\n' + result )
+    } else if (typeof onCallback === "function") {
+        onCallback( result, type, url );
+    }
+  } catch (e) {
+    alert( 'Error in callback! \n\n Name: ' + name + '\nMessage:' + e.message )
+  }  
+}
+~~~
+  
+ 
+-----------------------------------------------------------------------------------
 ### Prompt/Confirm
 
-* Description: Prompt for confirmation, then run command 
-* ``javascript:pb.confirm('Open notepad?').run('notepad.exe')``
-* pb-protocol: ``pb://?Open notepad?/run/notepad.exe`` 
+Prompt for confirmation, then run command
+ 
+#### Syntax
 
+* url-protocol: **pb://?{prompt-message}?/**command 
+* javascript : **javascript:pb.confirm({prompt-message})**.apiFunction()
+* javascript : **javascript:pb.prompt({prompt-message})**.apiFunction()
+
+#### Sample
+
+* `javascript:pb.confirm('Open notepad?').run('notepad.exe')`
+* `pb://?Open notepad?/run/notepad.exe` 
+
+#### Source Code (powerbuilder)
+
+~~~ powerbuilder
+//=== powerbuilder.event titlechange()
+// handle prompt message
+if mid(text,4,4) = '///?' and pos(text,'?/',7) > 0 then	
+	if messagebox( 'Confirmation', mid( text, 8, pos(text,'?/',7) - 7 ), Question!, YesNo! ) <> 1 then 
+		return
+	else
+		text = left(text,5) + mid( text, pos(text,'?/',7) + 2 )
+	end if
+end if
+~~~
+ 
+ 
+-----------------------------------------------------------------------------------
 ### @js Variable Replacement
 
-* Description: use @jsVar to pass javascript vaiable as command parameter. very useful for long string.
-* javascript: pb.db.query(sql1``) or pb.db.query(``'@sql1'``)
-* pb-protocol: pb://sql/query/``@sql1``
+Use javascript variable to store long string, and pass to Powerpage interface. 
+For the place of string parameter, `@{var}` will be replace with the value of variable.
 
+#### Sample
+
+* javascript: pb.db.query(`sql1`) 
+* javascript: pb.db.query(`'@sql1'`)
+* url-protocol: pb://sql/query/`@sql1``
+
+#### Source Code (powerbuilder + powerpage.js)
+
+For string paramter start with '@', Powerbuilder call javascript function pb('@var') to retrieve its value. 
+
+~~~ powerbuilder
+string function of_get_string( string as_text ) 
+  // load string from js variable
+  if left(as_text,1)='@' then 
+  	as_text = this.object.document.script.pb( mid(as_text,2) )	
+  end if
+  
+  // handle some special characters
+  as_text = of_replaceall( as_text, '&gt;', '>' )
+  as_text = of_replaceall( as_text, '&lt;', '<' )
+	
+return as_text
+~~~
+
+in powerpage.js, declare function pb('@var') to return js variable value.
+
+~~~ powerpage.js
+// pb main function, pb('varname') = js.varname, pb('#div') = getElementById
+var pb = function (n) { 
+  return n[0]=='#'? document.getElementById(n.substr(1)) : window[n]; 
+}
+~~~
+ 
+ 
+-----------------------------------------------------------------------------------
 ### Secured protocol
 
-* Description: ``Secured`` Protocol will prompt user login by windows account.
-*  ``javascript:pb.secure().run('resmon.exe')``
-* ps-protocol: ``ps://run/resmon.exe`` 
+Once use ``Secured`` protocol, powerpage will prompt user login by windows account.
 
+#### Syntax
 
+* url-protocol: **ps://**command 
+* javascript : **javascript:pb.secure()**.apiFunction()
+
+#### Sample
+ 
+*  `javascript:pb.secure().run('resmon.exe')`
+* ps-protocol: `ps://run/resmon.exe` 
+ 
+#### Source Code (powerbuilder)
+
+~~~ powerbuilder
+//=== powerbuilder.event titlechange() 
+// handle ps:// security mode
+if lower(left(text,5)) = 'ps://' and trim(gnv_app.is_login_user) = '' then
+  open(w_login)
+  if trim(gnv_app.is_login_user) = '' then 
+    return
+  end if
+  gnv_app.of_microhelp( 'window user login. id=' + gnv_app.is_login_user )
+end if
+~~~  
+ 
+ 
+       
 ## Run / Shell 
-
------------------------------------------------------
+ 
+Powerpage may execute sheel command by calling window.shell or wsh.shell.
+ 
+-----------------------------------------------------------------------------------
 ### pb.run( command )
 ### pb.run( cmd, path, style, callback ) 
 
-* Description: Run a program, e.g. resmon.exe
-* pb-protocol: `` pb://run/{command}`` or `` pb://run/cmd={command},path={path},style={style}`` 
+Run a program, e.g. resmon.exe
 
-~~~~
-// Source Code (in powerpage.js)
-pb.run = function ( cmd, path, style, callback ) { 
-  if (arguments.length==1) {
-    pb.submit( 'run', cmd ) 
-  } else {
-    var ls_opt = 'cmd=' + cmd + (path? ',path='+path : '' ) + (style? ',style='+style : '' )
-    pb.submit( 'run', ls_opt, callback )
-  } 
-}
-~~~~
- 
-##### Arguments
+#### Syntax
 
-* {cmd}  // command 
-* {path} // path to run the command
-* {style} // style := [ normal | min | max | hide | wait ] 
+* url-protocol: **pb://run/**{command} 
+* javascript : **javascript:pb.run**({command})
+* 
+* {command} := cmd={cmd},path={path},style={style}
+* {cmd}  := dos command 
+* {path} := path to run the command
+* {style} := [ normal | min | max | hide | wait ] 
 
 ##### Samples
 
@@ -83,8 +196,57 @@ pb.run = function ( cmd, path, style, callback ) {
 * pb-protocol: ``pb://run/notepad.exe powerpage.html`` run notepad to edit powerpage.html
 * ``javascript:pb.run('powerpage.exe', 'c:\app')`` run powerpage at c:\app
 * ``javascript:pb.run('notepad.exe powerpage.html','.','max+wait','alert')`` edit edit powerpage.html and show status 
+ 
+#### Source Code (powerbuilder+powerpage.js))
 
------------------------------------------------------
+~~~ powerbuilder
+//## [20210611] pb://run/folder=?,cmd=?,style=[min|max|normal|hide]+wait
+if is_type = 'run' then
+	
+	ls_opts = mid(is_command,5) 
+	ls_path = of_get_keyword( ls_opts, 'path', ',', of_get_keyword( ls_opts, 'folder', ',', ls_null ) )
+	ls_run = of_get_keyword( ls_opts, 'cmd', ',', ls_null )
+	ls_style = of_get_keyword( ls_opts, 'style', ',', 'normal' ) 
+
+	if pos(lower(ls_style),'normal')>0 then
+		ll_show = 1
+	elseif pos(lower(ls_style),'min')>0 then
+		ll_show = 2
+	elseif pos(lower(ls_style),'max')>0 then
+		ll_show = 3
+	elseif pos(lower(ls_style),'hide')>0 then
+		ll_show = 0
+	else
+		ll_show = 1
+	end if
+
+	if ls_run > ' ' then
+		changedirectory( ls_path )
+		ll_rtn = of_wsh_run( ls_run, ll_show, pos(ls_style,'wait')>0 )
+		changedirectory( gnv_app.is_currentPath )
+	else
+		ll_rtn = run( mid( is_command, 5 ) )
+	end if
+	
+	return event ue_callback( as_callback, '{ "status":'+string(ll_rtn)+'}' )	
+	
+end if
+~~~
+
+
+~~~ powerpage.js
+pb.run = function ( cmd, path, style, callback ) { 
+  if (arguments.length==1) {
+    pb.submit( 'run', cmd ) 
+  } else {
+    var ls_opt = 'cmd=' + cmd + (path? ',path='+path : '' ) + (style? ',style='+style : '' )
+    pb.submit( 'run', ls_opt, callback )
+  } 
+}
+~~~
+
+
+-----------------------------------------------------------------------------------
 ### pb.shell(command)
 ### pb.shell(action, file, parm, path, show, callback)
 
@@ -118,7 +280,7 @@ pb.shell = function ( action, file, parm, path, show, callback ) {
 * ``pb.shell('run', 'c:\\app\\powerpage.exe')`` // shell-run program (similar to runat())
 * ``pb://shell/run/c:\powerpage\powerpage.exe`` // shell-run program (similar to runat())    
 
------------------------------------------------------
+-----------------------------------------------------------------------------------
 ### pb.sendkeys(keys)
 
 call sendkeys() function of Wscript Shell to send keystrokes.
@@ -137,21 +299,21 @@ keys := /run={cmd}/title={goto Title}/s={delay}/ms={delay ms}/Keystrokes
 
 Query from database, execute sql or stored procedure.
 
------------------------------------------------------
+-----------------------------------------------------------------------------------
 ### pb.db.json( sql, callback )
 
------------------------------------------------------
+-----------------------------------------------------------------------------------
 ### pb.db.html( sql, callback )
 
------------------------------------------------------
+-----------------------------------------------------------------------------------
 ### pb.db.query( sql, callback )
 ### pb.db.select( sql, callback )
 
------------------------------------------------------
+-----------------------------------------------------------------------------------
 ### pb.db.update( sql, callback )
 ### pb.db.execute( sql, callback )
 
------------------------------------------------------
+-----------------------------------------------------------------------------------
 ### pb.db.prompt( sql, callback )
 ### pb.db.confirm( sql, callback )
 
