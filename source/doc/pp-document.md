@@ -1,5 +1,5 @@
 ## Document by Markdown
-######################################################################
+--------------------------------------------------------
 
 This program, ``pp-document.html``, is a powerpage-application to show markdown documents.
 
@@ -66,15 +66,16 @@ function simpleTOC( title, srcDiv, toDiv ) {
   
 ### Simple Markdown
 
-Has considered to call js lib for markdown parser. However, some may too large, and some donot support IE11. 
+Considered to call js lib for markdown parser. However, some may too heavy, and some do not support IE11.
+ 
 Finally write a simple markdown parser in below codes:
 
- ![simple markdown parser](doc/pp-simple-markdown.jpg)
+ ![simple markdown parser](pp-simple-markdown.jpg)
 
  
 
 ## Supported Markdown Syntax
-######################################################################
+-------------------------------------------------------------
 
 refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown syntax 
 
