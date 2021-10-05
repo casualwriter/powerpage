@@ -29,13 +29,12 @@ td.syntax { width:30%; }
 <body>
 
 <div id=header>
-  <span id=title>Powerpage <small>(Quick Reference)</small></span>
+  <span id=title>Power Page</span>
   <span id=menu style="float:right; padding:12px">
 		<button onclick="location.href='pp-document.html'" accesskey=d><u>D</u>ocumentation</button> 
 		<button onclick="location.href='pp-markdown.html'">Markdown Editor</button> 
 		<button onclick="location.href='pp-web-crawler.html'">Web Crawler</button> 
 		<button onclick="location.href='pp-db-browser.html'" disabled>DB Browser</button>
-		<button onclick="pb.run('notepad.exe powerpage.html')" accesskey=e><u>E</u>dit This Page</button>  
 		<button onclick="pb.window('w_about')" accesskey=a><u>A</u>bout</button> 
   </span>
 </div>
@@ -44,7 +43,7 @@ td.syntax { width:30%; }
 <p><b>Powerpage</b> is is a lightweight web browser with DB capability and windows accessibility, 
 for rapid development of javascript/html application.
 </p>
-<p>Powerpage will connect to database, load startup page using Microsoft web-browser control (**equivalent to IE11**), 
+<p>Powerpage will connect to database, load startup page using Microsoft web-browser control (<b>equivalent to IE11</b>), 
 and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to provide below features
 </p> 
 <ul >
@@ -57,12 +56,12 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 </ul>
 </div>
 
-<div id=subtitle>Quick Reference of API (pb-protocol)</div>
+<div id=subtitle>Quick Reference of API</div>
 
 <div id=global>
 <h3>Global Features (Callback, Prompt, @JsVar, Secured protocol)</h3> 
 <p>"Callback, Prompt/Confirm, @JsVar, Secured protocol" are supported in all commands.</p>
-<table style="margin:10px; border-collapse: collapse;">
+<table>
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
      <td class=remark>Prompt for confirmation, then run command
@@ -94,7 +93,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 <div>
 <h3>Run / Shell</h3>
 <p>Run will call Wscript.run() and Shell command will be diverted to shell32.dll -> ShellExecuteW()</p>
-<table style="margin:10px;border-collapse: collapse;">
+<table>
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
      <td class=remark>Run a program, e.g. mspaint.exe, resmon.exe
@@ -144,7 +143,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 <div>
 <h3>File Accessibility</h3>
 <p>calling powerbuilder file/diretory funcitons to provide file support.</p>
-<table style="margin:10px;border-collapse: collapse;">
+<table>
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
      <td class=remark>Copy powerpage.ppg to newfile.html
@@ -230,7 +229,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 <div>
 <h3>Database Accessibility</h3>
 <p>Query from database, execute sql or stored procedure.</p>
-<table style="margin:10px;border-collapse: collapse;">
+<table>
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
      <td class=remark>run ah-hoc SQL, return json
@@ -287,7 +286,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 <div>
 <h3>Work with Powerbuilder</h3>
 <p>call powerbuilder customized window/function, which stored in extert pbl file.</p>
-<table style="margin:10px;border-collapse: collapse;">
+<table>
   <tr><th>Description<th>Syntax<th>url protocol<th>javascript</tr>
   <tr>
      <td class=remark>Open PB window object
@@ -315,7 +314,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 <p>Session is important for applicaiton development. After page loaded, 
 ``pb.session``` serves as session object sharing information between different pages.
 </p>
-<table style="margin:10px;border-collapse: collapse;">spid
+<table>
   <tr>
      <td class=remark>initialized by powerpage.ini
      <td class=sample>[session]<br>var1 = name: PowerPage
@@ -340,7 +339,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 
 <div>
 <h3>Print and PDF Report Generation</h3>
-<table style="margin:10px;border-collapse: collapse;">
+<table>
   <tr>
      <td class=remark>Print, Preview, PageSetup 
      <td class=sample><mark>pb://print</mark>/[now|preview|setup]
@@ -364,7 +363,7 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
 
 <div>
 <h3>Url Navigation / Misc</h3>
-<table style="margin:10px;border-collapse: collapse;">
+<table>
   <tr>
      <td class=remark>open link in popup dialog (share session info)
      <td class=sample><mark>pb://popup</mark>/width=?,height=?,url=?

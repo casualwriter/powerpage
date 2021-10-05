@@ -171,7 +171,8 @@ end if
        
 ## Run / Shell 
  
-Powerpage may execute sheel command by calling window.shell or wsh.shell.
+Run will call Wscript.run() to run DOS command,
+Shell command will be diverted to `shell32.dll ->ShellExecuteW()`
  
 -----------------------------------------------------------------------------------
 ### pb.run( command )
@@ -445,6 +446,7 @@ by javascript ``pb.popup('width=500,url=dialog.html','mycallback') or pb.callbac
 
 * 2021/05/11  initial
 * 2021/05/31  add print commands
-* 2021/09/28  rewrite document
+* 2021/09/30  update document using markdown
+* 2021/10/05  update document
 
 

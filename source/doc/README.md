@@ -16,12 +16,19 @@ and communicate with html/js page by ``pb:// or ps://`` protocol to provide belo
 
 * Portable solution. No need to install
 * Single execute file. Quick Deployment.
+* No dependance, pure js/html/css
 * Code-and-Play instantly 
 * Make use of all javascript library (which support IE11)
 * Command Line for multiple purpose (e.g. save url page, generate PDF)
 * Work with Powerbuilder (e.g. call powerbuilder window/function/datawindow)
 
 ps: due to the limitation of Microsoft web-browser control, Powerpage web browser is **equivalent to IE11 (not chrome)**!
+
+
+### Screen Preview
+
+ ![Powerpage](doc/powerpage.gif)
+
 
 ### Run Powerpage
 
@@ -96,9 +103,9 @@ powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-ht
 
 Powerpage is released with some sample applications.
 
-* [Screen](powerpage.jpg) -> [Powerpage](https://github.com/casualwriter) with self-demonstration
-* [Screen](powerpage-markdown.jpg) -> [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
-* [Screen](powerpage-web-crawler.jpg) -> [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
+* [Powerpage](https://github.com/casualwriter) with self-demonstration
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
+* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
  
  
 ## Modification History

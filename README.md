@@ -5,7 +5,7 @@ and windows accessibility, for rapid development of javascript/html application.
 
 Powerpage will connect to database, load startup page using Microsoft web-browser control (**equivalent to IE11**), 
 and communicate with html/js page by ``pb:// or ps://`` protocol to provide below features
- 
+
 * (Run) Call External Program 
 * (File) Access file system 
 * (DB) Database Accessibility
@@ -16,12 +16,19 @@ and communicate with html/js page by ``pb:// or ps://`` protocol to provide belo
 
 * Portable solution. No need to install
 * Single execute file. Quick Deployment.
+* No dependance, pure js/html/css
 * Code-and-Play instantly 
 * Make use of all javascript library (which support IE11)
 * Command Line for multiple purpose (e.g. save url page, generate PDF)
 * Work with Powerbuilder (e.g. call powerbuilder window/function/datawindow)
 
 ps: due to the limitation of Microsoft web-browser control, Powerpage web browser is **equivalent to IE11 (not chrome)**!
+
+
+### Screen Preview
+
+ ![Powerpage](doc/powerpage.gif)
+
 
 ### Run Powerpage
 
@@ -37,6 +44,10 @@ Powerpage is a single executable program. No installation is needed, just downlo
 * ``powerpage.ini`` is the config file for DB connection and misc setup
 * ``powerpage.js`` is the initial javascript lib for interface
 * ``*.dll`` is Powerbuilder run-time files
+
+* ``pp-markdown.html`` is pp-application of "Powerpage Markdown Editor"
+* ``pp-web-crawler.html`` is pp-application of "Powerpage Web Crawler"
+* ``pp-db-report.html`` is pp-application of "Powerpage DB Reports"
 
 
 ### How PowerPage work?
@@ -61,7 +72,7 @@ for example:
 
 For more details, please refer to [API documentation](interface.md)
 
-
+  
 ## Command Line
 
 Beside running javascript applications, Powerpage has wide usage by using commandline parameters.
@@ -69,12 +80,11 @@ Beside running javascript applications, Powerpage has wide usage by using comman
 ~~~
 powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-html} /pdf={output-pdf-file} /delay={1000}
 ~~~
-	
+
 * ``/ini={ini-file}`` specifies ini setting file. Aplication could be changed by change the ini file.
 * ``/url={start-url}`` is used to specify startup link. Aplication could be changed by change startup link. 
-* ``/print`` will load startup url, print and close program.
-* 
 * ``/fullscreen`` or ``/kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
+* ``/print`` will load startup url, print and close program.
 * ``/save={save-html}`` will load startup url, save to html file, and close program. Useful for web-crawler
 * ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program. useful for PDF generation.
 * ``/delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
@@ -87,17 +97,17 @@ powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-ht
 * ``powerpage.exe /url=http://haodoo.net/  /save=haodoo.html`` save the page of haodoo.net
 * ``powerpage.exe /url=http://haodoo.net/  /pdf=haodoo.pdf`` save the page of haodoo.net to PDF file
 * ``powerpage.exe /url=pp-kanban.html /fullscreen`` run Kanban display board in fullscreen mode
-
-
+ 
+ 
 ## Application Samples
 
 Powerpage is released with some sample applications.
 
-* [Screen](powerpage.jpg) -> [Powerpage](https://github.com/casualwriter) with self-demonstration
-* [Screen](powerpage-markdown.jpg) -> [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
-* [Screen](powerpage-web-crawler.jpg) -> [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
-
-
+* [Powerpage](https://github.com/casualwriter) with self-demonstration
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
+* [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
+ 
+ 
 ## Modification History
 
 * 2021/05/07, beta version, v0.41 
@@ -108,5 +118,6 @@ Powerpage is released with some sample applications.
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* 2021/10/04, beta version, v0.57, code document frameword, update document
 
 
