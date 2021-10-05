@@ -1,7 +1,7 @@
 ## Introduction
 
 [**PowerPage**](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
-and windows accessibility, for rapid development of javascript/html application.
+and windows accessibility, for rapid development of javascript/html/css application.
 
 Powerpage will connect to database, load startup page using Microsoft web-browser control (**equivalent to IE11**), 
 and communicate with html/js page by ``pb:// or ps://`` protocol to provide below features
@@ -37,13 +37,15 @@ Powerpage is a single executable program. No installation is needed, just downlo
 * Simply download from "release" folder, unzip the file, and run ``powerpage.exe``
 * Source code and latest version can be downloaded from "source" folder. 
 
-### Files
+### Files & Applications
 
 * ``powerpage.exe`` is the executable file of powerpage. (single executable file)
 * ``powerpage.html`` is the startup html file (i.e. javascript/html application)
 * ``powerpage.ini`` is the config file for DB connection and misc setup
 * ``powerpage.js`` is the initial javascript lib for interface
 * ``*.dll`` is Powerbuilder run-time files
+
+** Applications **
 
 * ``pp-markdown.html`` is pp-application of "Powerpage Markdown Editor"
 * ``pp-web-crawler.html`` is pp-application of "Powerpage Web Crawler"
@@ -107,6 +109,7 @@ Powerpage is released with some sample applications.
 * [Powerpage](https://github.com/casualwriter) with self-demonstration
 * [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
 * [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
+* Powerpage - Document By Markdown 
  
  
 ## Modification History
@@ -119,6 +122,6 @@ Powerpage is released with some sample applications.
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
-* 2021/10/05, beta version, v0.57, code document frameword, update document
+* 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
 
 
