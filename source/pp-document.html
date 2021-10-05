@@ -74,17 +74,22 @@ function loadMdFile( fname, title ) {
 
 //=== show markdown file
 function showMdFile(text) {
+  // call simple markdown praser
   text = simpleMarkdown(text)
   
   // special handling for powerpage links (call chrome for github.com, call pb.function for API)
   text = text.replace(/<a href="https:\/\/github/g,'<a href="pb://shell/file=chrome.exe,parm=https://github')
-  text = text.replace(/<a href="(.*).md"/gm,'<a href="javascript:loadMdFile(\'doc/$1.md\',\'$1\')"')
   text = text.replace(/<code\>javascript:(.*?)<\/code\>/gm,'<code><a href="javascript:$1">javascript:$1</a></code>')
   text = text.replace(/<code\>pb:\/\/(.*?)<\/code\>/gm,'<code><a href="pb://$1">pb://$1</a></code>')
   text = text.replace(/<code\>ps:\/\/(.*?)<\/code\>/gm,'<code><a href="ps://$1">ps://$1</a></code>')
+
+  // fix the folder location for *.md, *.gif
+  text = text.replace(/<a href="(.*?).md"/gim,'<a href="javascript:loadMdFile(\'doc/$1.md\',\'$1\')"')
+  text = text.replace(/src="(.*?).gif"/gim,'src="doc/$1.gif"')
   
-  document.getElementById('right-panel').innerHTML =  text + '<br>'	 
-  //document.getElementById('right-panel').innerHTML =  '<xmp>'+text + '</xmp>'	 
+  document.getElementById('right-panel').innerHTML =  text + '<br>'
+  
+  // generate "table of content"	 
   simpleTOC( pb.tocTitle )
 }
 
@@ -137,8 +142,8 @@ function simpleMarkdown(mdText) {
       	.replace(/^\>> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
       	.replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>').replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
         .replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
-      	.replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, "<img alt='$1' src='$2' $3 />")
-      	.replace(/!\[(.*?)\]\((.*?)\)/gm, "<img alt='$1' src='$2' />")
+      	.replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<img alt="$1" src="$2" $3 />')
+      	.replace(/!\[(.*?)\]\((.*?)\)/gm, '<img alt="$1" src="$2" />')
       	.replace(/\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<a href="$2" title="$3">$1</a>')
         .replace(/<http(.*?)\>/gm, '<a href="http$1">http$1</a>')
         .replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')

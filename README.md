@@ -27,7 +27,7 @@ ps: due to the limitation of Microsoft web-browser control, Powerpage web browse
 
 ### Screen Preview
 
- ![Powerpage](doc/powerpage.gif)
+ ![Powerpage](powerpage.gif)
 
 
 ### Run Powerpage

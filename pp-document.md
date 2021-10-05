@@ -323,7 +323,7 @@ use number [0-9] with dot for ordered list.
 * quick link1 &lt;https://youtube.com> 
 * quick link2 [https://youtube.com]() 
 
-* Show ![Powerpage Document](doc/powerpage.gif)
+* Show ![Powerpage Document](powerpage.gif)
 * Show Image with additional options 
   ![Powerpage Document](doc/powerpage.gif "width=380px")     
 ~~~
@@ -337,9 +337,9 @@ use number [0-9] with dot for ordered list.
 * quick link2 [https://youtube.com]() 
 
 * Show Image 
-  ![Powerpage Document](doc/powerpage.gif)     
+  ![Powerpage Document](powerpage.gif)     
 * Show Image with additional options 
-  ![Powerpage Document](doc/powerpage.gif "width=380px")     
+  ![Powerpage Document](powerpage.gif "width=380px")     
 </xmp><td>
 </tr></table>
 
@@ -351,9 +351,9 @@ use number [0-9] with dot for ordered list.
 * quick link2 [https://youtube.com]() 
 
 * Image  
-  ![Powerpage Document](doc/powerpage.gif)  
+  ![Powerpage Document](powerpage.gif)  
 * Image with width 
-  ![Powerpage Document](doc/powerpage.gif "width=380px")  
+  ![Powerpage Document](powerpage.gif "width=380px")  
 
    
 ### Escaping Characters
