@@ -27,7 +27,7 @@ ps: due to the limitation of Microsoft web-browser control, Powerpage web browse
 
 ### Screen Preview
 
- ![Powerpage](powerpage.gif)
+ ![Powerpage](powerpage.gif "border=1")
 
 
 ### Run Powerpage
@@ -48,6 +48,7 @@ Powerpage is a single executable program. No installation is needed, just downlo
 * ``pp-markdown.html`` is pp-application of "Powerpage Markdown Editor"
 * ``pp-web-crawler.html`` is pp-application of "Powerpage Web Crawler"
 * ``pp-db-report.html`` is pp-application of "Powerpage DB Reports"
+* ``pp-document.html`` is pp-application of "Powerpage Document Frawework"
 
 
 ### How PowerPage work?
@@ -118,6 +119,6 @@ Powerpage is released with some sample applications.
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
-* 2021/10/04, beta version, v0.57, code document frameword, update document
+* 2021/10/05, beta version, v0.57, code document frameword, update document
 
 

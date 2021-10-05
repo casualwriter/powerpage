@@ -76,7 +76,7 @@ Finally write a simple markdown parser in below codes:
 ## Supported Markdown Syntax
 ######################################################################
 
-refer to [https://www.markdown.xyz/basic-syntax/] for the simple markdown syntax 
+refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown syntax 
 
 ### Heading 
 
