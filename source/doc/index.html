@@ -30,19 +30,19 @@ a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outlin
 }
 </style>
 
-<body onload="loadMdFile('README.md', 'Overview' )">
+<body>
 <div id=header>
   <span id=title>Powerpage <small>(documentation)</small></span>
   <span id=menu style="float:right; padding:12px">
-    <button onclick="loadMdFile('README.md',this.innerText)">Home</button>
-    <button onclick="loadMdFile('interface.md',this.innerText)">API</button>
-    <button onclick="loadMdFile('development.md',this.innerText)">Development</button>
-    <button onclick="loadMdFile('pp-document.md')">Document.md</button>
-    <button onclick="loadMdFile('pp-markdown.md')" disabled>Markdown-Editor</button>
-    <button onclick="loadMdFile('pp-web-crawler.md')" disabled>Web-Crawler</button>
-    <button onclick="loadMdFile('pp-db-report.md')" disabled>DB-Reports</button> 
+    <button onclick="location = '?file=README.md&title=' + this.innerText">Home</button>
+    <button onclick="location = '?file=interface.md&title=' + this.innerText">API</button>
+    <button onclick="location = '?file=development.md&title=' + this.innerText">Development</button>
+    <button onclick="location = '?file=pp-document.md&title=' + this.innerText">Document.md</button>
+    <button onclick="location = '?file=pp-markdown.md&title=' + this.innerText" disabled>Markdown-Editor</button>
+    <button onclick="location = '?file=pp-web-crawler.md&title=' + this.innerText" disabled>Web-Crawler</button>
+    <button onclick="location = '?file=pp-db-report.md&title=' + this.innerText" disabled>DB-Reports</button> 
     <button onclick="window.print()">Print</button> 
-    <button style="display:none" onclick="showHTML()" accesskey=s>ShowHTML</button> 
+    <button style="display:none" onclick="toggleHTML()" accesskey=s>ShowHTML</button> 
   </span>
 </div>
 <div id=content>
@@ -52,11 +52,20 @@ a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outlin
 </body>
 
 <script>
-// show HTML syntax. (this is a hidden function for developer)
-function showHTML () {
-  document.getElementById('right-panel').innerHTML='<xmp>'+document.getElementById('right-panel').innerHTML+'</xmp>'
+// get parameter from ?doc={file}&title={title}
+var md = { file:'README.md', title:'Home' }
+location.href.replace( /[?&]+([^=&]+)=([^&]*)/g, function(m,key,value) { md[key] = value; } );
+
+// load and show markdown file  
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onload = function (e) {
+  document.getElementById('right-panel').innerHTML =  simpleMarkdown(this.responseText) + '<br>'
+  simpleTOC( md.title||md.file ) 
 }
-//=== toggle HTML for right-panel. (this is a hidden function for developer)
+xmlhttp.open("GET", md.file , true)
+xmlhttp.send();
+
+//=== toggle HTML in right-panel. (this is a hidden function for developer)
 function toggleHTML() {
   var html = document.getElementById('right-panel').innerHTML
   if (html.substr(0,5)=='<xmp>') {
@@ -66,17 +75,6 @@ function toggleHTML() {
   }  
 }
 
-//=== Load markdown file
-function loadMdFile( fname, title ) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onload = function (e) {
-    document.getElementById('right-panel').innerHTML =  simpleMarkdown(this.responseText) + '<br>'
-    simpleTOC( title ) 
-  };
-  xmlhttp.open("GET", fname , true);
-  xmlhttp.send();
-}
-  
 //=== simpleTOC: show Table of Content
 function simpleTOC( title, srcDiv, toDiv ) {
 

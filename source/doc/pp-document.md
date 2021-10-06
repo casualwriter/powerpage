@@ -391,5 +391,5 @@ use number [0-9] with dot for ordered list.
  
 ## Modification History
 
-* 2021/10/05, v0.50, initial version
-* 2021/10/06, v0.60, html version, and minor revision 
+* 2021/10/05, v0.48, initial version
+* 2021/10/06, v0.50, html version, and minor revision 

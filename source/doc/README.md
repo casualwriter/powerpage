@@ -27,7 +27,7 @@ ps: due to the limitation of Microsoft web-browser control, Powerpage web browse
 
 ### Screen Preview
 
- <img alt="poerpage screen preview" src="powerpage.gif" style="width:85%; padding:30px">
+ <img alt="powerpage screen preview" src="powerpage.gif" style="width:85%; padding:30px">
 
 
 ### Run Powerpage
