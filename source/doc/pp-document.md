@@ -1,5 +1,4 @@
 ## Document by Markdown
---------------------------------------------------------
 
 This program, ``pp-document.html``, is a powerpage-application to show markdown documents.
 
@@ -73,10 +72,9 @@ Finally write a simple markdown parser in below codes:
  ![simple markdown parser](pp-simple-markdown.jpg)
 
  
-
+  
 ## Supported Markdown Syntax
--------------------------------------------------------------
-
+ 
 refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown syntax 
 
 ### Heading 
@@ -110,28 +108,34 @@ refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown synt
 <table border=1><tr><th>Markdown<th>HTML<th>Rendered Layout</tr>
 <tr><td>
 ~~~
-this is **bold** sample
-this is __bold__ sample
-this is *italic* sample
-this is _italic_ sample
-this is ***bold+italic*** sample
-this is ___bold+italic___ sample
+this is **bold** sample  
+this is *italic* sample  
+this is _italic_ sample  
+this is ***bold+italic*** sample  
+this is ___bold+italic___ sample  
+this is __underline__ sample  
+this is ~~Strikethrough~~ sample   
+this is ~~delete~~ then ^^insert^^ sample    
 ~~~
 <td><xmp>
-this is **bold** sample
-this is __bold__ sample
-this is *italic* sample
-this is _italic_ sample
-this is ***bold+italic*** sample
-this is ___bold+italic___ sample
+this is **bold** sample  
+this is *italic* sample  
+this is _italic_ sample  
+this is ***bold+italic*** sample  
+this is ___bold+italic___ sample  
+this is __underline__ sample  
+this is ~~Strikethrough~~ sample   
+this is ~~delete~~ then ^^insert^^ sample    
 </xmp>
 <td>
-this is **bold** sample 
-this is __bold__ sample 
-this is *italic* sample 
-this is _italic_ sample 
-this is ***bold+italic*** sample 
-this is ___bold+italic___ sample
+this is **bold** sample  
+this is *italic* sample  
+this is _italic_ sample  
+this is ***bold+italic*** sample  
+this is ___bold+italic___ sample  
+this is __underline__ sample  
+this is ~~Strikethrough~~ sample   
+this is ~~delete~~ then ^^insert^^ sample    
 </td></tr></table>
 
 
@@ -378,10 +382,14 @@ use number [0-9] with dot for ordered list.
  
 ## To-Do
 
-* [] support check list
-* [] support table syntax
+- [v] some enhance synatx (underline,Strikethrough,highlight)
+- [x] support check list (cancelled! no need)
+- [ ] support table syntax
+- [ ] Frontmatter :=  ---\name: value\n--- 
+- [ ] use Frontmatter for markdown-application 
 
  
 ## Modification History
 
 * 2021/10/05, v0.50, initial version
+* 2021/10/06, v0.60, html version, and minor revision 

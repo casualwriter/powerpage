@@ -27,7 +27,7 @@ ps: due to the limitation of Microsoft web-browser control, Powerpage web browse
 
 ### Screen Preview
 
- ![Powerpage](powerpage.gif "border=1")
+ <img alt="poerpage screen preview" src="powerpage.gif" style="width:85%; padding:30px">
 
 
 ### Run Powerpage
@@ -123,6 +123,6 @@ Powerpage is released with some sample applications.
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
-* 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/source/doc)
+* 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
 
 
