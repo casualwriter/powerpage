@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<title>PowerPage</title>
+<style>
+html { box-sizing:border-box } *,*:before, *:after {box-sizing:inherit}
+body { font-family:Verdana,sans-serif; font-size:14px; line-height:1.5; margin:0; }
+h1,h2,h3,h4,h5,h6 {font-family:"Segoe UI",Arial,sans-serif;font-weight:600;margin:10px 0}
+h1 { font-size:36px; padding:8px; color:#695874; background:#f0f0f0; }
+h2 { font-size:30px; padding:8px; color:#695874; background:#f0f0f0; }
+h3 { font-size:24px; padding:2px; color:darkblue; }
+h4 { font-size:20px; padding:2px; }
+h5 { font-size:16px; padding:2px; }
+h2 { font-size:30px; padding:8px; color:#695874; background:#f0f0f0; }
+blockquote { font-family:sans-serif,calibri; background-color:#f6f6f6; border-left:5px solid grey; padding-left:8px  }
+code { font-family:"Segoe UI Mono",Consolas,Monaco,monospace; background-color:#f6f6f6; color:darkblue; border-radius:2px; padding:2px; }
+pre  { font-family:"Segoe UI Mono",Consolas,Monaco,monospace; margin-left:12px; border:1px solid #eee; background:#f6f6f6; padding:8px; }
+a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outline-width:0; background:#CED; }
+#header { background-color:#695874; color:white; width:100%; height:50px; }
+#title 	{ float:left; font-size:18px; font-weight:700; padding:8px }
+#menu button { font-family:Verdana,Arial; border:none; padding:4px 8px; vertical-align:middle; color:inherit; background:#695874; }
+#menu button:hover { color:#000; background-color:#ccc }
+#menu button:disabled {cursor:not-allowed; opacity:0.5}: disabled *{pointer-events:none}
+#toc 		{ list-style-type:none; padding:0; margin:0 }
+#toc li	{ padding:4px 8px; border-bottom:1px solid #eee }
+#left-panel 	{ position:absolute; left:0; bottom:0; width:400px; top:48px; border:1px solid grey; overflow:auto; padding:4px 8px }
+#right-panel 	{ position:absolute; right:0; bottom:0; left:400px; top:48px; border:1px solid grey; overflow:auto; padding:4px 8px }
+@media print{
+  @page { size: A4 landscape; }
+  #header, #left-panel { display:none!important }
+  #right-panel { position:relative; width:100%; left:0px; top:0px; border:none; height:auto; overflow:hidden }
+}
+</style>
+
+<body>
+<div id=header>
+  <span id=title>Powerpage <small>(documentation)</small></span>
+  <span id=menu style="float:right; padding:12px">
+    <button onclick="loadMdFile('doc/readme.md',this.innerText)">Home</button>
+    <button onclick="loadMdFile('doc/interface.md',this.innerText)">API</button>
+    <button onclick="loadMdFile('doc/development.md',this.innerText)">Development</button>
+    <button onclick="loadMdFile('doc/pp-document.md')">Document.md</button>
+    <button onclick="loadMdFile('doc/pp-markdown.md')" disabled>Markdown-Editor</button>
+    <button onclick="loadMdFile('doc/pp-web-crawler.md')" disabled>Web-Crawler</button>
+    <button onclick="loadMdFile('doc/pp-db-report.md')" disabled>DB-Reports</button> | 
+    <button onclick="pb.run('notepad.exe '+pb.mdFile )">Edit</button>
+    <button onclick="pb.print('preview')">Print</button>
+    <button onclick="pb.window('w_about')">About</button>
+    <button onclick="pb('right-panel').innerHTML='<xmp>'+pb('right-panel').innerHTML+'</xmp>'">ShowHTML</button>
+  </span>
+</div>
+<div id=content>
+  <div id="left-panel"></div>
+  <div id="right-panel"></div>
+</div>
+</body>
+
+<script>
+//=== Load markdown file
+function loadMdFile( fname, title ) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onload = function (e) { 
+    document.getElementById('right-panel').innerHTML =  simpleMarkdown(this.responseText) + '<br>'
+    simpleTOC( title ) 
+  };
+  xmlhttp.open("GET", url , true);
+  xmlhttp.send();
+}
+  
+//=== simpleTOC: show Table of Content
+function simpleTOC( title, srcDiv, toDiv ) {
+
+  var toc = document.getElementById(srcDiv||'right-panel').querySelectorAll('h2,h3')
+  var html = '<h4> ' + (title||'Content') + '</h4><ul id="toc">';
+
+  for (var i=0; i<toc.length; i++ ) {
+  	if (!toc[i].id) toc[i].id = "toc-item-" + i;
+    
+  	if (toc[i].nodeName === "H2") {
+  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
+  	} else if (toc[i].nodeName === "H3") {
+  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
+  	} else if (toc[i].nodeName === "H4") {
+  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
+  	}
+  }
+
+  document.getElementById(toDiv||'left-panel').innerHTML = html   
+}
+
+//=== simple markdown parser
+function simpleMarkdown(mdText) {
+
+  // first, handle syntax for code-block
+  mdText = mdText.replace(/\r\n/g, '\n')
+  mdText = mdText.replace(/\n~~~ *(.*?)\n([\s\S]*?)\n~~~/g, '<pre><code title="$1">$2</code></pre>' )
+  mdText = mdText.replace(/\n``` *(.*?)\n([\s\S]*?)\n```/g, '<pre><code title="$1">$2</code></pre>' )
+  
+  // split by "pre>", skip for code-block and process normal text
+  var mdHTML = ''
+  var mdCode = mdText.split( 'pre>')
+  console.log( mdCode )
+
+  for (var i=0; i<mdCode.length; i++) {
+  	if ( mdCode[i].substr(-2) == '</' ) {
+      mdHTML += '<pre>' + mdCode[i] + 'pre>'
+  	} else {
+      mdHTML += mdCode[i].replace(/(.*)<$/, '$1')
+      	.replace(/^##### (.*?)\s*#*$/gm, '<h5>$1</h5>')
+        .replace(/^#### (.*?)\s*#*$/gm, '<h4 id="$1">$1</h4>')
+        .replace(/^### (.*?)\s*#*$/gm, '<h3 id="$1">$1</h3>')
+        .replace(/^## (.*?)\s*#*$/gm, '<h2 id="$1">$1</h2>')
+        .replace(/^# (.*?)\s*#*$/gm, '<h1 id="$1">$1</h1>')    
+        .replace(/^-{3,}|\_{3,}|\*{3,}/gm, '<hr>')    
+        .replace(/``(.*?)``/gm, '<code>$1</code>' ).replace(/`(.*?)`/gm, '<code>$1</code>' )
+      	.replace(/^\>> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
+      	.replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>').replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
+        .replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
+      	.replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<img alt="$1" src="$2" $3 />')
+      	.replace(/!\[(.*?)\]\((.*?)\)/gm, '<img alt="$1" src="$2" />')
+      	.replace(/\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<a href="$2" title="$3">$1</a>')
+        .replace(/<http(.*?)\>/gm, '<a href="http$1">http$1</a>')
+        .replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')
+      	.replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>')
+        .replace(/^[\*|+|-][ |.](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
+        .replace(/^\d[ |.](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
+      	.replace(/\*\*\*(.*)\*\*\*/gm, '<b><i>$1</i></b>').replace(/___(.*)___/gm, '<b><em>$1</em></b>')
+      	.replace(/\*\*(.*)\*\*/gm, '<b>$1</b>').replace(/__(.*)__/gm, '<b>$1</b>')
+      	.replace(/\*([\w \d]*)\*/gm, '<em>$1</em>').replace(/_([\w \d]*)_/gm, '<em>$1</em>')
+        .replace(/ +\n/g, '\n<br/>')
+        .replace(/\n\s*\n/g, '\n<p>\n')
+      	.replace(/^ {4,10}(.*)/gm, '<pre><code>$1</code></pre>' )
+      	.replace(/^\t(.*)/gm, '<pre><code>$1</code></pre>' )
+      	.replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
+      	.replace(/\\([`_\\\*\+\-\.\(\)\[\]\{\}])/gm, '$1' )
+  	}  
+  }
+  
+  return mdHTML.trim()
+}
+
+window.onload = function () {
+  loadMdFile('doc/readme.md', 'Overview' )
+	//document.getElementById('left-panel').innerHTML = '<xmp>'+simpleMarkdown( document.getElementById('test').innerHTML )+'</xmp>' 
+  //document.getElementById('right-panel').innerHTML = simpleMarkdown( document.getElementById('test').innerHTML )
+}
+
+</script>
+

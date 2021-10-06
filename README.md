@@ -106,7 +106,7 @@ powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-ht
 
 Powerpage is released with some sample applications.
 
-* [Powerpage](https://github.com/casualwriter) with self-demonstration
+* [Powerpage](https://github.com/casualwriter/powerpage) with self-demonstration
 * [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
 * [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
 * Powerpage - Document By Markdown 
@@ -123,5 +123,6 @@ Powerpage is released with some sample applications.
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
+* 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/source/doc)
 
 
