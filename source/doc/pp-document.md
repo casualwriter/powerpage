@@ -13,55 +13,72 @@ It may work as document framework serve the following purpose
 
 The list of document is coded in HTML as below
 
-~~~
-<xmp>
+~~~~~
 <div id=header>
-  <span id=title>Powerpage <small>(documentation)</small></span>
+  <span id=title onclick="location='powerpage.html'">Powerpage <small>(documentation)</small></span>
   <span id=menu style="float:right; padding:12px">
-    <button onclick="loadMdFile('doc/readme.md',this.innerText)">Home</button>
+    <button onclick="loadMdFile('doc/README.md',this.innerText)">Home</button>
     <button onclick="loadMdFile('doc/interface.md',this.innerText)">API</button>
     <button onclick="loadMdFile('doc/development.md',this.innerText)">Development</button>
-    <button onclick="loadMdFile('doc/pp-document.html')" disabled>Markdown-Document</button>
-    <button onclick="loadMdFile('doc/pp-markdown.html')" disabled>Markdown-Editor</button>
-    <button onclick="loadMdFile('doc/pp-web-crawler.html')" disabled>Web-Crawler</button>
-    <button onclick="loadMdFile('doc/pp-db-report.html')" disabled>DB-Reports</button>
-    <button onclick="pb.run('notepad.exe '+pb.mdFile )">Edit</button>
+    <button onclick="loadMdFile('doc/pp-document.md')">Document.md</button>
+    <button onclick="loadMdFile('doc/pp-markdown.md')" disabled>Markdown-Editor</button>
+    <button onclick="loadMdFile('doc/pp-web-crawler.md')" disabled>Web-Crawler</button>
+    <button onclick="loadMdFile('doc/pp-db-report.md')" disabled>DB-Reports</button> | 
+    <button onclick="toggleHTML()">HTML</button> 
     <button onclick="pb.print('preview')">Print</button>
     <button onclick="pb.window('w_about')">About</button>
   </span>
 </div>
-</xmp>
-~~~
+~~~~~
 
  
 ### Simple TOC
 
-the function of simpleTOC() is used to show "table of content" to left-panel
+simpleTOC() retrieve all "H2,H3,H4" elements, and generate "table of content" to left-panel.
 
-~~~
-<xmp>
+~~~~~
 //=== simpleTOC: show Table of Content
 function simpleTOC( title, srcDiv, toDiv ) {
-
   var toc = document.getElementById(srcDiv||'right-panel').querySelectorAll('h2,h3')
   var html = '<h4> ' + (title||'Content') + '</h4><ul id="toc">';
 
   for (var i=0; i<toc.length; i++ ) {
+  
   	if (!toc[i].id) toc[i].id = "toc-item-" + i;
     
-  	if (toc[i].nodeName === "H2") {
-  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
-  	} else if (toc[i].nodeName === "H3") {
-  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
-  	} else if (toc[i].nodeName === "H4") {
-  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
+  	if (toc[i].nodeName === "H2" && toc[i].innerText.substr(-3)!=="###" ) {
+  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+  	} else if (toc[i].nodeName === "H3" && toc[i].innerText.substr(-3)!=="###" ) {
+  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+  	} else if (toc[i].nodeName === "H4" &&  toc[i].innerText.substr(-3)!=="###" ) {
+  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
   	}
+    
   }
 
   document.getElementById(toDiv||'left-panel').innerHTML = html   
 }
-</xmp>
-~~~
+~~~~~
+  
+  
+### Simple Scroll-Spy
+
+listen to onscroll event, check the position of all TOC items, and highlight these TOC items shown in viewport.
+
+~~~~~
+//=== scrollspy feature
+document.getElementById('right-panel').onscroll = function () {
+  var list = document.getElementById('left-panel').querySelectorAll('a')
+  var divScroll = document.getElementById('right-panel').scrollTop - 10
+  var divHeight = document.getElementById('right-panel').offsetHeight
+  
+  for (var i=0; i<list.length; i++) {
+    var pos = document.getElementById(list[i].innerText).offsetTop - divScroll  
+    list[i].style['font-weight'] = ( pos>0 && pos<divHeight ? 600 : 400 )
+  }
+}
+~~~~~
+
   
 ### Simple Markdown
 
@@ -81,13 +98,16 @@ refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown synt
 
 <table border=1><tr><th>Markdown<th>result<th>layout</tr>
 <tr><td>
-~~~
+<pre>
+may add multiple # in right side.  
+more than ### will skip TOC
+
 # heading 1
-## heading 2
-### heading 3
-#### heading 4
+## heading 2 ###   
+### heading 3 ###  
+#### heading 4 ########
 ##### heading 5
-~~~
+</pre>
 <td><xmp>
 # heading 1
 ## heading 2
@@ -96,10 +116,10 @@ refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown synt
 ##### heading 5
 </xmp>
 <td>
-# heading 1
-## heading 2
-### heading 3
-#### heading 4
+# heading 1   
+## heading 2 ###   
+### heading 3 ###  
+#### heading 4 ########
 ##### heading 5
 </td></tr></table>
  

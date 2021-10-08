@@ -13,11 +13,11 @@ h2 { font-size:30px; padding:8px; color:#695874; background:#f0f0f0; }
 blockquote { font-family:sans-serif,calibri; background-color:#f6f6f6; border-left:5px solid grey; padding-left:8px  }
 code { font-family:"Segoe UI Mono",Consolas,Monaco,monospace; background-color:#f6f6f6; color:darkblue; border-radius:2px; padding:2px; }
 pre  { font-family:"Segoe UI Mono",Consolas,Monaco,monospace; margin-left:12px; border:1px solid #eee; background:#f6f6f6; padding:8px; }
-a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outline-width:0; background:#CED; }
+a 	 { background:transparent; text-decoration:none; color:navy } a:active, a:hover { outline-width:0; background:#CED; }
 #header { background-color:#695874; color:white; width:100%; height:50px; }
 #title 	{ float:left; font-size:18px; font-weight:700; padding:8px }
-#menu button { font-family:Verdana,Arial; border:none; padding:4px 8px; vertical-align:middle; color:inherit; background:#695874; }
-#menu button:hover { color:#000; background-color:#ccc }
+#menu button, #menu a  { font-family:Verdana,Arial; border:none; padding:4px 8px; color:inherit; background:#695874; }
+#menu button:hover, #menu a:hover { color:#000; background-color:#ccc }
 #menu button:disabled {cursor:not-allowed; opacity:0.5}: disabled *{pointer-events:none}
 #toc 		{ list-style-type:none; padding:0; margin:0 }
 #toc li	{ padding:4px 8px; border-bottom:1px solid #eee }
@@ -30,17 +30,16 @@ a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outlin
 }
 </style>
 
-<body>
+<body onload="loadMdFile( location.href.split('?file=')[1]||'README.md', '<b>Contents</b>' )">
 <div id=header>
   <span id=title>Powerpage <small>(documentation)</small></span>
   <span id=menu style="float:right; padding:12px">
-    <button onclick="location = '?file=README.md&title=' + this.innerText">Home</button>
-    <button onclick="location = '?file=interface.md&title=' + this.innerText">API</button>
-    <button onclick="location = '?file=development.md&title=' + this.innerText">Development</button>
-    <button onclick="location = '?file=pp-document.md&title=' + this.innerText">Document.md</button>
-    <button onclick="location = '?file=pp-markdown.md&title=' + this.innerText" disabled>Markdown-Editor</button>
-    <button onclick="location = '?file=pp-web-crawler.md&title=' + this.innerText" disabled>Web-Crawler</button>
-    <button onclick="location = '?file=pp-db-report.md&title=' + this.innerText" disabled>DB-Reports</button> 
+    <button onclick="loadMdFile( 'README.md', this.innerText )">Home</button>
+    <button onclick="loadMdFile( 'interface.md', this.innerText )">API</button>
+    <button onclick="loadMdFile( 'development.md', this.innerText )">Development</button>
+    <button onclick="loadMdFile( 'pp-document.md', this.innerText )">Document.md</button>
+    <button onclick="loadMdFile( 'pp-md-editor.md', this.innerText )" disabled>Markdown Editor</button>
+    <button onclick="loadMdFile( 'pp-web-crawler.md', this.innerText )" disabled>Web Crawler</button>
     <button onclick="window.print()">Print</button> 
     <button style="display:none" onclick="toggleHTML()" accesskey=s>ShowHTML</button> 
   </span>
@@ -52,19 +51,6 @@ a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outlin
 </body>
 
 <script>
-// get parameter from ?doc={file}&title={title}
-var md = { file:'README.md', title:'Home' }
-location.href.replace( /[?&]+([^=&]+)=([^&]*)/g, function(m,key,value) { md[key] = value; } );
-
-// load and show markdown file  
-var xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function (e) {
-  document.getElementById('right-panel').innerHTML =  simpleMarkdown(this.responseText) + '<br>'
-  simpleTOC( md.title||md.file ) 
-}
-xmlhttp.open("GET", md.file , true)
-xmlhttp.send();
-
 //=== toggle HTML in right-panel. (this is a hidden function for developer)
 function toggleHTML() {
   var html = document.getElementById('right-panel').innerHTML
@@ -75,25 +61,49 @@ function toggleHTML() {
   }  
 }
 
+//=== load and parser markdown file. 
+function loadMdFile( fname, title ) {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onload = function (e) {
+    document.getElementById('right-panel').innerHTML =  simpleMarkdown(this.responseText) + '<br>'
+    simpleTOC( title||fname ) 
+  }
+  xmlhttp.open("GET", fname , true)
+  xmlhttp.send();
+}
+
 //=== simpleTOC: show Table of Content
 function simpleTOC( title, srcDiv, toDiv ) {
-
   var toc = document.getElementById(srcDiv||'right-panel').querySelectorAll('h2,h3')
   var html = '<h4> ' + (title||'Content') + '</h4><ul id="toc">';
 
   for (var i=0; i<toc.length; i++ ) {
+  
   	if (!toc[i].id) toc[i].id = "toc-item-" + i;
     
-  	if (toc[i].nodeName === "H2") {
-  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
-  	} else if (toc[i].nodeName === "H3") {
-  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
-  	} else if (toc[i].nodeName === "H4") {
-  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].textContent + '</a></li>';
+  	if (toc[i].nodeName === "H2" && toc[i].innerText.substr(-3)!=="###" ) {
+  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+  	} else if (toc[i].nodeName === "H3" && toc[i].innerText.substr(-3)!=="###" ) {
+  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+  	} else if (toc[i].nodeName === "H4" &&  toc[i].innerText.substr(-3)!=="###" ) {
+  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
   	}
+    
   }
 
   document.getElementById(toDiv||'left-panel').innerHTML = html   
+}
+
+//=== scrollspy feature
+document.getElementById('right-panel').onscroll = function () {
+  var list = document.getElementById('left-panel').querySelectorAll('a')
+  var divScroll = document.getElementById('right-panel').scrollTop - 10
+  var divHeight = document.getElementById('right-panel').offsetHeight
+  
+  for (var i=0; i<list.length; i++) {
+    var pos = document.getElementById(list[i].innerText).offsetTop - divScroll  
+    list[i].style['font-weight'] = ( pos>0 && pos<divHeight ? 600 : 400 )
+  }
 }
 
 //=== simple markdown parser
@@ -101,6 +111,7 @@ function simpleMarkdown(mdText) {
 
   // first, handle syntax for code-block
   mdText = mdText.replace(/\r\n/g, '\n')
+  mdText = mdText.replace(/\n~~~~~ *(.*?)\n([\s\S]*?)\n~~~~~/g, '<pre><code title="$1"><xmp>$2</xmp></code></pre>' )
   mdText = mdText.replace(/\n~~~ *(.*?)\n([\s\S]*?)\n~~~/g, '<pre><code title="$1">$2</code></pre>' )
   mdText = mdText.replace(/\n``` *(.*?)\n([\s\S]*?)\n```/g, '<pre><code title="$1">$2</code></pre>' )
   
@@ -141,7 +152,7 @@ function simpleMarkdown(mdText) {
         .replace(/_([\w \d]*)_/gm, '<em>$1</em>')
       	.replace(/~~(.*)~~/gm, '<del>$1</del>')
         .replace(/\^\^(.*)\^\^/gm, '<ins>$1</ins>')
-        .replace(/ +\n/g, '\n<br/>')
+        .replace(/  \n/g, '\n<br/>')
         .replace(/\n\s*\n/g, '\n<p>\n')
       	.replace(/^ {4,10}(.*)/gm, '<pre><code>$1</code></pre>' )
       	.replace(/^\t(.*)/gm, '<pre><code>$1</code></pre>' )

@@ -15,8 +15,8 @@ a 	 { background:transparent; text-decoration:none; } a:active, a:hover { outlin
 #header   { background-color:#695874; color:white; width:100%; height:50px; padding:0px }
 #title    { float:left; font-size:18px; font-weight:700; padding:8px }
 #subtitle { background:#eee; width:98%; height:48px; font-size:18px; font-weight:700; margin:8px }
-#menu button { font-family:Verdana,Arial; border:none; padding:4px 8px; vertical-align:middle; color:inherit; background:#695874; }
-#menu button:hover { color:#000; background-color:#ccc }
+#menu button, #menu a { font-family:Verdana,Arial; border:none; padding:4px 8px; color:inherit; background:#695874; }
+#menu button:hover, #menu a:hover { color:#000; background-color:#ccc }
 #menu button:disabled {cursor:not-allowed; opacity:0.5}: disabled *{pointer-events:none}
 table { margin:8px; border-collapse: collapse; }
 th { border:1px solid grey; background:lightgrey; padding:4px; }
@@ -31,11 +31,12 @@ td.syntax { width:30%; }
 <div id=header>
   <span id=title>PowerPage</span>
   <span id=menu style="float:right; padding:12px">
-		<button onclick="location.href='pp-document.html'" accesskey=d><u>D</u>ocumentation</button> 
-		<button onclick="location.href='pp-markdown.html'">Markdown Editor</button> 
-		<button onclick="location.href='pp-web-crawler.html'">Web Crawler</button> 
-		<button onclick="location.href='pp-db-browser.html'" disabled>DB Browser</button>
-		<button onclick="pb.window('w_about')" accesskey=a><u>A</u>bout</button> 
+		<a href='pp-document.html'>Documentation</a> 
+		<a href='pp-markdown.html'>Markdown Editor</a> 
+		<a href='pp-web-crawler.html'>Web Crawler</a> 
+		<button disabled>DB Browser</button>
+		<a href="http://html5test.com/">HTML5-Test</a>
+		<a href="javascript:pb.window('w_about')">About</a> 
   </span>
 </div>
 
