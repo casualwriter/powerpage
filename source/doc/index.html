@@ -81,11 +81,11 @@ function simpleTOC( title, srcDiv, toDiv ) {
   
   	if (!toc[i].id) toc[i].id = "toc-item-" + i;
     
-  	if (toc[i].nodeName === "H2" && toc[i].innerText.substr(-3)!=="###" ) {
+  	if (toc[i].nodeName === "H2" && toc[i].id.substr(0,6)!=="no-toc") {
   		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	} else if (toc[i].nodeName === "H3" && toc[i].innerText.substr(-3)!=="###" ) {
+  	} else if (toc[i].nodeName === "H3" && toc[i].id.substr(0,6)!=="no-toc") {
   		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	} else if (toc[i].nodeName === "H4" &&  toc[i].innerText.substr(-3)!=="###" ) {
+  	} else if (toc[i].nodeName === "H4" && toc[i].id.substr(0,6)!=="no-toc") {
   		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
   	}
     
@@ -101,7 +101,7 @@ document.getElementById('right-panel').onscroll = function () {
   var divHeight = document.getElementById('right-panel').offsetHeight
   
   for (var i=0; i<list.length; i++) {
-    var div = document.getElementById(list[i].innerText)
+    var div = document.getElementById( list[i].href.split('#')[1] )
     var pos = (div? div.offsetTop - divScroll : 0 )  // in case of not found sometimes.
     list[i].style['font-weight'] = ( pos>0 && pos<divHeight ? 600 : 400 )
   }
