@@ -101,7 +101,8 @@ document.getElementById('right-panel').onscroll = function () {
   var divHeight = document.getElementById('right-panel').offsetHeight
   
   for (var i=0; i<list.length; i++) {
-    var pos = document.getElementById(list[i].innerText).offsetTop - divScroll  
+    var div = document.getElementById(list[i].innerText)
+    var pos = (div? div.offsetTop - divScroll : 0 )  // in case of not found sometimes.
     list[i].style['font-weight'] = ( pos>0 && pos<divHeight ? 600 : 400 )
   }
 }
@@ -124,11 +125,11 @@ function simpleMarkdown(mdText) {
       mdHTML += '<pre>' + mdCode[i] + 'pre>'
     } else {
       mdHTML += mdCode[i].replace(/(.*)<$/, '$1')
-      	.replace(/^##### (.*?)\s*#*$/gm, '<h5>$1</h5>')
-        .replace(/^#### (.*?)\s*#*$/gm, '<h4 id="$1">$1</h4>')
-        .replace(/^### (.*?)\s*#*$/gm, '<h3 id="$1">$1</h3>')
-        .replace(/^## (.*?)\s*#*$/gm, '<h2 id="$1">$1</h2>')
-        .replace(/^# (.*?)\s*#*$/gm, '<h1 id="$1">$1</h1>')    
+      	.replace(/^##### (.*?)\s*{(.*)}\s#*$/gm, '<h5 id="$2">$1</h5>').replace(/^##### (.*?)\s*#*$/gm, '<h5>$1</h5>')
+        .replace(/^#### (.*?)\s*{(.*)}\s#*$/gm, '<h4 id="$2">$1</h4>').replace(/^#### (.*?)\s*#*$/gm, '<h4>$1</h4>')
+        .replace(/^### (.*?)\s*{(.*)}\s#*$/gm, '<h3 id="$2">$1</h3>').replace(/^### (.*?)\s*#*$/gm, '<h3>$1</h3>')
+        .replace(/^## (.*?)\s*{(.*)}\s#*$/gm, '<h2 id="$2">$1</h2>').replace(/^## (.*?)\s*#*$/gm, '<h2>$1</h2>')
+        .replace(/^# (.*?)\s*{(.*)}\s#*$/gm, '<h1 id="$2">$1</h1>').replace(/^# (.*?)\s*#*$/gm, '<h1>$1</h1>')    
         .replace(/^-{3,}|^\_{3,}|^\*{3,}/gm, '<hr/>')    
         .replace(/``(.*?)``/gm, '<code>$1</code>' )
         .replace(/`(.*?)`/gm, '<code>$1</code>' )

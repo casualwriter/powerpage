@@ -46,11 +46,11 @@ function simpleTOC( title, srcDiv, toDiv ) {
   
   	if (!toc[i].id) toc[i].id = "toc-item-" + i;
     
-  	if (toc[i].nodeName === "H2" && toc[i].innerText.substr(-3)!=="###" ) {
+  	if (toc[i].nodeName === "H2" && toc[i].id.substr(0,6)!=="no-toc") {
   		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	} else if (toc[i].nodeName === "H3" && toc[i].innerText.substr(-3)!=="###" ) {
+  	} else if (toc[i].nodeName === "H3" && toc[i].id.substr(0,6)!=="no-toc") {
   		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	} else if (toc[i].nodeName === "H4" &&  toc[i].innerText.substr(-3)!=="###" ) {
+  	} else if (toc[i].nodeName === "H4" && toc[i].id.substr(0,6)!=="no-toc") {
   		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
   	}
     
@@ -100,25 +100,25 @@ refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown synt
 <tr><td>
 <pre>
 may add multiple # in right side.  
-more than ### will skip TOC
+following with {id} to specify id
 
 # heading 1
-## heading 2 ###   
-### heading 3 ###  
+## heading 2 {no-toc-1} ##
+### heading 3 {no-toc-2} ####
 #### heading 4 ########
 ##### heading 5
 </pre>
 <td><xmp>
 # heading 1
-## heading 2
-### heading 3
-#### heading 4
+## heading 2 {no-toc-1} ##
+### heading 3 {no-toc-2} ####
+#### heading 4 ########
 ##### heading 5
 </xmp>
 <td>
 # heading 1   
-## heading 2 ###   
-### heading 3 ###  
+## heading 2 {no-toc-1} ##
+### heading 3 {no-toc-2} ####
 #### heading 4 ########
 ##### heading 5
 </td></tr></table>
