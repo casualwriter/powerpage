@@ -1,6 +1,11 @@
 ## Document by Markdown
 
-This program, ``pp-document.html``, is a powerpage-application to show markdown documents.
+This program, ``pp-document.html``, is a powerpage-application to show documents from markdown files.
+
+* read markdown file (via ajax)
+* parse markdown by [basic markdown syntax](#markdown-syntax)
+* auto table-of-content with scrollspy
+* enable [API call](?file=interface.md "new") of powerpage 
 
 It may work as document framework serve the following purpose
 
@@ -8,12 +13,16 @@ It may work as document framework serve the following purpose
 2. make powerpage API call from markdown (e.g. [edit src](pb://run/notepad.exe pp-document.html))
 3. write simple application by markdown.
    
+A web version ([doc/index.html](https://github.com/casualwriter/powerpage-document)) is also
+available to show [powerpage documentation](https://pingshan-tech.com/powerpage/doc/ "new") to web. 
+
+  ![Powerpage Documents](pp-document.gif "width=80%")
 
 ### Menu of Markdown Documents
 
-The list of document is coded in HTML as below
+Top menu shows the list of markdown files. Please define the menu item for each markdown file by below html code.
 
-~~~~~
+~~~ top menu
 <div id=header>
   <span id=title onclick="location='powerpage.html'">Powerpage <small>(documentation)</small></span>
   <span id=menu style="float:right; padding:12px">
@@ -29,76 +38,156 @@ The list of document is coded in HTML as below
     <button onclick="pb.window('w_about')">About</button>
   </span>
 </div>
-~~~~~
+~~~
 
  
 ### Simple TOC
 
 simpleTOC() retrieve all "H2,H3,H4" elements, and generate "table of content" to left-panel.
 
-~~~~~
-//=== simpleTOC: show Table of Content
+ps: for Powerpage documents, only retrieve "H2,H3"
+
+~~~ simple TOC
+//=== simpleTOC: show Table of Content (updated on 2021/10/09)
 function simpleTOC( title, srcDiv, toDiv ) {
+
+  // retrieve he,h3[,h4,h5] DOM elements
   var toc = document.getElementById(srcDiv||'right-panel').querySelectorAll('h2,h3')
   var html = '<h4> ' + (title||'Content') + '</h4><ul id="toc">';
-
+  
   for (var i=0; i<toc.length; i++ ) {
   
-  	if (!toc[i].id) toc[i].id = "toc-item-" + i;
+    // assign id if not defined 
+    if (!toc[i].id) toc[i].id = "toc-item-" + i;
     
-  	if (toc[i].nodeName === "H2" && toc[i].id.substr(0,6)!=="no-toc") {
-  		html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	} else if (toc[i].nodeName === "H3" && toc[i].id.substr(0,6)!=="no-toc") {
-  		html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	} else if (toc[i].nodeName === "H4" && toc[i].id.substr(0,6)!=="no-toc") {
-  		html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
-  	}
+    // generate indented list by h2,h3,h4  
+    if (toc[i].nodeName === "H2" && toc[i].id.substr(0,6)!=="no-toc") {
+      html += '<li style="background:#f6f6f6"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+    } else if (toc[i].nodeName === "H3" && toc[i].id.substr(0,6)!=="no-toc") {
+      html += '<li style="margin-left:12px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+    } else if (toc[i].nodeName === "H4" && toc[i].id.substr(0,6)!=="no-toc") {
+      html += '<li style="margin-left:24px"><a href="#' + toc[i].id + '">' + toc[i].innerText + '</a></li>';
+    }
     
   }
-
+  
   document.getElementById(toDiv||'left-panel').innerHTML = html   
 }
-~~~~~
+~~~
   
   
 ### Simple Scroll-Spy
 
 listen to onscroll event, check the position of all TOC items, and highlight these TOC items shown in viewport.
 
-~~~~~
-//=== scrollspy feature
+~~~ scrollspy
+//=== scrollspy feature  (updated on 2021/10/09)
 document.getElementById('right-panel').onscroll = function () {
+
+  // get links and get viewport position   
   var list = document.getElementById('left-panel').querySelectorAll('a')
   var divScroll = document.getElementById('right-panel').scrollTop - 10
   var divHeight = document.getElementById('right-panel').offsetHeight
   
+  // loop for each header element, highlight if within viewport
   for (var i=0; i<list.length; i++) {
-    var pos = document.getElementById(list[i].innerText).offsetTop - divScroll  
+    var div = document.getElementById( list[i].href.split('#')[1] )
+    var pos = (div? div.offsetTop - divScroll : 0 )  // in case of not found sometimes.
     list[i].style['font-weight'] = ( pos>0 && pos<divHeight ? 600 : 400 )
   }
+  
 }
-~~~~~
+~~~
 
   
 ### Simple Markdown
 
 Considered to call js lib for markdown parser. However, some may too heavy, and some do not support IE11.
  
-Finally write a simple markdown parser in below codes:
+Finally write a simple markdown parser to support [**basic markdown syntax**](#markdown-syntax)
 
- ![simple markdown parser](pp-simple-markdown.jpg)
+~~~ simple markdown praser
+//=== simple markdown parser (updated on 2021/10/11, v0.63)
+function simpleMarkdown(mdText) {
+
+  // function for REGEXP to show html tag. ie. <TAG> => &lt;TAG*gt;  
+  var formatTag = function (html) { return html.replace(/</g,'&lt;').replace(/\>/g,'&gt;'); }
+  
+  // format code-block, highlight remarks/keyword 
+  var formatCode = function(m,p1,p2){
+    p2 = p2.replace(/</g,'&lt;').replace(/\>/g,'&gt;').replace(/\/\/(.*)$/gm,'<rem>//$1</rem>')   
+    p2 = p2.replace(/(function |return |var |let |const |else |if |for |while |continue |break |case |switch )/gim,'<b>$1</b>')
+    return '<pre title="' + p1 + '"><code>'  + p2 + '</code></pre>'
+  }
+
+  // function to convert mdString into HTML string  
+  var formatMD = function( mdstr ) {
+      return mdstr.replace(/^##### (.*?)\s*#*$/gm, '<h5>$1</h5>')
+                .replace(/^#### (.*?)\s*#*$/gm, '<h4>$1</h4>')
+                .replace(/^### (.*?)\s*#*$/gm, '<h3>$1</h3>')
+                .replace(/^## (.*?)\s*#*$/gm, '<h2>$1</h2>')
+                .replace(/^# (.*?)\s*#*$/gm, '<h1>$1</h1>')
+                .replace(/^<h(\d)\>(.*?)\s*{(.*)}\s*<\/h\d\>$/gm, '<h$1 id="$3">$2</h$1>')    
+                .replace(/^-{3,}|^\_{3,}|^\*{3,}/gm, '<hr/>')    
+                .replace(/``(.*?)``/gm, function(m,p){ return '<code>' + formatTag(p).replace(/`/g,'&#96;') + '</code>'} ) 
+                .replace(/`(.*?)`/gm, '<code>$1</code>' )
+                .replace(/^\>> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
+                .replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>')
+                .replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
+                .replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
+                .replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<img alt="$1" src="$2" $3 />')
+                .replace(/!\[(.*?)\]\((.*?)\)/gm, '<img alt="$1" src="$2" />')
+                .replace(/\[(.*?)\]\((.*?) "new"\)/gm, '<a href="$2" target=_new>$1</a>')
+                .replace(/\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<a href="$2" title="$3">$1</a>')
+                .replace(/<http(.*?)\>/gm, '<a href="http$1">http$1</a>')
+                .replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')
+                .replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>')
+                .replace(/^[\*|+|-][ |.](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
+                .replace(/^\d[ |.](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
+                .replace(/\*\*\*(.*)\*\*\*/gm, '<b><em>$1</em></b>')
+                .replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
+                .replace(/\*([\w \d]*)\*/gm, '<em>$1</em>')
+                .replace(/___(.*)___/gm, '<b><em>$1</em></b>')
+                .replace(/__(.*)__/gm, '<u>$1</u>')
+                .replace(/_([\w \d]*)_/gm, '<em>$1</em>')
+                .replace(/~~(.*)~~/gm, '<del>$1</del>')
+                .replace(/\^\^(.*)\^\^/gm, '<ins>$1</ins>')
+                .replace(/  \n/g, '\n<br/>')
+                .replace(/\n\s*\n/g, '\n<p>\n')
+                .replace(/^ {4,10}(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
+                .replace(/^\t(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
+                .replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
+                .replace(/\\([`_~\*\+\-\.\^\\\<\>\(\)\[\]])/gm, '$1' )
+  }
+   
+  // first, handle syntax for code-block
+  var pos1=0, pos2=0, mdHTML = ''
+  mdText = mdText.replace(/\r\n/g, '\n').replace(/\n~~~/g,'\n```')
+  mdText = mdText.replace(/\n``` *(.*?)\n([\s\S]*?)\n``` *\n/g, formatCode )
+  
+  // split by "<code>", skip for code-block and process normal text
+  while ( (pos1 = mdText.indexOf('<code>')) >= 0 ) {
+    pos2 = mdText.indexOf('</code>', pos1 )
+    mdHTML += formatMD( mdText.substr(0,pos1) ) + mdText.substr(pos1+6, (pos2>0? pos2-pos1-6 : mdtext.length) )
+    mdText = mdText.substr( pos2 + 7 )
+  }
+   
+  return mdHTML + formatMD( mdText )
+}
+~~~
 
  
   
-## Supported Markdown Syntax
+## Supported Markdown Syntax {markdown-syntax}
  
-refer to [https://www.markdown.xyz/basic-syntax/]() for the simple markdown syntax 
+The simple markdown parser support the basic syntax of [www.markdown.xyz/basic-syntax](https://www.markdown.xyz/basic-syntax/ "new")  
+Some advanced syntax are also supported. Please refer below samples.  
 
 ### Heading 
 
 <table border=1><tr><th>Markdown<th>result<th>layout</tr>
 <tr><td>
-<pre>
+~~~
 may add multiple # in right side.  
 following with {id} to specify id
 
@@ -106,21 +195,21 @@ following with {id} to specify id
 ## heading 2 {no-toc-1} ##
 ### heading 3 {no-toc-2} ####
 #### heading 4 ########
-##### heading 5
-</pre>
+##### heading 5 {id=five}
+~~~
 <td><xmp>
 # heading 1
 ## heading 2 {no-toc-1} ##
 ### heading 3 {no-toc-2} ####
 #### heading 4 ########
-##### heading 5
+##### heading 5 {id=five}
 </xmp>
 <td>
 # heading 1   
 ## heading 2 {no-toc-1} ##
 ### heading 3 {no-toc-2} ####
 #### heading 4 ########
-##### heading 5
+##### heading 5 {id=five}
 </td></tr></table>
  
 ### Bold and Italic
@@ -164,29 +253,28 @@ this is ~~delete~~ then ^^insert^^ sample
 <table border=1><tr><th>Markdown<th>HTML<th>Rendered Layout</tr>
 <tr><td>
 ~~~
+Empty will be considered as paragraph.
+
 Don't put tabs or spaces in front of your paragraphs.
 
-Keep lines left-aligned like this.
-
-This is the first line.   
-And this is the second line.
+Line break will be added     
+if line wne with 2+ space  
 ~~~
 <td><xmp>
+Empty will be considered as paragraph.
+
 Don't put tabs or spaces in front of your paragraphs.
 
-Keep lines left-aligned like this.
-
-This is the first line.    
-
-And this is the second line.
+Line break will be added     
+if line wne with 2+ space  
 </xmp>
 <td>
+Empty will be considered as paragraph.
+
 Don't put tabs or spaces in front of your paragraphs.
 
-Keep lines left-aligned like this.
-
-This is the first line.   
-And this is the second line.
+Line break will be added     
+if line wne with 2+ space  
 </td></tr><tr><td>
 ~~~
 Use - or _ or * for horizontal rule.
@@ -228,8 +316,12 @@ ________
 >         
 > line 5
 
-this is `code block` in same line 
-another ``code block`` in same line
+single quote in same line   
+may allow `<b>decoration</b> text` 
+  
+double quote in same line  
+will show ``RAW `<u>text</u>``   
+include single quote
 ~~~
 <td><xmp>
 > blockquote line1
@@ -240,8 +332,12 @@ another ``code block`` in same line
 >         
 > line 5
 
-this is `code block` in same line 
-another ``code block`` in same line
+single quote in same line   
+may allow `<b>decoration</b> text` 
+  
+double quote in same line  
+will show ``RAW `<u>text</u>``  
+include single quote
 </xmp>
 <td>
 > blockquote line1
@@ -252,11 +348,15 @@ another ``code block`` in same line
 >         
 > line 5
 
-this is `code block` in same line 
-another ``code block`` in same line
+single quote in same line   
+may allow `<b>decoration</b> text` 
+  
+double quote in same line  
+will show ``RAW `<u>text</u>``   
+include single quote
 </td></tr></table>
 
-### Lists
+### Lists (Ordered and unordered)
 
 <table border=1><tr><th>Markdown<th>HTML<th>Rendered Layout</tr>
 <tr><td>
@@ -343,73 +443,115 @@ use number [0-9] with dot for ordered list.
 <table border=1><tr><th>Markdown<th>HTML</tr>
 <tr><td>
 ~~~
-* Link to [google](https://google.com)
-* Link with title [youtube](https://youtube.com "hints")
-* quick link1 &lt;https://youtube.com> 
-* quick link2 [https://youtube.com]() 
+* Link to 
+ [google](https://google.com)
+* Link with title 
+ [youtube](https://youtube.com "google")
+* url text as link <https://youtube.com> 
+* link as text [https://youtube.com]() 
 
-* Show ![Powerpage Document](powerpage.gif)
-* Show Image with additional options 
-  ![Powerpage Document](doc/powerpage.gif "width=380px")     
+* Show Image 
+  ![Powerpage Document](powerpage.gif)
+       
+* Show Image with additional options (width=380px or 300px+border)
+
+  ![Powerpage Document](powerpage.gif "width=380px")
+       
+  ![Powerpage Document](powerpage.gif "width=300px; style='border:1px solid red'")     
 ~~~
 
 <td><xmp>
 * Link to 
  [google](https://google.com)
 * Link with title 
- [youtube](https://youtube.com "hints")
-* quick link1 <https://youtube.com> 
-* quick link2 [https://youtube.com]() 
+ [youtube](https://youtube.com "google")
+* url text as link <https://youtube.com> 
+* link as text [https://youtube.com]() 
 
 * Show Image 
-  ![Powerpage Document](powerpage.gif)     
-* Show Image with additional options 
-  ![Powerpage Document](powerpage.gif "width=380px")     
+  ![Powerpage Document](powerpage.gif)
+       
+* Show Image with additional options (width=380px or 300px+border)
+
+  ![Powerpage Document](powerpage.gif "width=380px")
+       
+  ![Powerpage Document](powerpage.gif "width=300px; style='border:1px solid red'")     
 </xmp><td>
 </tr></table>
 
 ** Rendered Layout **
 
 * Link to [google](https://google.com)
-* Link with title [youtube](https://youtube.com "hints")
-* quick link1 <https://youtube.com> 
-* quick link2 [https://youtube.com]() 
+* Link with title [youtube](https://youtube.com "google")
+* url text as link <https://youtube.com> 
+* link as text [https://youtube.com]() 
 
-* Image  
-  ![Powerpage Document](powerpage.gif)  
-* Image with width 
-  ![Powerpage Document](powerpage.gif "width=380px")  
+* Show Image 
+  ![Powerpage Document](powerpage.gif)
+       
+* Show Image with additional options (width=380px or 300px+border)
 
+  ![Powerpage Document](powerpage.gif "width=380px")
+       
+  ![Powerpage Document](powerpage.gif "width=300px; style='border:1px solid red'")     
+  
    
 ### Escaping Characters
+
 
 <table border=1><tr><th>Markdown<th>HTML<th>Rendered Layout</tr>
 <tr><td>
 ~~~
-\` \_ \\ \* \+ \- \.   
-\( \) \[ \] \{ \}
+\` \~ \_ \* \+ \- \. \^   
+\\ \< \> \( \) \[ \]  
 ~~~
 <td><xmp>
-\` \_ \\ \* \+ \- \.   
-\( \) \[ \] \{ \}
+\` \~ \_ \* \+ \- \. \^   
+\\ \< \> \( \) \[ \]  
 </xmp>
 <td>
-\` \_ \\ \* \+ \- \.   
-\( \) \[ \] \{ \}
+\` \~ \_ \* \+ \- \. \^   
+\\ \< \> \( \) \[ \]  
 </td>
 </tr></table>
-
  
+
+### Enhanced Syntax  {enhanced-syntax}
+
+The following enhanced syntax also support by the simple markdown parser.
+   
+however, be aware compatibility issue if document will be parsed by other parser (e.g. github)
+
+* Specify ID for Header. ie. ``\n## header {id} [#*]`` => ``<h2 id={id}>header</h2>``
+* Specify title for Code-Block. ie. ``\n~\~\~ {title}\n{code-block}\n~\~\~`` => ``<pre title={title}><code\>{code-block}</code\></pre>``
+
+* link as text. ie. `[link]\()` => ``<a href={link}>{link}</a>``
+* text as link for url. ie. ``<https://{url}>`` => ``<a href="https://{url}">https://{url}</a>``   
+* Open link in new page. i.e.  ``[text]\(url "new")`` => ``<a href="url" target=_new>text</a>`` 
+* Specify title for Link i.e.  ``[text]\(url "title")`` => ``<a href="url" title="title">text</a>``  
+* Specify property for image. ie. `![title]\(image "{width=400px,etc..}")`
+
+* __Underline__ by `_\_Underline_\_` => ``<u>text</u>`  
+* ~~Strikethrough~~ by `~\~Strikethrough~\~` => ``<del>text</del>`
+* ^^highlight^^ by `^\^highlight^\^` => ``<ins>text</ins>`` 
+* Escaping Characters `` \` \~ \_ \* \+ \- \. \^ \\ &lt; &gt; \( \) \[ \] ``  
+
+   
 ## To-Do
 
 - [v] some enhance synatx (underline,Strikethrough,highlight)
+- [v] some enhance synatx (link as tex, header id, image property)
 - [x] support check list (cancelled! no need)
 - [ ] support table syntax
 - [ ] Frontmatter :=  ---\name: value\n--- 
 - [ ] use Frontmatter for markdown-application 
+- [ ] code pp-application by markdown  
 
- 
+  
 ## Modification History
 
 * 2021/10/05, v0.48, initial version
-* 2021/10/06, v0.50, html version, and minor revision 
+* 2021/10/06, v0.50, html version, and minor revision
+* 2021/10/09, v0.60, add scrollspy feature
+* 2021/10/10, v0.62, minor fixed and enhanced
+* 2021/10/11, v0.63, rewrite code-block handling, and green remarks for code-block 
