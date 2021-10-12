@@ -94,8 +94,8 @@ powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-ht
 
 ### Samples of using command-line
 
-* ``powerpage.exe /url=pp-markdown.html`` run powerpage-markdown-editor
-* ``powerpage.exe /url=pp-web-crawler.html`` run powerpage-web-crawler
+* ``powerpage.exe /url=pp-md-editor.html`` run "Powerpage Markdown Editor"
+* ``powerpage.exe /url=pp-web-crawler.html`` run "Powerpage Web Crawler"
 * ``powerpage.exe /url=http://haodoo.net/`` print the page of haodoo.net
 * ``powerpage.exe /url=http://haodoo.net/  /save=haodoo.html`` save the page of haodoo.net
 * ``powerpage.exe /url=http://haodoo.net/  /pdf=haodoo.pdf`` save the page of haodoo.net to PDF file
@@ -107,15 +107,15 @@ powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-ht
 Powerpage is released with some sample applications.
 
 * [Powerpage](https://github.com/casualwriter/powerpage) with self-demonstration
-* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-markdown) 
+* [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-md-editor) 
 * [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
-* Powerpage - Document By Markdown 
+* Powerpage - [Document By Markdown](https://github.com/casualwriter/powerpage-md-document) 
  
  
 ## Modification History
 
 * 2021/05/07, beta version, v0.41 
-* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-markdown](https://github.com/casualwriter/powerpage-markdown)
+* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md-editor](https://github.com/casualwriter/powerpage-md-editor))
 * 2021/05/25, beta version, v0.46, command for html printing
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
 * 2021/06/16, beta version, v0.50, handle command line
@@ -124,5 +124,6 @@ Powerpage is released with some sample applications.
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
 * 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
+* 2021/10/12, update [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
 
 
