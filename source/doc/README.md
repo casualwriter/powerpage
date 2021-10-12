@@ -47,10 +47,10 @@ Powerpage is a single executable program. No installation is needed, just downlo
 
 ** Applications **
 
-* ``pp-markdown.html`` is pp-application of "Powerpage Markdown Editor"
+* ``pp-md-editor.html`` is pp-application of "Powerpage Markdown Editor"
 * ``pp-web-crawler.html`` is pp-application of "Powerpage Web Crawler"
 * ``pp-db-report.html`` is pp-application of "Powerpage DB Reports"
-* ``pp-document.html`` is pp-application of "Powerpage Document Frawework"
+* ``pp-md-document.html`` is pp-application of "Powerpage Document Frawework"
 
 
 ### How PowerPage work?
@@ -115,7 +115,7 @@ Powerpage is released with some sample applications.
 ## Modification History
 
 * 2021/05/07, beta version, v0.41 
-* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md-editor](https://github.com/casualwriter/powerpage-md-editor))
+* 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md-editor](https://github.com/casualwriter/powerpage-md-editor)
 * 2021/05/25, beta version, v0.46, command for html printing
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
 * 2021/06/16, beta version, v0.50, handle command line
@@ -124,6 +124,6 @@ Powerpage is released with some sample applications.
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
 * 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
-* 2021/10/12, update [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
+* 2021/10/12, beta version, v0.58, update documents with [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
 
 
