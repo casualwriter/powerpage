@@ -10,12 +10,15 @@ h3 { font-size:24px; padding:2px; color:darkblue; }
 h4 { font-size:20px; padding:2px; }
 h5 { font-size:16px; padding:2px; }
 h2 { font-size:30px; padding:8px; color:#695874; background:#f0f0f0; }
-ins { color:#890604 }
+ins { color:#890604 } 
 rem { color:#198964 }
 blockquote { font-family:sans-serif,calibri; background-color:#f6f6f6; border-left:5px solid grey; padding-left:8px  }
 code { font-family:"Segoe UI Mono",Consolas,Monaco,monospace; background-color:#f6f6f6; color:darkblue; border-radius:2px; padding:2px; }
 pre  { font-family:"Segoe UI Mono",Consolas,Monaco,monospace; margin-left:12px; border:1px solid #eee; background:#f6f6f6; padding:8px; }
 a 	 { background:transparent; text-decoration:none; color:navy } a:active, a:hover { outline-width:0; background:#CED; }
+table { margin:12px; border-collapse: collapse; }
+th    { border:1px solid grey; background:lightgrey; padding:6px; }
+td    { border:1px solid grey;  padding:6px; }
 #header { background-color:#695874; color:white; width:100%; height:50px; }
 #title 	{ float:left; font-size:18px; font-weight:700; padding:8px }
 #menu button, #menu a  { font-family:Verdana,Arial; border:none; padding:4px 8px; color:inherit; background:#695874; }
@@ -57,7 +60,7 @@ a 	 { background:transparent; text-decoration:none; color:navy } a:active, a:hov
 // Program: Show document by markdown (for powerpage documentation)  
 // Author: CK Hung
 // Github: https://github.com/casualwriter/powerpage-document
-// Last update on 2021/10/11, v0.62
+// Last update on 2021/10/11, v0.64
 //############################################################################
 
 //=== toggle HTML in right-panel. (this is a hidden function for developer)
@@ -132,7 +135,7 @@ document.getElementById('right-panel').onscroll = function () {
   
 }
 
-//=== simple markdown parser (updated on 2021/10/11, v0.63)
+//=== simple markdown parser (updated on 2021/10/1, v0.64, add table syntax)
 function simpleMarkdown(mdText) {
 
   // function for REGEXP to show html tag. ie. <TAG> => &lt;TAG*gt;  
@@ -147,42 +150,70 @@ function simpleMarkdown(mdText) {
 
   // function to convert mdString into HTML string  
   var formatMD = function( mdstr ) {
-      return mdstr.replace(/^##### (.*?)\s*#*$/gm, '<h5>$1</h5>')
+  
+      // header => <h1>..<h5> 
+      mdstr = mdstr.replace(/^##### (.*?)\s*#*$/gm, '<h5>$1</h5>')
                 .replace(/^#### (.*?)\s*#*$/gm, '<h4>$1</h4>')
                 .replace(/^### (.*?)\s*#*$/gm, '<h3>$1</h3>')
                 .replace(/^## (.*?)\s*#*$/gm, '<h2>$1</h2>')
                 .replace(/^# (.*?)\s*#*$/gm, '<h1>$1</h1>')
-                .replace(/^<h(\d)\>(.*?)\s*{(.*)}\s*<\/h\d\>$/gm, '<h$1 id="$3">$2</h$1>')    
-                .replace(/^-{3,}|^\_{3,}|^\*{3,}/gm, '<hr/>')    
-                .replace(/``(.*?)``/gm, function(m,p){ return '<code>' + formatTag(p).replace(/`/g,'&#96;') + '</code>'} ) 
-                .replace(/`(.*?)`/gm, '<code>$1</code>' )
-                .replace(/^\>> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
-                .replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>')
-                .replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
-                .replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
-                .replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<img alt="$1" src="$2" $3 />')
-                .replace(/!\[(.*?)\]\((.*?)\)/gm, '<img alt="$1" src="$2" />')
-                .replace(/\[(.*?)\]\((.*?) "new"\)/gm, '<a href="$2" target=_new>$1</a>')
-                .replace(/\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<a href="$2" title="$3">$1</a>')
-                .replace(/<http(.*?)\>/gm, '<a href="http$1">http$1</a>')
-                .replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')
-                .replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>')
-                .replace(/^[\*|+|-][ |.](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
-                .replace(/^\d[ |.](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
-                .replace(/\*\*\*(.*)\*\*\*/gm, '<b><em>$1</em></b>')
-                .replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
-                .replace(/\*([\w \d]*)\*/gm, '<em>$1</em>')
-                .replace(/___(.*)___/gm, '<b><em>$1</em></b>')
-                .replace(/__(.*)__/gm, '<u>$1</u>')
-                .replace(/_([\w \d]*)_/gm, '<em>$1</em>')
-                .replace(/~~(.*)~~/gm, '<del>$1</del>')
-                .replace(/\^\^(.*)\^\^/gm, '<ins>$1</ins>')
-                .replace(/  \n/g, '\n<br/>')
-                .replace(/\n\s*\n/g, '\n<p>\n')
-                .replace(/^ {4,10}(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
-                .replace(/^\t(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
-                .replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
-                .replace(/\\([`_~\*\+\-\.\^\\\<\>\(\)\[\]])/gm, '$1' )
+                .replace(/^<h(\d)\>(.*?)\s*{(.*)}\s*<\/h\d\>$/gm, '<h$1 id="$3">$2</h$1>')
+                    
+      // horizontal rule => <hr> 
+      mdstr = mdstr.replace(/^-{3,}|^\_{3,}|^\*{3,}/gm, '<hr/>')
+      
+      // md inline code-block => <code>$1</code>    
+      mdstr = mdstr.replace(/``(.*?)``/gm, function(m,p){ return '<code>' + formatTag(p).replace(/`/g,'&#96;') + '</code>'} ) 
+      mdstr = mdstr.replace(/`(.*?)`/gm, '<code>$1</code>' )
+      
+      // blockquote => <blockquote>
+      mdstr = mdstr.replace(/^\>> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
+      mdstr = mdstr.replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>')
+      mdstr = mdstr.replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
+      mdstr = mdstr.replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
+                
+      // image syntax => <img alt="title" src="url" [opts] />          
+      mdstr = mdstr.replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<img alt="$1" src="$2" $3 />')
+      mdstr = mdstr.replace(/!\[(.*?)\]\((.*?)\)/gm, '<img alt="$1" src="$2" />')
+                
+      // links syntax => <a href="url" title="title">text</a>          
+      mdstr = mdstr.replace(/\[(.*?)\]\((.*?) "new"\)/gm, '<a href="$2" target=_new>$1</a>')
+      mdstr = mdstr.replace(/\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<a href="$2" title="$3">$1</a>')
+      mdstr = mdstr.replace(/<http(.*?)\>/gm, '<a href="http$1">http$1</a>')
+      mdstr = mdstr.replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')
+      mdstr = mdstr.replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>')
+                
+      // unordered list, and ordered list  => <ul><li>..</li></ul>, <ol><li>..</li></ol>
+      mdstr = mdstr.replace(/^[\*+-][ .](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
+      mdstr = mdstr.replace(/^\d[ .](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
+                
+      // text decoration: bold, italic, underline, strikethrough, highlight                
+      mdstr = mdstr.replace(/\*\*\*(.*)\*\*\*/gm, '<b><em>$1</em></b>')
+      mdstr = mdstr.replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
+      mdstr = mdstr.replace(/\*([\w \d]*)\*/gm, '<em>$1</em>')
+      mdstr = mdstr.replace(/___(.*)___/gm, '<b><em>$1</em></b>')
+      mdstr = mdstr.replace(/__(.*)__/gm, '<u>$1</u>')
+      mdstr = mdstr.replace(/_([\w \d]*)_/gm, '<em>$1</em>')
+      mdstr = mdstr.replace(/~~(.*)~~/gm, '<del>$1</del>')
+      mdstr = mdstr.replace(/\^\^(.*)\^\^/gm, '<ins>$1</ins>')
+                
+      // table syntax
+      mdstr = mdstr.replace(/\n\|([\s\S]*)\|\s*\n\s*\n/g, function (m,p) {
+          var thead = p.substr(0, p.indexOf('\n')-1).replace(/\|/g,'<th>')
+          var tbody = p.replace(/.*\n\|\-(.*)\-\|\n/g, '').replace(/\|\s*\n/g,'\n<tr>').replace(/\|/g,'<td>')
+          return '\n<table><thead>\n<tr><th>' + thead + '</thead>\n<tr>' + tbody + '\n</tr></table>\n\n' 
+      } )   
+                
+      // line break and paragraph => <br/> <p>                
+      //mdstr = mdstr.replace(/  \n/g, '\n<br/>').replace(/\n\s*\n/g, '\n<p>\n')
+      
+      // indent as code-block          
+      mdstr = mdstr.replace(/^ {4,10}(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
+      mdstr = mdstr.replace(/^\t(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
+      mdstr = mdstr.replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
+
+      // Escaping Characters                
+      return mdstr.replace(/\\([`_~\*\+\-\.\^\\\<\>\(\)\[\]])/gm, '$1' )
   }
    
   // first, handle syntax for code-block

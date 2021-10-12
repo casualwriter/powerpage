@@ -515,11 +515,32 @@ use number [0-9] with dot for ordered list.
 </td>
 </tr></table>
  
+ 
+### Tables
+
+below is a typical table 
+
+~~~
+| header1 | Header2 | Header3 |
+|--------------------------|
+| row1,c1 | row1, c2 | row1, c3 |
+| r2,col1 | r2,col2 | r2,col3 |
+| row3,col1 | row3,col2 | row3,col3 |
+~~~
+
+the render output like below
+
+| header1 | Header2 | Header3 |
+|--------------------------|
+| row1,c1 | row1, c2 | row1, c3 |
+| r2,col1 | r2,col2 | r2,col3 |
+| row3,col1 | row3,col2 | row3,col3 |
+
 
 ### Enhanced Syntax  {enhanced-syntax}
 
-The following enhanced syntax also support by the simple markdown parser.
-   
+The following enhanced syntax are support by the simple markdown parser.
+       
 however, be aware compatibility issue if document will be parsed by other parser (e.g. github)
 
 * Specify ID for Header. ie. ``\n## header {id} [#*]`` => ``<h2 id={id}>header</h2>``
@@ -530,11 +551,12 @@ however, be aware compatibility issue if document will be parsed by other parser
 * Open link in new page. i.e.  ``[text]\(url "new")`` => ``<a href="url" target=_new>text</a>`` 
 * Specify title for Link i.e.  ``[text]\(url "title")`` => ``<a href="url" title="title">text</a>``  
 * Specify property for image. ie. `![title]\(image "{width=400px,etc..}")`
+* table support
 
 * __Underline__ by `_\_Underline_\_` => ``<u>text</u>`  
 * ~~Strikethrough~~ by `~\~Strikethrough~\~` => ``<del>text</del>`
-* ^^highlight^^ by `^\^highlight^\^` => ``<ins>text</ins>`` 
-* Escaping Characters `` \` \~ \_ \* \+ \- \. \^ \\ &lt; &gt; \( \) \[ \] ``  
+* ^^highlight^^ by `^\^highlight^\^` => ``<ins>text</ins>``
+* Escaping Characters `` \` \~ \_ \* \+ \- \. \^ \\ &lt; &gt; \( \) \[ \] ``
 
    
 ## To-Do
@@ -542,7 +564,8 @@ however, be aware compatibility issue if document will be parsed by other parser
 - [v] some enhance synatx (underline,Strikethrough,highlight)
 - [v] some enhance synatx (link as tex, header id, image property)
 - [x] support check list (cancelled! no need)
-- [ ] support table syntax
+- [v] enhance code-block
+- [v] support table syntax
 - [ ] Frontmatter :=  ---\name: value\n--- 
 - [ ] use Frontmatter for markdown-application 
 - [ ] code pp-application by markdown  
@@ -554,4 +577,4 @@ however, be aware compatibility issue if document will be parsed by other parser
 * 2021/10/06, v0.50, html version, and minor revision
 * 2021/10/09, v0.60, add scrollspy feature
 * 2021/10/10, v0.62, minor fixed and enhanced
-* 2021/10/11, v0.63, rewrite code-block handling, and green remarks for code-block 
+* 2021/10/11, v0.63, rewrite code-block, highlight remarks and keywords 
