@@ -205,7 +205,7 @@ function simpleMarkdown(mdText) {
       } )   
                 
       // line break and paragraph => <br/> <p>                
-      //mdstr = mdstr.replace(/  \n/g, '\n<br/>').replace(/\n\s*\n/g, '\n<p>\n')
+      mdstr = mdstr.replace(/  \n/g, '\n<br/>').replace(/\n\s*\n/g, '\n<p>\n')
       
       // indent as code-block          
       mdstr = mdstr.replace(/^ {4,10}(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
