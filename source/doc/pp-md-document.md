@@ -16,7 +16,7 @@ It may work as document framework serve the following purpose
 A web version ([doc/index.html](https://github.com/casualwriter/powerpage-document)) is also
 available to show [powerpage documentation](https://pingshan-tech.com/powerpage/doc/ "new") to web. 
 
-  ![Powerpage Documents](pp-document.gif "width=80%")
+  ![Powerpage Documents](pp-md-document.gif "width=80%")
 
 ### Menu of Markdown Documents
 
