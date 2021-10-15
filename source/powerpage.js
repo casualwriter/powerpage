@@ -159,19 +159,26 @@ pb.session = function ( name, value, from ) {
    }
 }
 
+//====== HTML Selector funciton (selector for outerHTML, @select for innerText, null for header+body)======
+pb.html = function (selector) {
+  var i, divs, html=''
+  if (selector[0]=='@') {
+    divs = document.querySelectorAll(selector.substr(1).replace(/\$/g,'#'))
+    for (i=0; i<divs.length; i++ ) html += divs[i].innerText + '\n'
+  } else if (selector) {
+    divs = document.querySelectorAll(selector.replace(/\$/g,'#'))
+    for (i=0; i<divs.length; i++ ) html += divs[i].outerHTML + '\n'
+  } else {
+    html = '<!DOCTYPE html>\n' + document.head.outerHTML + '\n' + document.body.outerHTML + '\n'
+  } 
+  return html
+}
+   
 //====== print support. pb://print/[now|preview|setup]
 pb.print = function ( opt, callback ) { pb.submit( 'print', opt, callback ) }
 
 //====== PDF report. pb://pdf/[print|open|dialog|div]/{querySelector}
-pb.pdf = function ( opt, parm, callback ) { 
-  var html=''
-  if (opt=='host') { 
-     var divs = document.querySelectorAll(parm.replace(/\$/g,'#'))
-     for (var i=0; i<divs.length; i++ ) html += divs[i].outerHTML + '\n'
-     return html
-  }    
-  return pb.submit( 'pdf', opt + (parm? '/' + parm : '' ), callback ) 
-}
+pb.pdf = function ( opt, parm, callback ) {  return pb.submit( 'pdf', opt + (parm? '/' + parm : '' ), callback ) }
 
 // spider protocol
 pb.spider = function ( url, key, callback ) { pb.submit( 'spider', 'key='+key+'; url='+url, callback ) }

@@ -45,7 +45,7 @@ Powerpage is a single executable program. No installation is needed, just downlo
 * ``powerpage.js`` is the initial javascript lib for interface
 * ``*.dll`` is Powerbuilder run-time files
 
-** Applications **
+ **Applications**
 
 * ``pp-md-editor.html`` is pp-application of "Powerpage Markdown Editor"
 * ``pp-web-crawler.html`` is pp-application of "Powerpage Web Crawler"
@@ -81,49 +81,70 @@ For more details, please refer to [API documentation](interface.md)
 Beside running javascript applications, Powerpage has wide usage by using commandline parameters.
 
 ~~~
-powerpage.exe /ini={ini-file} /url={start-url} /fullscreen /print /save={save-html} /pdf={output-pdf-file} /delay={1000}
+powerpage.exe /ini={ini-file} /url={start-url}  /fullscreen /print /silent
+              /save={save-html} /pdf={output-pdf-file} /select={selector} /delay={1000}
 ~~~
 
-* ``/ini={ini-file}`` specifies ini setting file. Aplication could be changed by change the ini file.
-* ``/url={start-url}`` is used to specify startup link. Aplication could be changed by change startup link. 
-* ``/fullscreen`` or ``/kiosk`` will run in fullscreen mode, useful for kiosk, or display board.
-* ``/print`` will load startup url, print and close program.
-* ``/save={save-html}`` will load startup url, save to html file, and close program. Useful for web-crawler
-* ``/pdf={output-pdf-file}`` will load startup url, generate PDF file, and close program. useful for PDF generation.
-* ``/delay={1000}`` specifies delay time (by milliseconds) for print/save/pdf options 
+* `/ini={ini-file}` specifies ini setting file. Aplication could be changed by change the ini file.
+* `/url={start-url}` is used to specify startup link. Aplication could be changed by change startup link. 
+* `/fullscreen` or `/kiosk` will run in fullscreen mode, useful for kiosk, or display board.
+* `/silent` will run in silent mode (i.e. suppress js error message)
+* `/print`` will load startup url, print and close program.
+* `/save={save-html}` will load startup url, save to html file, and close program.  Useful for web-crawler
+* `/pdf={output-pdf-file}` will load startup url, generate PDF file, and close program. useful for PDF generation.
+* `/delay={1000}` specifies delay time (by milliseconds) for print/save/pdf options
+* `/select={css-selector}` is applied for **print/save** to select part of html elements.  Useful for web-crawler
 
 ### Samples of using command-line
 
+**General Usage**
+* ``powerpage.exe /ini=pp-md-editor.ini`` run "Powerpage Markdown Editor" with its config ini
 * ``powerpage.exe /url=pp-md-editor.html`` run "Powerpage Markdown Editor"
 * ``powerpage.exe /url=pp-web-crawler.html`` run "Powerpage Web Crawler"
-* ``powerpage.exe /url=http://haodoo.net/`` print the page of haodoo.net
-* ``powerpage.exe /url=http://haodoo.net/  /save=haodoo.html`` save the page of haodoo.net
-* ``powerpage.exe /url=http://haodoo.net/  /pdf=haodoo.pdf`` save the page of haodoo.net to PDF file
 * ``powerpage.exe /url=pp-kanban.html /fullscreen`` run Kanban display board in fullscreen mode
- 
- 
+* ``powerpage.exe /url=pp-md-document.html`` open "Powerpage Documents"
+
+**print page or save to html/pdf**
+* ``powerpage.exe /url=http://haodoo.net/ /print`` print page of haodoo.net
+* ``powerpage.exe /url=http://haodoo.net/ /pdf=haodoo.pdf`` save the page of haodoo.net to PDF file
+* ``powerpage.exe /url=http://haodoo.net/ /save=haodoo.html`` save page "haodoo.net" to haodoo.html
+
+**save web content to file (whole page or select by css-selecotr)**
+* ``powerpage.exe /url=https://pingshan-tech.com/powerpage/doc /save=README.html`` save powerpage README (whole page)
+* ``powerpage.exe /url=https://pingshan-tech.com/powerpage/doc /save=README.html /select=#content`` save powerpage README (#content:outerHTML)
+* ``powerpage.exe /url=https://pingshan-tech.com/powerpage/doc /save=README.html /select=@#content`` save powerpage README (#content:innerText)
+* ``powerpage.exe /url=https://pingshan-tech.com/powerpage/doc /save=README.html /select=#right-panel`` save powerpage README (#right-panel)
+
+**save github content to html/pdf (select==.markdown-body)**
+* ``powerpage /url=https://github.com/casualwriter/powerpage /save=README.html /select=.markdown-body`` to save README from github (has error msg)
+* ``powerpage /url=https://github.com/casualwriter/powerpage /save=README.html /select=.markdown-body /silent`` to save README from github (silent mode)
+* ``powerpage /url=https://github.com/casualwriter/powerpage /pdf=README.pdf /select=.markdown-body /silent`` to save in PDF format
+
+   
 ## Application Samples
 
 Powerpage is released with some sample applications.
 
-* [Powerpage](https://github.com/casualwriter/powerpage) with self-demonstration
+* [Powerpage](https://github.com/casualwriter/powerpage) as Quick Reference, or self-demonstration
 * [Powerpage - Markdown Editor](https://github.com/casualwriter/powerpage-md-editor) 
 * [Powerpage - Web Crawler](https://github.com/casualwriter/powerpage-web-crawler) 
 * Powerpage - [Document By Markdown](https://github.com/casualwriter/powerpage-md-document) 
  
- 
+  
 ## Modification History
 
 * 2021/05/07, beta version, v0.41 
 * 2021/05/14, beta version, v0.43, with markdown editor [powerpage-md-editor](https://github.com/casualwriter/powerpage-md-editor)
-* 2021/05/25, beta version, v0.46, command for html printing
+* 2021/05/25, beta version, v0.46, commandline for html printing
 * 2021/06/03, beta version, v0.48, generate PDF report (using wkhtmltopdf.exe)
-* 2021/06/16, beta version, v0.50, handle command line
+* 2021/06/16, beta version, v0.50, more command line options
 * 2021/07/02, beta version, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/08, beta version, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/20, beta version, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
 * 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
 * 2021/10/12, beta version, v0.58, update documents with [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
+* 2021/10/14, beta version, v0.60, align all version (powerpage-md-editor,poerpage-web-crawler) to v0.60
+* 2021/10/15, beta version, v0.61, support commline option: /select={selector} 
 
 
