@@ -331,8 +331,8 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
   <tr>
      <td class=remark>update session variables
      <td class=sample><mark>pb://session</mark>/name/value     
-     <td class=syntax>[pb://session/about/new description]() <button onclick="pb.popup('dialog.html')">check</button>
-     <td class=syntax>[javascript:pb.session('about','new description')]() <button onclick="pb.popup('dialog.html')">check</button>
+     <td class=syntax>[pb://session/about/new description]() <button onclick="pb.popup('pp-dialog.html')">check</button>
+     <td class=syntax>[javascript:pb.session('about','new description')]() <button onclick="pb.popup('pp-dialog.html')">check</button>
   </tr>
 </table>
 </div>
@@ -368,14 +368,14 @@ and communicate with html/js page by <mark>pb:// or ps://</mark> protocol to pro
   <tr>
      <td class=remark>open link in popup dialog (share session info)
      <td class=sample><mark>pb://popup</mark>/width=?,height=?,url=?
-     <td class=syntax>[pb://popup/height=500,url=dialog.html]()
-     <td class=syntax>[javascript:pb.popup('width=800,url=dialog.html')]()
+     <td class=syntax>[pb://popup/height=500,url=pp-dialog.html]()
+     <td class=syntax>[javascript:pb.popup('width=800,url=pp-dialog.html')]()
   </tr>  
   <tr>
      <td class=remark>popup dialog with callback
      <td class=sample><mark>pb://callback/?/popup</mark>/width=?,height=?,url=?
-     <td class=syntax>[pb://callback/mycallback/popup/height=500,url=dialog.html]()
-     <td class=syntax>[javascript:pb.popup('width=500,url=dialog.html','mycallback')]()
+     <td class=syntax>[pb://callback/mycallback/popup/height=500,url=pp-dialog.html]()
+     <td class=syntax>[javascript:pb.popup('width=500,url=pp-dialog.html','mycallback')]()
   </tr>  
   <tr>
      <td class=remark>Capture url content and callback

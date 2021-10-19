@@ -107,7 +107,7 @@ Considered to call js lib for markdown parser. However, some may too heavy, and 
 Finally write a simple markdown parser to support [**basic markdown syntax**](#markdown-syntax)
 
 ~~~ simple markdown praser
-//=== simple markdown parser (updated on 2021/10/1, v0.64, add table syntax)
+//=== simple markdown parser (updated on 2021/10/19, v0.65, minor fix)
 function simpleMarkdown(mdText) {
 
   // function for REGEXP to show html tag. ie. <TAG> => &lt;TAG*gt;  
@@ -132,14 +132,14 @@ function simpleMarkdown(mdText) {
                 .replace(/^<h(\d)\>(.*?)\s*{(.*)}\s*<\/h\d\>$/gm, '<h$1 id="$3">$2</h$1>')
                     
       // horizontal rule => <hr> 
-      mdstr = mdstr.replace(/^-{3,}|^\_{3,}|^\*{3,}/gm, '<hr/>')
+      mdstr = mdstr.replace(/^-{3,}|^\_{3,}|^\*{3,}$/gm, '<hr/>')
       
       // md inline code-block => <code>$1</code>    
       mdstr = mdstr.replace(/``(.*?)``/gm, function(m,p){ return '<code>' + formatTag(p).replace(/`/g,'&#96;') + '</code>'} ) 
       mdstr = mdstr.replace(/`(.*?)`/gm, '<code>$1</code>' )
       
       // blockquote => <blockquote>
-      mdstr = mdstr.replace(/^\>> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
+      mdstr = mdstr.replace(/^\>\> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
       mdstr = mdstr.replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>')
       mdstr = mdstr.replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
       mdstr = mdstr.replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
@@ -160,14 +160,13 @@ function simpleMarkdown(mdText) {
       mdstr = mdstr.replace(/^\d[ .](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
                 
       // text decoration: bold, italic, underline, strikethrough, highlight                
-      mdstr = mdstr.replace(/\*\*\*(.*)\*\*\*/gm, '<b><em>$1</em></b>')
-      mdstr = mdstr.replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
-      mdstr = mdstr.replace(/\*([\w \d]*)\*/gm, '<em>$1</em>')
-      mdstr = mdstr.replace(/___(.*)___/gm, '<b><em>$1</em></b>')
-      mdstr = mdstr.replace(/__(.*)__/gm, '<u>$1</u>')
-      mdstr = mdstr.replace(/_([\w \d]*)_/gm, '<em>$1</em>')
-      mdstr = mdstr.replace(/~~(.*)~~/gm, '<del>$1</del>')
-      mdstr = mdstr.replace(/\^\^(.*)\^\^/gm, '<ins>$1</ins>')
+      mdstr = mdstr.replace(/\*\*\*([\w\d].*?)\*\*\*/gm, '<b><em>$1</em></b>')
+      mdstr = mdstr.replace(/\*\*([\w\d].*?)\*\*/gm, '<b>$1</b>')
+      mdstr = mdstr.replace(/\*([\w\d].*?)\*/gm, '<em>$1</em>')
+      mdstr = mdstr.replace(/___([\w\d].*?)___/gm, '<b><em>$1</em></b>')
+      mdstr = mdstr.replace(/__([\w\d].*?)__/gm, '<u>$1</u>')
+      mdstr = mdstr.replace(/~~([\w\d].*?)~~/gm, '<del>$1</del>')
+      mdstr = mdstr.replace(/\^\^([\w\d].*?)\^\^/gm, '<ins>$1</ins>')
                 
       // table syntax
       mdstr = mdstr.replace(/\n\|([\s\S]*)\|\s*\n\s*\n/g, function (m,p) {
@@ -208,7 +207,7 @@ function simpleMarkdown(mdText) {
   
 ## Supported Markdown Syntax {markdown-syntax}
  
-The simple markdown parser support the basic syntax of [www.markdown.xyz/basic-syntax](https://www.markdown.xyz/basic-syntax/ "new")  
+The simple markdown parser support the [Basic Markdown Syntax](https://www.markdownguide.org/basic-syntax/ "new")  
 Some advanced syntax are also supported. Please refer below samples.  
 
 ### Heading 
@@ -245,34 +244,49 @@ following with {id} to specify id
 <table border=1><tr><th>Markdown<th>HTML<th>Rendered Layout</tr>
 <tr><td>
 ~~~
+this is ***bold+italic*** sample  
 this is **bold** sample  
 this is *italic* sample  
-this is _italic_ sample  
-this is ***bold+italic*** sample  
 this is ___bold+italic___ sample  
 this is __underline__ sample  
 this is ~~Strikethrough~~ sample   
-this is ~~delete~~ then ^^insert^^ sample    
+this is ~~delete~~ then ^^insert^^ sample
+
+follow with space will disable these feature
+
+* disable ** bold** by add space  
+* disable * italic* by add space  
+* not support _italic_ as easy got problem.
 ~~~
 <td><xmp>
+this is ***bold+italic*** sample  
 this is **bold** sample  
 this is *italic* sample  
-this is _italic_ sample  
-this is ***bold+italic*** sample  
 this is ___bold+italic___ sample  
 this is __underline__ sample  
 this is ~~Strikethrough~~ sample   
-this is ~~delete~~ then ^^insert^^ sample    
+this is ~~delete~~ then ^^insert^^ sample
+
+follow with space will disable these feature
+
+* disable ** bold** by add space  
+* disable * italic* by add space  
+* not support _italic_ as easy got problem.
 </xmp>
 <td>
+this is ***bold+italic*** sample  
 this is **bold** sample  
 this is *italic* sample  
-this is _italic_ sample  
-this is ***bold+italic*** sample  
 this is ___bold+italic___ sample  
 this is __underline__ sample  
 this is ~~Strikethrough~~ sample   
-this is ~~delete~~ then ^^insert^^ sample    
+this is ~~delete~~ then ^^insert^^ sample
+
+follow with space will disable these feature
+
+* disable ** bold** by add space  
+* disable * italic* by add space  
+* not support _italic_ as easy got problem.
 </td></tr></table>
 
 
@@ -606,6 +620,6 @@ however, be aware compatibility issue if document will be parsed by other parser
 * 2021/10/05, v0.48, initial version
 * 2021/10/06, v0.50, html version, and minor revision
 * 2021/10/09, v0.60, add scrollspy feature
-* 2021/10/10, v0.62, minor fixed and enhanced
 * 2021/10/11, v0.63, rewrite code-block, highlight remarks and keywords 
 * 2021/10/12, v0.64, support table syntax 
+* 2021/10/19, v0.65, minor fix 
