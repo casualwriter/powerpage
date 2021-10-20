@@ -12,10 +12,25 @@ and communicate with html/js page by ``pb:// or ps://`` protocol to provide belo
 * (PB) Call Powerbuilder Windows/Functions 
 * (Misc) Global variables, sessions information 
 
+### Motivation
+
+For security reason, all browsers are working hard to prevent unauthorized access of OS resources (ie. printer, files, database etc..).
+In other side, developers working hard to access OS resources for application development. Development within web-browser just like 
+a game of police-theft. 
+ 
+I had longed for a web browser which has DB connectivity and OS accessibility, 
+so that can coding JavaScript/html/css application like Electron.
+
+Somehow, quite frustrated in many "installation" works, to setup development evnironment and deploy application. 
+It always goes wrong by unknown reasons and stuck into unknown situations. 
+What I want is "copy-and-run" and "code-and-play" (i.e. no installation, no compile, no deployment). 
+
+I try to make "Powerpage" solution for this purpose.  
+
 ### Features
 
-* Portable solution. No need to install
-* Single execute file. Quick Deployment.
+* Portable solution. No installation
+* Single execute file. No deployment.
 * No dependance, pure js/html/css
 * Code-and-Play instantly 
 * Make use of all javascript library (which support IE11)
@@ -144,7 +159,20 @@ Powerpage is released with some sample applications.
 * 2021/10/05, beta version, v0.57, code document framework pp-document.html, update documents
 * 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
 * 2021/10/12, beta version, v0.58, update documents with [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
-* 2021/10/14, beta version, v0.60, align all version (powerpage-md-editor,poerpage-web-crawler) to v0.60
-* 2021/10/15, beta version, v0.61, support commline option: /select={selector} 
+* 2021/10/14, beta version, v0.60, align all version (powerpage-md-editor,powerpage-web-crawler) to v0.60
+* 2021/10/15, beta version, v0.61, support commandline option: /select={selector}
+* 2021/10/20, beta version, v0.62, minor fix of markdown parser 
+  
 
+## To-Do List
+
+* document: API
+* document: development
+* secure desktop application by web-hosting
+* refine layout of powerpage-md-editor and powerpage-web-crawler 
+* api: app.registry( 'get|set|delete', key, values ) 
+* api: app.loadIniFile() => read ini file, return json.
+* api: app.datawindow( id, params ) => popup datawindow report defined in <div> 
+* app: "powerpage-db-report" - db reporting utility.  
+* app: "powerpage-kanban" - simple kanban utility for teamwork.  
 

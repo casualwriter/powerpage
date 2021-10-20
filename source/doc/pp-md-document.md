@@ -107,13 +107,13 @@ Considered to call js lib for markdown parser. However, some may too heavy, and 
 Finally write a simple markdown parser to support [**basic markdown syntax**](#markdown-syntax)
 
 ~~~ simple markdown praser
-//=== simple markdown parser (updated on 2021/10/19, v0.65, minor fix)
+//=== simple markdown parser (updated on 2021/10/20, v0.66, minor fix)
 function simpleMarkdown(mdText) {
 
-  // function for REGEXP to show html tag. ie. <TAG> => &lt;TAG*gt;  
+  // function for REGEXP to convert html tag. ie. <TAG> => &lt;TAG*gt;  
   var formatTag = function (html) { return html.replace(/</g,'&lt;').replace(/\>/g,'&gt;'); }
   
-  // format code-block, highlight remarks/keyword 
+  // function for REGEXP to format code-block, highlight remarks/keywords 
   var formatCode = function(m,p1,p2){
     p2 = p2.replace(/</g,'&lt;').replace(/\>/g,'&gt;').replace(/\/\/(.*)$/gm,'<rem>//$1</rem>')   
     p2 = p2.replace(/(function |return |var |let |const |else |if |for |while |continue |break |case |switch )/gim,'<b>$1</b>')
@@ -134,39 +134,45 @@ function simpleMarkdown(mdText) {
       // horizontal rule => <hr> 
       mdstr = mdstr.replace(/^-{3,}|^\_{3,}|^\*{3,}$/gm, '<hr/>')
       
-      // md inline code-block => <code>$1</code>    
+      // inline code-block: `code-block` => <code>code-block</code>    
       mdstr = mdstr.replace(/``(.*?)``/gm, function(m,p){ return '<code>' + formatTag(p).replace(/`/g,'&#96;') + '</code>'} ) 
       mdstr = mdstr.replace(/`(.*?)`/gm, '<code>$1</code>' )
       
-      // blockquote => <blockquote>
+      // blockquote, max 2 levels => <blockquote>{text}</blockquote>
       mdstr = mdstr.replace(/^\>\> (.*$)/gm, '<blockquote><blockquote>$1</blockquote></blockquote>')
       mdstr = mdstr.replace(/^\> (.*$)/gm, '<blockquote>$1</blockquote>')
+      mdstr = mdstr.replace(/<\/blockquote\>\n<blockquote\>/g, '\n' )
       mdstr = mdstr.replace(/<\/blockquote\>\n<blockquote\>/g, '\n<br>' )
-      mdstr = mdstr.replace(/<\/blockquote\>\n<br\><blockquote\>/g, '\n<br>' )
                 
-      // image syntax => <img alt="title" src="url" [opts] />          
+      // image syntax: ![title](url) => <img alt="title" src="url" />          
       mdstr = mdstr.replace(/!\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<img alt="$1" src="$2" $3 />')
       mdstr = mdstr.replace(/!\[(.*?)\]\((.*?)\)/gm, '<img alt="$1" src="$2" />')
                 
-      // links syntax => <a href="url" title="title">text</a>          
+      // links syntax: [title](url) => <a href="url" title="title">text</a>          
       mdstr = mdstr.replace(/\[(.*?)\]\((.*?) "new"\)/gm, '<a href="$2" target=_new>$1</a>')
       mdstr = mdstr.replace(/\[(.*?)\]\((.*?) "(.*?)"\)/gm, '<a href="$2" title="$3">$1</a>')
       mdstr = mdstr.replace(/<http(.*?)\>/gm, '<a href="http$1">http$1</a>')
       mdstr = mdstr.replace(/\[(.*?)\]\(\)/gm, '<a href="$1">$1</a>')
       mdstr = mdstr.replace(/\[(.*?)\]\((.*?)\)/gm, '<a href="$2">$1</a>')
                 
-      // unordered list, and ordered list  => <ul><li>..</li></ul>, <ol><li>..</li></ol>
-      mdstr = mdstr.replace(/^[\*+-][ .](.*)/gm, '<ul><li>$1</li></ul>' ).replace(/<\/ul\>\n<ul\>/g, '\n' )
-      mdstr = mdstr.replace(/^\d[ .](.*)/gm, '<ol><li>$1</li></ol>' ).replace(/<\/ol\>\n<ol\>/g, '\n' )
+      // unordered/ordered list, max 2 levels  => <ul><li>..</li></ul>, <ol><li>..</li></ol>
+      mdstr = mdstr.replace(/^[\*+-][ .](.*)/gm, '<ul><li>$1</li></ul>' )
+      mdstr = mdstr.replace(/^\d[ .](.*)/gm, '<ol><li>$1</li></ol>' )
+      mdstr = mdstr.replace(/^\s{2,6}[\*+-][ .](.*)/gm, '<ul><ul><li>$1</li></ul></ul>' )
+      mdstr = mdstr.replace(/^\s{2,6}\d[ .](.*)/gm, '<ul><ol><li>$1</li></ol></ul>' )
+      mdstr = mdstr.replace(/<\/[ou]l\>\n<[ou]l\>/g, '\n' )
+      mdstr = mdstr.replace(/<\/[ou]l\>\n<[ou]l\>/g, '\n' )
                 
       // text decoration: bold, italic, underline, strikethrough, highlight                
-      mdstr = mdstr.replace(/\*\*\*([\w\d].*?)\*\*\*/gm, '<b><em>$1</em></b>')
-      mdstr = mdstr.replace(/\*\*([\w\d].*?)\*\*/gm, '<b>$1</b>')
-      mdstr = mdstr.replace(/\*([\w\d].*?)\*/gm, '<em>$1</em>')
-      mdstr = mdstr.replace(/___([\w\d].*?)___/gm, '<b><em>$1</em></b>')
-      mdstr = mdstr.replace(/__([\w\d].*?)__/gm, '<u>$1</u>')
-      mdstr = mdstr.replace(/~~([\w\d].*?)~~/gm, '<del>$1</del>')
-      mdstr = mdstr.replace(/\^\^([\w\d].*?)\^\^/gm, '<ins>$1</ins>')
+      mdstr = mdstr.replace(/\*\*\*(\w.*?[^\\])\*\*\*/gm, '<b><em>$1</em></b>')
+      mdstr = mdstr.replace(/\*\*(\w.*?[^\\])\*\*/gm, '<b>$1</b>')
+      mdstr = mdstr.replace(/\*(\w.*?[^\\])\*/gm, '<em>$1</em>')
+      mdstr = mdstr.replace(/___(\w.*?[^\\])___/gm, '<b><em>$1</em></b>')
+      mdstr = mdstr.replace(/__(\w.*?[^\\])__/gm, '<u>$1</u>')
+      // mdstr = mdstr.replace(/_(\w.*?[^\\])_/gm, '<u>$1</u>')  // NOT support!! 
+      mdstr = mdstr.replace(/~~(\w.*?)~~/gm, '<del>$1</del>')
+      mdstr = mdstr.replace(/\^\^(\w.*?)\^\^/gm, '<ins>$1</ins>')
+      mdstr = mdstr.replace(/\{\{(\w.*?)\}\}/gm, '<mark>$1</mark>')
                 
       // table syntax
       mdstr = mdstr.replace(/\n\|([\s\S]*)\|\s*\n\s*\n/g, function (m,p) {
@@ -179,8 +185,8 @@ function simpleMarkdown(mdText) {
       mdstr = mdstr.replace(/  \n/g, '\n<br/>').replace(/\n\s*\n/g, '\n<p>\n')
       
       // indent as code-block          
-      mdstr = mdstr.replace(/^ {4,10}(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
-      mdstr = mdstr.replace(/^\t(.*)/gm, function(m,p){ return '<pre><code>' + formatTag(p) + '</code></pre>'} )
+      mdstr = mdstr.replace(/^ {4,10}(.*)/gm, function(m,p) { return '<pre><code>' + formatTag(p) + '</code></pre>'} )
+      mdstr = mdstr.replace(/^\t(.*)/gm, function(m,p) { return '<pre><code>' + formatTag(p) + '</code></pre>'} )
       mdstr = mdstr.replace(/<\/code\><\/pre\>\n<pre\><code\>/g, '\n' )
 
       // Escaping Characters                
@@ -239,54 +245,69 @@ following with {id} to specify id
 ##### heading 5 {id=five}
 </td></tr></table>
  
-### Bold and Italic
+### Text Decoratoin (Bold/Italic)
 
 <table border=1><tr><th>Markdown<th>HTML<th>Rendered Layout</tr>
 <tr><td>
 ~~~
+**basic decoration**
+
 this is ***bold+italic*** sample  
 this is **bold** sample  
 this is *italic* sample  
 this is ___bold+italic___ sample  
 this is __underline__ sample  
-this is ~~Strikethrough~~ sample   
-this is ~~delete~~ then ^^insert^^ sample
+  
+**enhance syntax**  
+* ~~Strikethrough~~ sample
+* ~~delete~~ then ^^insert^^
+* mark {{text}} is supported
 
-follow with space will disable these feature
-
-* disable ** bold** by add space  
-* disable * italic* by add space  
-* not support _italic_ as easy got problem.
+**disable decoration**
+* disable \*\*bold\*\* by esc\  
+* disable \*italic\* by esc\  
+* disable by following ** with space*  
+* not support _italic_ !!
 ~~~
 <td><xmp>
+**basic decoration**
+
 this is ***bold+italic*** sample  
 this is **bold** sample  
 this is *italic* sample  
 this is ___bold+italic___ sample  
 this is __underline__ sample  
-this is ~~Strikethrough~~ sample   
-this is ~~delete~~ then ^^insert^^ sample
+  
+**enhance syntax**  
+* ~~Strikethrough~~ sample
+* ~~delete~~ then ^^insert^^
+* mark {{text}} is supported
 
-follow with space will disable these feature
-
-* disable ** bold** by add space  
-* disable * italic* by add space  
-* not support _italic_ as easy got problem.
+**disable decoration**
+* disable \*\*bold\*\* by esc\  
+* disable \*italic\* by esc\  
+* disable by following ** with space*  
+* not support _italic_ !!
 </xmp>
 <td>
+**basic decoration**
+
 this is ***bold+italic*** sample  
 this is **bold** sample  
 this is *italic* sample  
 this is ___bold+italic___ sample  
 this is __underline__ sample  
-this is ~~Strikethrough~~ sample   
-this is ~~delete~~ then ^^insert^^ sample
+  
+**enhance syntax**  
+* ~~Strikethrough~~ sample
+* ~~delete~~ then ^^insert^^
+* mark {{text}} is supported
 
-follow with space will disable these feature
-
-* disable ** bold** by add space  
-* disable * italic* by add space  
-* not support _italic_ as easy got problem.
+**disable decoration**
+* disable \*\*bold\*\* by esc\  
+* disable \*italic\* by esc\  
+* disable by following ** with space*  
+* not support _italic_ !!
 </td></tr></table>
 
 
@@ -408,14 +429,6 @@ use *|+|- for unorder list
 * item 1
 * item 2
 * item 3
-
-another list
-+ item 1
-+ item 2
-
-another list
-- item 1
-- item 2
 ~~~
 <td><xmp>
 use *|+|- for unorder list
@@ -423,61 +436,106 @@ use *|+|- for unorder list
 * item 1
 * item 2
 * item 3
-
-another list
-+ item 1
-+ item 2
-
-another list
-- item 1
-- item 2
 </xmp><td>
 use *|+|- for unorder list
 
 * item 1
 * item 2
 * item 3
-
-another list
-+ item 1
-+ item 2
-
-another list
-- item 1
-- item 2
 </td></tr>
 <tr><td>
 ~~~
-
 use number [0-9] with dot for ordered list.
 
 1. one 
 1. two
 0. three
 4. Four
-
 ~~~
 <td><xmp>
-
 use number [0-9] with dot for ordered list.
 
 1. one 
 1. two
 0. three
 4. Four
-
 </xmp>
 <td>
-
 use number [0-9] with dot for ordered list.
 
 1. one 
 1. two
 0. three
 4. Four
+</td></tr>
+<tr><td>
+~~~
+indent for nested list, 
+max 2 level, level 1 
+should be unordered list
 
-</td>
-</tr></table>
+* colors
+  + red
+  + green
+  + blue
+* numbers
+  1. one
+  2. two
+  
+* languages
+  0. javascript
+  0. python
+  0. c, c++
+* OS
+  - Windows
+  - Linux
+  - macOS
+~~~
+<td><xmp>
+indent for nested list, 
+max 2 level, level 1 
+should be unordered list
+
+* colors
+  + red
+  + green
+  + blue
+* numbers
+  1. one
+  2. two
+  
+* languages
+  0. javascript
+  0. python
+  0. c, c++
+* OS
+  - Windows
+  - Linux
+  - macOS
+</xmp>
+<td>
+indent for nested list, 
+max 2 level, level 1 
+should be unordered list
+
+* colors
+  + red
+  + green
+  + blue
+* numbers
+  1. one
+  2. two
+  
+* languages
+  0. javascript
+  0. python
+  0. c, c++
+* OS
+  - Windows
+  - Linux
+  - macOS
+</td></tr>
+</table>
 
  
 ### Links and Images
@@ -606,15 +664,12 @@ however, be aware compatibility issue if document will be parsed by other parser
 
 - [v] some enhance synatx (underline,Strikethrough,highlight)
 - [v] some enhance synatx (link as tex, header id, image property)
-- [x] support check list (cancelled! no need)
 - [v] enhance code-block
 - [v] support table syntax
-- [ ] Frontmatter :=  ---\name: value\n--- 
+- [ ] Frontmatter :=  ---\n Name: value \n--- 
 - [ ] use Frontmatter for markdown-application 
-- [ ] code pp-application by markdown  
   
 
-  
 ## Modification History
 
 * 2021/10/05, v0.48, initial version
@@ -622,4 +677,4 @@ however, be aware compatibility issue if document will be parsed by other parser
 * 2021/10/09, v0.60, add scrollspy feature
 * 2021/10/11, v0.63, rewrite code-block, highlight remarks and keywords 
 * 2021/10/12, v0.64, support table syntax 
-* 2021/10/19, v0.65, minor fix 
+* 2021/10/20, v0.66, minor fixes. support nested unordered list. 
