@@ -35,16 +35,16 @@ td    { border:1px solid grey;  padding:6px; }
 }
 </style>
 
-<body onload="loadMdFile( location.href.split('?file=')[1]||'https://raw.githack.com/casualwriter/powerpage/main/source/doc/README.md', '<b>Contents</b>' )">
+<body onload="loadMdFile( location.href.split('?file=')[1]||'README.md', '<b>Contents</b>' )">
 <div id=header>
   <span id=title>Powerpage <small>(documentation)</small></span>
   <span id=menu style="float:right; padding:12px">
-    <button onclick="loadMdFile( 'https://raw.githack.com/casualwriter/powerpage/main/source/doc/README.md', this.innerText )">Home</button>
-    <button onclick="loadMdFile( 'https://raw.githack.com/casualwriter/powerpage/main/source/doc/interface.md', this.innerText )">API</button>
-    <button onclick="loadMdFile( 'https://raw.githack.com/casualwriter/powerpage/main/source/doc/development.md', this.innerText )">Development</button>
-    <button onclick="loadMdFile( 'https://raw.githack.com/casualwriter/powerpage/main/source/doc/pp-md-document.md', this.innerText )">Document.md</button>
-    <button onclick="loadMdFile( 'https://raw.githack.com/casualwriter/powerpage/main/source/doc/pp-md-editor.md', this.innerText )">Markdown Editor</button>
-    <button onclick="loadMdFile( 'https://raw.githack.com/casualwriter/powerpage/main/source/doc/pp-web-crawler.md', this.innerText )">Web Crawler</button>
+    <button onclick="loadMdFile( 'README.md', this.innerText )">Home</button>
+    <button onclick="loadMdFile( 'interface.md', this.innerText )">API</button>
+    <button onclick="loadMdFile( 'development.md', this.innerText )">Development</button>
+    <button onclick="loadMdFile( 'pp-md-document.md', this.innerText )">Document.md</button>
+    <button onclick="loadMdFile( 'pp-md-editor.md', this.innerText )">Markdown Editor</button>
+    <button onclick="loadMdFile( 'pp-web-crawler.md', this.innerText )">Web Crawler</button>
     <button onclick="window.print()">Print</button> 
     <button style="display:none" onclick="toggleHTML()" accesskey=s>ShowHTML</button> 
   </span>
@@ -57,11 +57,12 @@ td    { border:1px solid grey;  padding:6px; }
 
 <script>
 //############################################################################
-// Program: Show document by markdown (for powerpage documentation, host on github)  
+// Program: Show powerpage documentation from github mardown files.  
 // Author: CK Hung
-// Github:  https://github.com/casualwriter/powerpage-md-document
-// thisUrl: https://raw.githack.com/casualwriter/powerpage/main/source/doc/index-github.html
-// Last update on 2021/10/20, v0.65
+// GitUrl: https://ghcdn.rawgit.org/casualwriter/powerpage/main/source/doc/index-github.html
+// Github: https://github.com/casualwriter/powerpage-md-document
+//
+// Last update on 2021/10/20, v0.65, direct access github md files as document
 //############################################################################
 
 //=== toggle HTML in right-panel. (this is a hidden function for developer)
@@ -88,7 +89,7 @@ function loadMdFile( fname, title ) {
     if (fname.indexOf('#')>0) location.href = fname.substr( fname.indexOf('#') ) 
   }
   
-  xmlhttp.open("GET", fname , true)
+  xmlhttp.open("GET", "https://ghcdn.rawgit.org/casualwriter/powerpage/main/source/doc/" + fname , true)
   xmlhttp.send();
   
 }
