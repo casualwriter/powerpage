@@ -161,7 +161,7 @@ Powerpage is released with some sample applications.
 * 2021/10/12, beta version, v0.58, update documents with [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
 * 2021/10/14, beta version, v0.60, align all version (powerpage-md-editor,powerpage-web-crawler) to v0.60
 * 2021/10/15, beta version, v0.61, support commandline option: /select={selector}
-* 2021/10/20, beta version, v0.62, minor fix of markdown parser 
+* 2021/10/20, beta version, v0.62, minor fix of markdown parser; show [system document](https://ghcdn.rawgit.org/casualwriter/powerpage/main/source/doc/index.html) directly from github  
   
 
 ## To-Do List
