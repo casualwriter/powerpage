@@ -95,8 +95,14 @@ for example:
 * Run update SQL2 -> ``javascript:pb.db.execute(sql3)`` or ``pb://db/execute/@sql3``
 * Call About window -> ``javascript:pb.window('w_about')`` or ``pb://window/w_about`` 
 
-For more details, please refer to [API documentation](interface.md)
+### Documentation
 
+please refer to latest documents in github-page: <https://casualwriter.github.io/powerpage>
+ 
+for API details, please refer to [API document](https://casualwriter.github.io/powerpage/index-pp.html?file=interface.md)
+
+ps: sorry no completed yet. will keep updating.
+  
   
 ## Command Line
 
