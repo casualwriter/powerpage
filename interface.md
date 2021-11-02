@@ -184,7 +184,8 @@ Run a program, e.g. resmon.exe
 
 * url-protocol: **pb://run/**{command} 
 * javascript : **javascript:pb.run**({command})
-* 
+* javascript : **javascript:pb.run**( {cmd}, {path}, {style}, callback )
+*
 * {command} := cmd={cmd},path={path},style={style}
 * {cmd}  := dos command 
 * {path} := path to run the command
