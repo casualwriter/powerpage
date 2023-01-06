@@ -1,7 +1,7 @@
 ## Introduction
 
 [**PowerPage**](https://github.com/casualwriter/powerpage) is a lightweight web browser with DB capability 
-and windows accessibility, for rapid development of javascript/html/css application.
+and windows accessibility, for rapid development of HTML/Javascript application.
 
  <img alt="powerpage screen preview" src="powerpage.gif" style="width:85%; padding:30px">
 
@@ -21,9 +21,9 @@ In other side, developers working hard to access OS resources for application de
 a game of police-theft. 
  
 I had longed for a web browser which has DB connectivity and OS accessibility, 
-so that can coding JavaScript/html/css application like Electron.
+so that can coding HTML/JavaScript application like Electron.
 
-Somehow, quite frustrated in many "installation" works, to setup development evnironment and deploy application. 
+Somehow, quite frustrated in many "installation" works, to setup development environment and deploy application. 
 It always goes wrong by unknown reasons and stuck into unknown situations. 
 What I want is "copy-and-run" and "code-and-play" (i.e. no installation, no compile, no deployment). 
 
@@ -31,13 +31,14 @@ I try to make "Powerpage" solution for this purpose.
 
 ### Features
 
-Powerpage is a ready-make Electron-like solution. No install, no compile, no packing. Just open editor to start coding.
+Powerpage is a ready-make Electron-like solution. No install, no compile, no packing. 
+Just open editor to start coding.
 
 * Portable solution. No installation
 * Single execute file. No deployment.
-* No dependance, pure js/html/css
+* No dependence, pure html/javascript/css
 * Code-and-Play instantly 
-* Make use of all javascript library (which support IE11)
+* Make use of javascript library (which support IE11)
 * Command Line for multiple purpose (e.g. save url page, generate PDF)
 * Work with Powerbuilder (e.g. call powerbuilder window/function/datawindow)
 
@@ -46,9 +47,9 @@ ps: due to the limitation of Microsoft web-browser control, Powerpage web browse
 
 ### Run Powerpage
 
-Powerpage is a single executable program. No installation is needed, just download and run ``powerpage.exe``.
+Powerpage is a single executable program. just download and run ``powerpage.exe``.
 
-* Simply download from "release" folder, unzip the file, and run ``powerpage.exe``
+* Simply download from [release](https://github.com/casualwriter/powerpage/tree/main/release) folder, unzip the file, and run ``powerpage.exe``
 * Source code and latest version can be downloaded from "source" folder. 
 
 ### Files & Applications
@@ -72,7 +73,6 @@ Powerpage is developed by Powerbuilder 10.5, source code is powerpage.pbl (only 
 
 * ``pp-md-editor.html`` is pp-application of "Powerpage Markdown Editor"
 * ``pp-web-crawler.html`` is pp-application of "Powerpage Web Crawler"
-* ``pp-db-report.html`` is pp-application of "Powerpage DB Reports"
 
 
 ### How PowerPage work?
@@ -82,7 +82,7 @@ to initialize ``pb`` javascript object to provide Powerpage interface.
 
 HTML page may via the following channel to talk to main program
 
-1. recommented call by javascript: ``pb.apiFunction()``, e.g. pb.run('notepad.exe')
+1. recommended call by javascript: ``pb.apiFunction()``, e.g. pb.run('notepad.exe')
 2. by url: ``&lt;a href="pb://command/parameters">Text&lt;/a>`` or ``window.location = "pb://command/parameters"``
 3. by change title: ``document.title = "pb://command/parameters"``
 
@@ -99,14 +99,14 @@ for example:
 
 please refer to latest documents in github-page: <https://casualwriter.github.io/powerpage>
  
-for API details, please refer to [API document](https://casualwriter.github.io/powerpage/index-pp.html?file=interface.md)
+* [Home](https://casualwriter.github.io/powerpage)
+* [API Reference](https://casualwriter.github.io/powerpage/index.html?file=interface.md)
+* [Development Guide](https://casualwriter.github.io/powerpage/index.html?file=development.md)
 
-ps: sorry no completed yet. will keep updating.
-  
   
 ## Command Line
 
-Beside running javascript applications, Powerpage has wide usage by using commandline parameters.
+Beside running html/javascript applications, Powerpage has wide usage by using command-line parameters.
 
 ~~~
 powerpage.exe /ini={ini-file} /url={start-url}  /script={script-file} /fullscreen /print /silent
@@ -163,32 +163,14 @@ Powerpage is released with some sample applications.
   
 ## Modification History
 
-* 2021/05/07, v0.41 
-* 2021/05/14, v0.43, with markdown editor [powerpage-md-editor](https://github.com/casualwriter/powerpage-md-editor)
-* 2021/05/25, v0.46, commandline for html printing
+* 2021/05/07, v0.41, initial version of Powerpage 
+* 2021/05/14, v0.43, code simple markdown editor [powerpage-md-editor](https://github.com/casualwriter/powerpage-md-editor)
 * 2021/06/03, v0.48, generate PDF report (using wkhtmltopdf.exe)
 * 2021/06/16, v0.50, more command line options
-* 2021/07/02, v0.54, crawl web function, add [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
+* 2021/07/02, v0.54, crawl web function, code [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
 * 2021/07/08, v0.55, refine powerpage, update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
-* 2021/07/20, v0.56, add pb://spider command; update [powerpage-web-crawler](https://github.com/casualwriter/powerpage-web-crawler)
-* 2021/10/05, v0.57, code document framework pp-document.html, update documents
-* 2021/10/06, code document framework (html version) at [doc/index.html](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
-* 2021/10/12, v0.58, update documents with [markdown parser](https://github.com/casualwriter/powerpage/blob/main/source/doc/index.html)
+* 2021/10/05, v0.57, code document framework, and markdown parser
 * 2021/10/14, v0.60, align all version (powerpage-md-editor,powerpage-web-crawler) to v0.60
-* 2021/10/15, v0.61, support commandline option: /select={selector}
-* 2021/10/20, v0.62, minor fix of markdown parser; show [system document](https://ghcdn.rawgit.org/casualwriter/powerpage/main/source/doc/index.html) directly from github  
-* 2021/11/02, v0.63, update pb source \src\*.*; remove local documents, host in [github-page](https://casualwriter.github.io/powerpage) now.
+* 2021/10/20, v0.62, refine markdown parser; update pb source to \src\*.*
+* 2021/11/02, v0.63, remove local documents, host in [github-page](https://casualwriter.github.io/powerpage) now.
  
-
-## To-Do List
-
-* document: API
-* document: development
-* secure desktop application by web-hosting
-* refine layout of powerpage-md-editor and powerpage-web-crawler 
-* api: app.registry( 'get|set|delete', key, values ) 
-* api: app.loadIniFile() => read ini file, return json.
-* api: app.datawindow( id, params ) => popup datawindow report in dw syntax but in html.  
-* app: "powerpage-db-report" - db reporting utility.  
-* app: "powerpage-kanban" - simple kanban utility for teamwork.  
-
